@@ -8,7 +8,7 @@ Project dependencies:
 * [peewee](http://docs.peewee-orm.com)
 * [pygments](http://pygments.org)
 
-### Testing the web interface
+### Testing the Web interface
 
 ```sh
 $ git clone https://github.com/bgmartins/historical-gazetteer.git
