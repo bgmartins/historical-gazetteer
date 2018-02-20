@@ -497,7 +497,7 @@ CREATE TABLE s_name_to_link_info_reference (
    entry_source_id LONG NOT NULL,
    PRIMARY KEY (feature_name_id,source_reference_id),
    FOREIGN KEY (feature_name_id) REFERENCES g_feature_name,
-   FOREIGN KEY (source_reference_id) REFERENCES g_source_reference, 
+   FOREIGN KEY (source_reference_id) REFERENCES g_source, 
    FOREIGN KEY (entry_source_id) REFERENCES g_entry_source
 );
 
