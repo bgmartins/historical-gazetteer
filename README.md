@@ -7,6 +7,7 @@ Project dependencies:
 * [flask](http://flask.pocoo.org)
 * [peewee](http://docs.peewee-orm.com)
 * [pygments](http://pygments.org)
+* [xmltodict](https://github.com/martinblech/xmltodict)
 
 ### Testing the Web interface
 
