@@ -23,7 +23,7 @@ USER=
 PASSWORD=
  
 # Generate diagram
-java -classpath $(echo ${SchemaCrawlerPATH}/_schemacrawler/lib/*.jar | tr ' ' ':') schemacrawler.Main -server=${RDBMS} -database=${SQLiteDatabaseFILE} -outputformat=pdf -outputfile=${OutputPATH} -command=details -routines= -tabletypes=TABLE -infolevel=maximum -user=${USER} -password=${PASSWORD} -loglevel=CONFIG
+java -classpath $(echo ${SchemaCrawlerPATH}/_schemacrawler/lib/*.jar | tr ' ' ':') schemacrawler.Main -server=${RDBMS} -database=${SQLiteDatabaseFILE} -outputformat=pdf -outputfile=${OutputPATH} -command=brief -routines= -tabletypes=TABLE -infolevel=standard -user=${USER} -password=${PASSWORD} -loglevel=CONFIG
 echo "Finished generating the diagram"
 
 # Remove schema crawler
