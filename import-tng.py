@@ -72,6 +72,49 @@ for row in obj["Vocabulary"]["Subject"]:
 			
 ###
 ## To extract Descriptive Notes if they exist
+##
+## The structure is as follows
+##
+## Descriptive_Note/Note_Text
+## Descriptive_Note/Note_Contributors/Note_Contributors/Note_Contributor/Contributor_id
+## Descriptive_Note/Note_Sources/Note_Source/Source/Source_ID
+## Descriptive_Note/Note_Sources/Note_Source/Source/Brief_Citation
+## Descriptive_Note/Note_Sources/Note_Source/Source/Full_Citation
+## Descriptive_Note/Note_Sources/Note_Source/Source/Biblio_Note
+## Descriptive_Note/Note_Sources/Note_Source/Source/Merged_Status
+## Descriptive_Note/Note_Sources/Note_Source/Page
+
+###
+## To extract Parent Relationships if they exist
+##
+## The structure is as follows
+##
+## Parent_Relationships/Preferred_Parent/Parent_Subject_ID
+## Parent_Relationships/Preferred_Parent/Relationship_Type
+## Parent_Relationships/Preferred_Parent/Historic_Flag
+## Parent_Relationships/Preferred_Parent/Parent_Date
+## Parent_Relationships/Non_Preferred_Parent/Parent_Subject_ID
+## Parent_Relationships/Non_Preferred_Parent/Relationship_Type
+## Parent_Relationships/Non_Preferred_Parent/Historic_Flag
+## Parent_Relationships/Non_Preferred_Parent/Parent_Date
+
+###
+## To extract Place Types if they exist
+##
+## The structure is as follows
+##
+## Place_Types/Preferred_Place_Type/Place_Type_ID
+## Place_Types/Preferred_Place_Type/Display_Order
+## Place_Types/Preferred_Place_Type/Historic_Flag
+## Place_Types/Preferred_Place_Type/PT_Date
+## Place_Types/Non_Preferred_Place_Type/Place_Type_ID
+## Place_Types/Non_Preferred_Place_Type/Display_Order
+## Place_Types/Non_Preferred_Place_Type/Historic_Flag
+## Place_Types/Non_Preferred_Place_Type/PT_Date
+
+
+
+
 	
 	#if "Associative_Relationships" in row:
 		#print (row["Associative_Relationships"]["Associative_Relationship"])
