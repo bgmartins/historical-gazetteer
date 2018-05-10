@@ -2589,7 +2589,7 @@ INSERT INTO l_time_period_name VALUES (28,'post-classic mesoamerica',4,NULL);
 INSERT INTO l_time_period_name VALUES (29,'conquest of america',4,NULL);
 INSERT INTO l_time_period_name VALUES (30,'mesoamerican colonial period',4,NULL);
 
-INSERT INTO g_time_date_range VALUES (4,'','','classical antiquity',5); # (480 bc – 476 ad)
+INSERT INTO g_time_date_range VALUES (4,'-480-01-01','-476-01-01','classical antiquity',5);
 INSERT INTO g_time_date_range VALUES (5,'0284-01-01','0500-01-01','late antiquity',5);
 INSERT INTO g_time_date_range VALUES (6,'0476-01-01','1453-01-01','middle ages',5);
 INSERT INTO g_time_date_range VALUES (7,'0330-01-01','1453-01-01','byzantine era',5);
