@@ -35,6 +35,7 @@ for row in obj["Vocabulary"]["Subject"]:
 	#Vocabulary/Subject/Coordinates/Bounding/Longitude_Most
 	#Vocabulary/Subject/Coordinates/Elevation_Meters
 	#Vocabulary/Subject/Coordinates/Elevation_Feet
+	
 	#for column in row["column"]:
         #c.execute("INSERT INTO table VALUES '(?,?)'", [column["@name"], column["#text"]])
 		#print ("item inserted \n")
