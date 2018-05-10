@@ -1,6 +1,13 @@
 import xmltodict
 import sqlite3
 
+## function to verify if a certain key exists and retrieve the value
+def verify_key(row, key):
+	if key in row:
+		return "true"
+	else:
+		return "false"
+
 conn = sqlite3.connect("test.sqlite")
 c = conn.cursor()
 
@@ -10,8 +17,10 @@ with open("tgn1-extract.xml") as fd: obj = xmltodict.parse(fd.read())
 
 for row in obj["Vocabulary"]["Subject"]:
 	id = row["@Subject_ID"]
-	if "Associative_Relationships" in row:
-		print (row["Associative_Relationships"]["Associative_Relationship"])
+	associative = verify_key(row, "Associative_Relationships")
+	print (associative)
+	#if "Associative_Relationships" in row:
+		#print (row["Associative_Relationships"]["Associative_Relationship"])
 		#if "Description" in row:
 	#preferred_name = row["Terms"]["Preferred_Term"]
 	#latitude = row["Coordinates"]["Latitude"]["Decimal"]
