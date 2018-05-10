@@ -1,24 +1,35 @@
 import xmltodict
 import sqlite3
+#import defusedexpat
 
 ## function to verify if a certain key exists and retrieve the value
-def verify_key(row, key):
-	if key in row:
-		return "true"
+def verify_key(root, key):
+	if key in root:
+		return len(root[key])
 	else:
 		return "false"
 
 conn = sqlite3.connect("test.sqlite")
 c = conn.cursor()
 
-with open("tgn1-extract.xml") as fd: obj = xmltodict.parse(fd.read())
+with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True})
 
 #print (obj["Vocabulary"]["Subject"])
 
 for row in obj["Vocabulary"]["Subject"]:
+	#print (type(row))
+	
 	id = row["@Subject_ID"]
-	associative = verify_key(row, "Associative_Relationships")
-	print (associative)
+	print (id)
+	## For Associative Relationaships
+	if "Associative_Relationships" in row:
+		#print(row)
+		for rel in row["Associative_Relationships"]["Associative_Relationship"]:
+			print (rel)
+			#print (row["Associative_Relationships"])
+			#print (rel["Historic_Flag"])
+	
+	
 	#if "Associative_Relationships" in row:
 		#print (row["Associative_Relationships"]["Associative_Relationship"])
 		#if "Description" in row:
