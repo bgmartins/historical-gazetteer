@@ -29,7 +29,6 @@ for row in obj["Vocabulary"]["Subject"]:
 			#print (row["Associative_Relationships"])
 			#print (rel["Historic_Flag"])
 	
-	
 	#if "Associative_Relationships" in row:
 		#print (row["Associative_Relationships"]["Associative_Relationship"])
 		#if "Description" in row:
