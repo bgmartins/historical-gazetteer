@@ -19,8 +19,8 @@ with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.
 for row in obj["Vocabulary"]["Subject"]:
 	#print (type(row))
 	
-	id = row["@Subject_ID"] #id of the subject
-	print (id)
+	feature = row["@Subject_ID"] #id of the subject
+	print (feature)
 	
 ###
 ## To extract Associative Relationaships if they exist
@@ -51,24 +51,36 @@ for row in obj["Vocabulary"]["Subject"]:
 					
 ###
 ## To extract Coordinates if they exist
+##
+## The structure is as follows
+##
+## Coordinates/Standard/Latitude/Decimal						mapped to	g_location	north_coordinate + south_coordinate
+## Coordinates/Standard/Longitude/Decimal						mapped to	g_location	east_coordinate + west_coordinate
+## Coordinates/Bounding/Latitude/Latitude_Least/Decimal			mapped to	g_location	south_coordinate
+## Coordinates/Bounding/Latitude/Latitude_Most/Decimal			mapped to	g_location	north_coordinate
+## Coordinates/Bounding/Longitude/Longitude_Least/Decimal		mapped to	g_location	west_coordinate
+## Coordinates/Bounding/Longitude/Longitude_Most/Decimal		mapped to	g_location	east_coordinate
+## Coordinates/Elevation_Meters									mapped to	NONE
+## 
+
 	if "Coordinates" in row:
-		for coo in row["Coordinates"]:
+		for coor in row["Coordinates"]:
 			if "Standard" in coo:
-				coo_standard_latitude_decimal = verify_key(coo["Standard"]["Latitude"], "Decimal")
-				#print (coo_standard_latitude_decimal)
-				coo_standard_longitude_decimal = verify_key(coo["Standard"]["Longitude"], "Decimal")
-				#print (coo_standard_longitude_decimal)
+				coor_standard_latitude_decimal = verify_key(coor["Standard"]["Latitude"], "Decimal")
+				#print (coor_standard_latitude_decimal)
+				coor_standard_longitude_decimal = verify_key(coor["Standard"]["Longitude"], "Decimal")
+				#print (coor_standard_longitude_decimal)
 			if "Bounding" in coo:
-				coo_bounding_latitude_least = verify_key(coo["Bounding"]["Latitude"]["Least"], "Decimal")
-				#print (coo_bounding_latitude_least)
-				coo_bounding_latitude_most = verify_key(coo["Bounding"]["Latitude"]["Most"], "Decimal")
-				#print (coo_bounding_latitude_most)
-				coo_bounding_longitude_least = verify_key(coo["Bounding"]["Longitude"]["Least"], "Decimal")
-				#print (coo_bounding_longitude_least)
-				coo_bounding_longitude_most = verify_key(coo["Bounding"]["Longitude"]["Most"], "Decimal")
-				#print (coo_bounding_longitude_most)
-			coo_elevation_meters = verify_key(coo, "Elevation_Meters")
-			#print (coo_elevation_meters)
+				coor_bounding_latitude_least = verify_key(coor["Bounding"]["Latitude"]["Least"], "Decimal")
+				#print (coor_bounding_latitude_least)
+				coor_bounding_latitude_most = verify_key(coor["Bounding"]["Latitude"]["Most"], "Decimal")
+				#print (coor_bounding_latitude_most)
+				coor_bounding_longitude_least = verify_key(coor["Bounding"]["Longitude"]["Least"], "Decimal")
+				#print (coor_bounding_longitude_least)
+				coor_bounding_longitude_most = verify_key(coor["Bounding"]["Longitude"]["Most"], "Decimal")
+				#print (coor_bounding_longitude_most)
+			coor_elevation_meters = verify_key(coor, "Elevation_Meters")
+			#print (coor_elevation_meters)
 			
 ###
 ## To extract Descriptive Notes if they exist
@@ -134,5 +146,10 @@ for row in obj["Vocabulary"]["Subject"]:
 	#Vocabulary/Subject/Coordinates/Elevation_Feet
 	
 	#for column in row["column"]:
-        #c.execute("INSERT INTO table VALUES '(?,?)'", [column["@name"], column["#text"]])
+	c.execute("INSERT INTO table g_collection (name) VALUES ('TGN');")
+	g_collection_id = c.execute("last_insert_rowid();")
+    c.execute("INSERT INTO table g_feature (collection_id) VALUES (", g_collection_id, '"')
+	feature_id = c.execute("last_insert_rowid();")
+
+
 		#print ("item inserted \n")
