@@ -49,19 +49,19 @@ for row in obj["Vocabulary"]["Subject"]:
 					contrib_subject_id = verify_key(ar_date, "Contrib_Subject_ID")
 					#print (contrib_subject_id)
 					
-###
-## To extract Coordinates if they exist
-##
-## The structure is as follows
-##
-## Coordinates/Standard/Latitude/Decimal						mapped to	g_location	north_coordinate + south_coordinate
-## Coordinates/Standard/Longitude/Decimal						mapped to	g_location	east_coordinate + west_coordinate
-## Coordinates/Bounding/Latitude/Latitude_Least/Decimal			mapped to	g_location	south_coordinate
-## Coordinates/Bounding/Latitude/Latitude_Most/Decimal			mapped to	g_location	north_coordinate
-## Coordinates/Bounding/Longitude/Longitude_Least/Decimal		mapped to	g_location	west_coordinate
-## Coordinates/Bounding/Longitude/Longitude_Most/Decimal		mapped to	g_location	east_coordinate
-## Coordinates/Elevation_Meters									mapped to	NONE
-## 
+"""
+To extract Coordinates if they exist
+
+The structure is as follows
+
+Coordinates/Standard/Latitude/Decimal						mapped to	g_location	north_coordinate + south_coordinate
+Coordinates/Standard/Longitude/Decimal						mapped to	g_location	east_coordinate + west_coordinate
+Coordinates/Bounding/Latitude/Latitude_Least/Decimal		mapped to	g_location	south_coordinate
+Coordinates/Bounding/Latitude/Latitude_Most/Decimal			mapped to	g_location	north_coordinate
+Coordinates/Bounding/Longitude/Longitude_Least/Decimal		mapped to	g_location	west_coordinate
+Coordinates/Bounding/Longitude/Longitude_Most/Decimal		mapped to	g_location	east_coordinate
+Coordinates/Elevation_Meters								mapped to	NONE
+"""
 
 	if "Coordinates" in row:
 		for coor in row["Coordinates"]:
@@ -82,74 +82,63 @@ for row in obj["Vocabulary"]["Subject"]:
 			coor_elevation_meters = verify_key(coor, "Elevation_Meters")
 			#print (coor_elevation_meters)
 			
-###
-## To extract Descriptive Notes if they exist
-##
-## The structure is as follows
-##
-## Descriptive_Note/Note_Text
-## Descriptive_Note/Note_Contributors/Note_Contributors/Note_Contributor/Contributor_id
-## Descriptive_Note/Note_Sources/Note_Source/Source/Source_ID
-## Descriptive_Note/Note_Sources/Note_Source/Source/Brief_Citation
-## Descriptive_Note/Note_Sources/Note_Source/Source/Full_Citation
-## Descriptive_Note/Note_Sources/Note_Source/Source/Biblio_Note
-## Descriptive_Note/Note_Sources/Note_Source/Source/Merged_Status
-## Descriptive_Note/Note_Sources/Note_Source/Page
+"""
+To extract Descriptive Notes if they exist
 
-###
-## To extract Parent Relationships if they exist
-##
-## The structure is as follows
-##
-## Parent_Relationships/Preferred_Parent/Parent_Subject_ID
-## Parent_Relationships/Preferred_Parent/Relationship_Type
-## Parent_Relationships/Preferred_Parent/Historic_Flag
-## Parent_Relationships/Preferred_Parent/Parent_Date
-## Parent_Relationships/Non_Preferred_Parent/Parent_Subject_ID
-## Parent_Relationships/Non_Preferred_Parent/Relationship_Type
-## Parent_Relationships/Non_Preferred_Parent/Historic_Flag
-## Parent_Relationships/Non_Preferred_Parent/Parent_Date
+The structure is as follows
 
-###
-## To extract Place Types if they exist
-##
-## The structure is as follows
-##
-## Place_Types/Preferred_Place_Type/Place_Type_ID
-## Place_Types/Preferred_Place_Type/Display_Order
-## Place_Types/Preferred_Place_Type/Historic_Flag
-## Place_Types/Preferred_Place_Type/PT_Date
-## Place_Types/Non_Preferred_Place_Type/Place_Type_ID
-## Place_Types/Non_Preferred_Place_Type/Display_Order
-## Place_Types/Non_Preferred_Place_Type/Historic_Flag
-## Place_Types/Non_Preferred_Place_Type/PT_Date
+Descriptive_Note/Note_Text
+Descriptive_Note/Note_Contributors/Note_Contributors/Note_Contributor/Contributor_id
+Descriptive_Note/Note_Sources/Note_Source/Source/Source_ID
+Descriptive_Note/Note_Sources/Note_Source/Source/Brief_Citation
+Descriptive_Note/Note_Sources/Note_Source/Source/Full_Citation
+Descriptive_Note/Note_Sources/Note_Source/Source/Biblio_Note
+Descriptive_Note/Note_Sources/Note_Source/Source/Merged_Status
+Descriptive_Note/Note_Sources/Note_Source/Page
+"""
 
+"""
+To extract Parent Relationships if they exist
 
+The structure is as follows
+
+Parent_Relationships/Preferred_Parent/Parent_Subject_ID
+Parent_Relationships/Preferred_Parent/Relationship_Type
+Parent_Relationships/Preferred_Parent/Historic_Flag
+Parent_Relationships/Preferred_Parent/Parent_Date
+Parent_Relationships/Non_Preferred_Parent/Parent_Subject_ID
+Parent_Relationships/Non_Preferred_Parent/Relationship_Type
+Parent_Relationships/Non_Preferred_Parent/Historic_Flag
+Parent_Relationships/Non_Preferred_Parent/Parent_Date
+"""
+
+"""
+To extract Place Types if they exist
+
+The structure is as follows
+
+Place_Types/Preferred_Place_Type/Place_Type_ID
+Place_Types/Preferred_Place_Type/Display_Order
+Place_Types/Preferred_Place_Type/Historic_Flag
+Place_Types/Preferred_Place_Type/PT_Date
+Place_Types/Non_Preferred_Place_Type/Place_Type_ID
+Place_Types/Non_Preferred_Place_Type/Display_Order
+Place_Types/Non_Preferred_Place_Type/Historic_Flag
+Place_Types/Non_Preferred_Place_Type/PT_Date
+"""
 
 
 	
-	#if "Associative_Relationships" in row:
-		#print (row["Associative_Relationships"]["Associative_Relationship"])
-		#if "Description" in row:
-	#preferred_name = row["Terms"]["Preferred_Term"]
-	#latitude = row["Coordinates"]["Latitude"]["Decimal"]
-	#longitude = row["Coordinates"]["Longitude"]["Decimal"]
-	
-	#parent = row["Preferred_Parent"]["Parent_Subject_ID"]
-	#parent_relation = row["Preferred_Parent"]["Parent_Subject_ID"]
-	
-	#Vocabulary/Subject/Coordinates/Bounding/Latitude_Least
-	#Vocabulary/Subject/Coordinates/Bounding/Latitude_Most
-	#Vocabulary/Subject/Coordinates/Bounding/Longitude_Least
-	#Vocabulary/Subject/Coordinates/Bounding/Longitude_Most
-	#Vocabulary/Subject/Coordinates/Elevation_Meters
-	#Vocabulary/Subject/Coordinates/Elevation_Feet
-	
-	#for column in row["column"]:
+"""
+Let's now insert the values extracted from the XML into the database
+"""
+##	inserting a new collection and getting its id
 	c.execute("INSERT INTO table g_collection (name) VALUES ('TGN');")
-	g_collection_id = c.execute("last_insert_rowid();")
-    c.execute("INSERT INTO table g_feature (collection_id) VALUES (", g_collection_id, '"')
-	feature_id = c.execute("last_insert_rowid();")
+	collection_id = c.execute(" select collection_id from g_collection where name = 'TGN';")
+
+##	inserting a new feature using the collection_id as FK and getting the feature_id to use afterwards
+	c.execute("INSERT INTO table g_feature (collection_id) VALUES (", g_collection_id, '"')
+	feature_id = c.execute("select feature_id from g_feature order by feature_id desc limit 1")
 
 
 		#print ("item inserted \n")
