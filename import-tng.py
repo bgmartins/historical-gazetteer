@@ -47,7 +47,7 @@ for row in obj["Vocabulary"]["Subject"]:
     print (feature_id)
     
 ## Inserting a new feature in the database
-    c.execute("INSERT INTO {tbl} (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) VALUES (:fid,:colid,)".format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id})
+    c.execute("INSERT INTO {tbl} (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) VALUES (:fid,:colid,0,)".format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id})
 
 ###
 ## To extract Associative Relationaships if they exist
