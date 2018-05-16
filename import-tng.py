@@ -24,8 +24,8 @@ c = conn.cursor()
 ## Lest's start by creating a collection to refer to the source of features
 ## inserting a new collection and getting its id
 if new_collection == "yes":
-    collection_id = get_latest_id("g_collection", "collection_id")
-    new_collection_id = collection_id + 1
+    new_collection_id = get_latest_id("g_collection", "collection_id")+1
+    collection_id = new_collection_id
     #print (new_collection_id)
     c.execute("INSERT INTO {tbl} (collection_id, name, note) VALUES (:col_id , :nm, :nt);".format(tbl = "g_collection"), {'col_id': new_collection_id, 'nm': collection_name , 'nt': '\"collection of features from TGN\"'})
     conn.commit()
@@ -40,11 +40,14 @@ with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.
 
 #print (obj["Vocabulary"]["Subject"])
 
+## This for cicle iterates through all the subjects(features) existing in the XML file and adds them to the database
 for row in obj["Vocabulary"]["Subject"]:
-    #print (type(row))
 
-    feature = row["@Subject_ID"] #id of the subject
-    #print (feature)
+    feature_id = row["@Subject_ID"] #id of the subject
+    print (feature_id)
+    
+## Inserting a new feature in the database
+    c.execute("INSERT INTO {tbl} (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) VALUES (:fid,:colid,)".format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id})
 
 ###
 ## To extract Associative Relationaships if they exist
