@@ -149,13 +149,12 @@ def getType(k, v):
         return type(v)
     return None
 
-
 def convertAlphatoNum(input):
     non_decimal = re.compile(r'[^\d.\s\w]+')
     return non_decimal.sub(' ', input)
 
 def profile_data_wrapper(inputFile):
-    input = None
+    input = {}
     try:
         connection = sqlite3.connect(inputFile)
         connection.row_factory = dict_factory
@@ -163,19 +162,20 @@ def profile_data_wrapper(inputFile):
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = cursor.fetchall()
         for table_name in tables:
-		conn = sqlite3.connect("inputFile")
-		conn.row_factory = dict_factory
-		cur1 = conn.cursor()		 
-		cur1.execute("SELECT * FROM "+table_name['name'])		 
-		results = cur1.fetchall()
-		input = json.load(format(results).replace(" u'", "'").replace("'", "\""))
-                connection.close()
+            conn = sqlite3.connect(inputFile)
+            conn.row_factory = dict_factory
+            cur1 = conn.cursor()		 
+            cur1.execute("SELECT * FROM "+table_name['name'])		 
+            results = cur1.fetchall()
+            aux = json.loads(format(results).replace(" u'", "'").replace("'", "\""))
+            input = dict(input.items() + aux.items())
+            connection.close()
     except: input = readjson(inputFile)
     for k, v in item_generator(input):
         try:
             v = v.lower()
         except:
-            print "Error in lower case...passing"
+            print("Error in lower case...passing")
             pass
         # print k + "-->" + v
 
@@ -449,10 +449,10 @@ def profile_data(inputFile, outputFile, top_frequent=20):
             res[field] = curr_rec
             res["num_record"] = len(fields)
         except Exception as e:
-            print e
+            print(e)
             raise
             #pass
-    print res
+    print(res)
 
     ans = json.dumps(res)
     f = open(outputFile, 'w')
@@ -461,6 +461,6 @@ def profile_data(inputFile, outputFile, top_frequent=20):
 
 
 if __name__ == '__main__':
-    if (sys.argv) > 1 : profile_data(sys.argv[1],sys.argv[2],int(sys.argv[3]))
+    if len(sys.argv) > 1 : profile_data(sys.argv[1],sys.argv[2],int(sys.argv[3]))
     else: profile_data('gazetteer.db','gazetteer_database_profile.json', 20)
     print("--- %s seconds ---" % (time.time() - start_time))
