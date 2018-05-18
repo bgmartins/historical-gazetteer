@@ -2558,6 +2558,8 @@ INSERT INTO l_scheme_term VALUES (1276,2,'possibly equivalent to',NULL,NULL,NULL
 INSERT INTO l_scheme_term VALUES (1277,2,'parent of',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (1278,2,'child of',NULL,NULL,NULL);
 
+INSERT INTO l_scheme_term VALUES (1279,3,'undefined',NULL,NULL,NULL);
+
 INSERT INTO l_time_period_name VALUES (1,'undefined',4,NULL);
 INSERT INTO l_time_period_name VALUES (2,'undefined-current',4,NULL);
 INSERT INTO l_time_period_name VALUES (3,'undefined-historical',4,NULL);
@@ -2616,6 +2618,34 @@ INSERT INTO g_time_date_range VALUES (27,'0250-01-01','0900-01-01','classic meso
 INSERT INTO g_time_date_range VALUES (28,'0900-01-01','1521-01-01','post-classic mesoamerica',5);
 INSERT INTO g_time_date_range VALUES (29,'1945-01-01','1991-01-01','conquest of america',5);
 INSERT INTO g_time_date_range VALUES (30,'1521-01-01','1821-01-01','mesoamerican colonial period',5);
+
+INSERT INTO g_time_period VALUES (4,1279);
+INSERT INTO g_time_period VALUES (5,1279);
+INSERT INTO g_time_period VALUES (6,1279);
+INSERT INTO g_time_period VALUES (7,7);
+INSERT INTO g_time_period VALUES (8,8);
+INSERT INTO g_time_period VALUES (9,9);
+INSERT INTO g_time_period VALUES (10,10);
+INSERT INTO g_time_period VALUES (11,11);
+INSERT INTO g_time_period VALUES (12,12);
+INSERT INTO g_time_period VALUES (13,13);
+INSERT INTO g_time_period VALUES (14,14);
+INSERT INTO g_time_period_to_period_name VALUES (15,15);
+INSERT INTO g_time_period_to_period_name VALUES (16,16);
+INSERT INTO g_time_period_to_period_name VALUES (17,17);
+INSERT INTO g_time_period_to_period_name VALUES (18,18);
+INSERT INTO g_time_period_to_period_name VALUES (19,19);
+INSERT INTO g_time_period_to_period_name VALUES (20,20);
+INSERT INTO g_time_period_to_period_name VALUES (21,21);
+INSERT INTO g_time_period_to_period_name VALUES (22,22);
+INSERT INTO g_time_period_to_period_name VALUES (23,23);
+INSERT INTO g_time_period_to_period_name VALUES (24,24);
+INSERT INTO g_time_period_to_period_name VALUES (25,25);
+INSERT INTO g_time_period_to_period_name VALUES (26,26);
+INSERT INTO g_time_period_to_period_name VALUES (27,27);
+INSERT INTO g_time_period_to_period_name VALUES (28,28);
+INSERT INTO g_time_period_to_period_name VALUES (29,29);
+INSERT INTO g_time_period_to_period_name VALUES (30,30);
 
 INSERT INTO g_time_period_to_period_name VALUES (4,4);
 INSERT INTO g_time_period_to_period_name VALUES (5,5);
