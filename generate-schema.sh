@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Create the database
+sqlite3 gazetteer.db <gazetteer-sql-schema.sql
+
 # Download schema crawler
 mkdir temp
 cd temp
