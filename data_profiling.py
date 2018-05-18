@@ -126,7 +126,7 @@ def item_generator(json_input, key=None, path="$"):
         try:
             yield (path.strip('.'), str(json_input))
         except:
-            yield (path.strip('.'), json_input.encode('utf-8'))
+            yield (path.strip('.'), json_input)
             pass
 
 
@@ -139,7 +139,7 @@ def getType(k, v):
             return 'Boolean'
 
         _type = type(v)
-        if _type is int or _type is long:
+        if _type is int:
             return "Integer"
         if _type is float:
             return "Decimal"
@@ -154,7 +154,7 @@ def convertAlphatoNum(input):
     return non_decimal.sub(' ', input)
 
 def profile_data_wrapper(inputFile):
-    input = {}
+    input = dict()
     try:
         connection = sqlite3.connect(inputFile)
         connection.row_factory = dict_factory
@@ -167,9 +167,10 @@ def profile_data_wrapper(inputFile):
             cur1 = conn.cursor()		 
             cur1.execute("SELECT * FROM "+table_name['name'])		 
             results = cur1.fetchall()
-            aux = json.loads(format(results).replace(" u'", "'").replace("'", "\""))
-            input = dict(input.items() + aux.items())
+            results = '{ "' + table_name['name'] + '":' + format(results).replace(" u'", "'").replace("'", "\"").replace(': None,', ': "null",').replace(': None}', ': "null"}') + " }"
+            input.update(dict(json.loads(results)))
             connection.close()
+        input = input.items()
     except: input = readjson(inputFile)
     for k, v in item_generator(input):
         try:
@@ -462,5 +463,5 @@ def profile_data(inputFile, outputFile, top_frequent=20):
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 : profile_data(sys.argv[1],sys.argv[2],int(sys.argv[3]))
-    else: profile_data('gazetteer.db','gazetteer_database_profile.json', 20)
+    else: profile_data('gazetteer.db','gazetteer-database-profile.json', 20)
     print("--- %s seconds ---" % (time.time() - start_time))
