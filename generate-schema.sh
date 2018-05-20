@@ -2,6 +2,7 @@
 
 # Create the database
 sqlite3 gazetteer.db <gazetteer-sql-schema.sql
+python3 import_periodo.py
 
 # Download schema crawler
 mkdir temp
