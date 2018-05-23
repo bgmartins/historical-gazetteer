@@ -224,13 +224,13 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         'agricultural center': 'agricultural facilities' }
     typedictionary = {}
     auxtypes = []
-    for line in open('/home/bgmartins/public_html/GettyTGN/tgn1.xml'):
+    for line in open('tgn1-extract.xml'):
         line = line.split("<Place_Type_ID>")
         if len(line) <= 1 : continue
         for i in range(1,len(line)):
             name = line[i].split("</Place_Type_ID>")[0]
             typedictionary[name] = name.split("/")[0].strip().lower()
-    conn = sqlite3.connect('./historical-gazetteer/gazetteer.db')
+    conn = sqlite3.connect('./gazetteer.db')
     c = conn.cursor()
     for row in c.execute('SELECT * FROM l_scheme_term WHERE scheme_id=' + str(target_scheme_code)): auxtypes.append( (row[0],row[2]) )
     metric = sm.similarity_measure.jaro_winkler.JaroWinkler()
@@ -257,12 +257,24 @@ def verify_key(root, key):
 
 def get_latest_id(table, id_field):
     c.execute("select {fld} from {tbl} order by {fld} desc limit 1;".format(tbl=table,fld=id_field))
-    return c.fetchone()[0]
+    ## If the table has no records yet, the value 0 is returned
+    if c.fetchone() != None:
+        return c.fetchone()[0]
+    else:
+        return 0
 
 conn = sqlite3.connect("test.sqlite3")
 c = conn.cursor()
 
-## Lest's start by creating a collection to use as the source of features
+"""
+Getting the classification terms dictionary
+"""
+dict_classification_terms = build_type_dictionary() ## Still not working
+
+
+"""
+We start by creating a collection to use as the source of features
+"""
 ## inserting a new collection and getting its id
 if new_collection == "yes":
     new_collection_id = get_latest_id("g_collection", "collection_id")+1
@@ -289,17 +301,54 @@ for row in obj["Vocabulary"]["Subject"]:
     #print (row)
     
     if row["Descriptive_Note"] != None:
-        descriptive_note_text = row["Descriptive_Note"]["Note_Text"]
+        if row["Descriptive_Note"]["Note_Text"]:
+            descriptive_note_text = row["Descriptive_Note"]["Note_Text"]
     else:
         descriptive_note_text = ""
     #print(type(row))
     #print (row(["Descriptive_Note"]["Note_Text"]))
     entry_date = datetime.datetime.now()
     
-    print (row["Terms"]["Preferred_Term"]["Term_Type"])
+    """
+    Adding a new feature to the database
+    """
+#    c.execute("INSERT INTO {tbl} \
+#             (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) \
+#              VALUES (:fid,:colid,0,1,:entnote,:entdate,:entdate)".format(tbl = "g_feature"),\
+#             {'fid':feature_id,'colid':collection_id,'entnote':descriptive_note_text,'entdate':entry_date})
     
-## Adding a new feature in the database
-    #c.execute("INSERT INTO {tbl} (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) VALUES (:fid,:colid,0,1,:entnote,:entdate,:entdate)".format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id,'entnote':descriptive_note_text,'entdate':entry_date})
+    """
+    filling table g_feature_name
+    """
+    # We first extract the latest feature_name_id from the table to increment
+    latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
+    
+    # We also need to get the Noun, which is the preferred term inside terms
+    if row["Terms"]["Preferred_Term"]["Term_Type"] == "Noun":
+        feature_name = row["Terms"]["Preferred_Term"]["Term_Text"]
+    else:
+        feature_name = ""
+
+#    c.execute("INSERT INTO {tbl} \
+#             (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
+#              VALUES (:fnameid,:fid,1,:fname,"",129,9,"")".format(tbl = "g_feature_name"),\
+#             {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
+    
+    """
+    filling table g_classification
+    """
+    # We first get the latest classification id
+    latest_g_classification_id = get_latest_id("g_classification","classification_id") + 1
+    
+    # We then map the place_type to the correct classification_term
+    place_type = row["Place_Types"]["Preferred_Place_Type"]["Place_Type_ID"]
+    adl_place_type_id = dict_classification_terms[place_type]
+    
+    c.execute("INSERT INTO {tbl} \
+             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
+              VALUES (:classidid,:fid,:classtermid,1,1,"")".format(tbl = "g_classification"),\
+             {'classid':latest_g_classification_id,'fid':feature_id,'classtermid':adl_place_type_id})
+    
     
     
     
