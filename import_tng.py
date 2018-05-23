@@ -2,6 +2,7 @@ import os
 import sqlite3
 import py_stringmatching as sm
 import xmltodict
+import datetime
 #import defusedexpat
 
 ## initial parameters and global variables
@@ -261,7 +262,7 @@ def get_latest_id(table, id_field):
 conn = sqlite3.connect("test.sqlite3")
 c = conn.cursor()
 
-## Lest's start by creating a collection to refer to the source of features
+## Lest's start by creating a collection to use as the source of features
 ## inserting a new collection and getting its id
 if new_collection == "yes":
     new_collection_id = get_latest_id("g_collection", "collection_id")+1
@@ -280,15 +281,29 @@ with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.
 
 #print (obj["Vocabulary"]["Subject"])
 
-## This for cicle iterates through all the subjects(features) existing in the XML file and adds them to the database
+## This for cycle iterates through all the subjects(features) from the XML file and adds them to the database
 for row in obj["Vocabulary"]["Subject"]:
 
     feature_id = row["@Subject_ID"] #id of the subject
     print (feature_id)
+    #print (row)
     
-## Inserting a new feature in the database
-    c.execute("INSERT INTO {tbl} (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) VALUES (:fid,:colid,0,)".format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id})
-
+    if row["Descriptive_Note"] != None:
+        descriptive_note_text = row["Descriptive_Note"]["Note_Text"]
+    else:
+        descriptive_note_text = ""
+    #print(type(row))
+    #print (row(["Descriptive_Note"]["Note_Text"]))
+    entry_date = datetime.datetime.now()
+    
+    print (row["Terms"]["Preferred_Term"]["Term_Type"])
+    
+## Adding a new feature in the database
+    #c.execute("INSERT INTO {tbl} (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) VALUES (:fid,:colid,0,1,:entnote,:entdate,:entdate)".format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id,'entnote':descriptive_note_text,'entdate':entry_date})
+    
+    
+    
+    
 ###
 ## To extract Associative Relationaships if they exist
     if "Associative_Relationships" in row:
