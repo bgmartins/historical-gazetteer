@@ -337,19 +337,48 @@ for row in obj["Vocabulary"]["Subject"]:
     """
     filling table g_classification
     """
-    # We first get the latest classification id
-    latest_g_classification_id = get_latest_id("g_classification","classification_id") + 1
+    # We first get and increment the latest classification id
+    latest_classification_id = get_latest_id("g_classification","classification_id") + 1
     
     # We then map the place_type to the correct classification_term
     place_type = row["Place_Types"]["Preferred_Place_Type"]["Place_Type_ID"]
     adl_place_type_id = dict_classification_terms[place_type]
     
-    c.execute("INSERT INTO {tbl} \
-             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
-              VALUES (:classidid,:fid,:classtermid,1,1,"")".format(tbl = "g_classification"),\
-             {'classid':latest_g_classification_id,'fid':feature_id,'classtermid':adl_place_type_id})
+#    c.execute("INSERT INTO {tbl} \
+#             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
+#              VALUES (:classid,:fid,:classtermid,1,1,'')".format(tbl = "g_classification"),\
+#             {'classid':latest_classification_id,'fid':feature_id,'classtermid':adl_place_type_id})
     
+    """
+    filling table g_feature_code
+    """
+    # We first get and increment the latest feature code id
+    latest_feature_code_id = get_latest_id("g_feature_code","feature_code_id") + 1
     
+#    c.execute("INSERT INTO {tbl} \
+#             (feature_code_id, feature_id, code, code_scheme_id) \
+#              VALUES (:fcodeid,:fid,'Undefined',0)".format(tbl = "g_feature_code"),\
+#             {'fcodeid':latest_feature_code_id,'fid':feature_id})
+    
+    """
+    filling table g_location
+    This only makes sense if we have information in the TGN XML file
+    """
+    if "Coordinates" in row:
+        print (row["Coordinates"]["Standard"]["Latitude"]["Decimal"])
+        # first we get and increment the latest location id
+#        latest_location_id = get_latest_id("g_location","location_id") + 1
+        
+        #TODO - finish the below code
+#        c.execute("INSERT INTO {tbl} \
+#                 (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
+#                  VALUES (:locid,:fid,'',4326,)".format(tbl = "g_location"),\
+#                 {'locid':latest_location_id,'fid':feature_id})
+    
+    """
+    filling table 
+    """
+    # we first get and increment the 
     
     
     
