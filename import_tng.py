@@ -289,7 +289,7 @@ elif new_collection == "no":
 
 
 ### Now we open the XML file to import to the gazeteer database
-with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True})
+with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True})
 
 #print (obj["Vocabulary"]["Subject"])
 
@@ -297,11 +297,11 @@ with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.
 for row in obj["Vocabulary"]["Subject"]:
 
     feature_id = row["@Subject_ID"] #id of the subject
-    print (feature_id)
+    #print (feature_id)
     #print (row)
     
     if row["Descriptive_Note"] != None:
-        if row["Descriptive_Note"]["Note_Text"]:
+        if "Note_Text" in row.get("Descriptive_Note", {}):
             descriptive_note_text = row["Descriptive_Note"]["Note_Text"]
     else:
         descriptive_note_text = ""
@@ -342,7 +342,7 @@ for row in obj["Vocabulary"]["Subject"]:
     
     # We then map the place_type to the correct classification_term
     place_type = row["Place_Types"]["Preferred_Place_Type"]["Place_Type_ID"]
-    adl_place_type_id = dict_classification_terms[place_type]
+    #adl_place_type_id = dict_classification_terms[place_type]
     
 #    c.execute("INSERT INTO {tbl} \
 #             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
@@ -362,21 +362,33 @@ for row in obj["Vocabulary"]["Subject"]:
     
     """
     filling table g_location
-    This only makes sense if we have information in the TGN XML file
+    This only makes sense if such information is available in the TGN XML file
+    Besides, the data is available in two types: either we have a point or a bounding box.
     """
     if "Coordinates" in row:
-        print (row["Coordinates"]["Standard"]["Latitude"]["Decimal"])
-        # first we get and increment the latest location id
-#        latest_location_id = get_latest_id("g_location","location_id") + 1
-        
-        #TODO - finish the below code
-#        c.execute("INSERT INTO {tbl} \
-#                 (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
-#                  VALUES (:locid,:fid,'',4326,)".format(tbl = "g_location"),\
-#                 {'locid':latest_location_id,'fid':feature_id})
+        for coor in row["Coordinates"]:
+            # We get and increment the latest location id
+            latest_location_id = get_latest_id("g_location","location_id") + 1
+            if "Standard" in coor:
+                coor_bounding_latitude_least = verify_key(coor["Standard"]["Latitude"], "Decimal")
+                coor_bounding_latitude_most = verify_key(coor["Standard"]["Latitude"], "Decimal")
+                coor_bounding_longitude_least = verify_key(coor["Standard"]["Longitude"], "Decimal")
+                coor_bounding_longitude_most = verify_key(coor["Standard"]["Longitude"], "Decimal")
+
+            if "Bounding" in coor:
+                coor_bounding_latitude_least = verify_key(coor["Bounding"]["Latitude_Least"], "Decimal")
+                coor_bounding_latitude_most = verify_key(coor["Bounding"]["Latitude_Most"], "Decimal")
+                coor_bounding_longitude_least = verify_key(coor["Bounding"]["Longitude_Least"], "Decimal")
+                coor_bounding_longitude_most = verify_key(coor["Bounding"]["Longitude_Most"], "Decimal")
+            coor_elevation_meters = verify_key(coor, "Elevation_Meters")
+            
+#            c.execute("INSERT INTO {tbl} \
+#                    (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
+#                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,,'Undefined','Undefined')".format(tbl = "g_location"),\
+#                    {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
     
     """
-    filling table 
+    filling table g_related_feature
     """
     # we first get and increment the 
     
@@ -408,38 +420,6 @@ for row in obj["Vocabulary"]["Subject"]:
                     #print (vp_subject_id)
                     contrib_subject_id = verify_key(ar_date, "Contrib_Subject_ID")
                     #print (contrib_subject_id)
-
-## To extract Coordinates if they exist
-
-## The structure is as follows
-
-## Coordinates/Standard/Latitude/Decimal                       mapped to	g_location	north_coordinate + south_coordinate
-## Coordinates/Standard/Longitude/Decimal                      mapped to	g_location	east_coordinate + west_coordinate
-## Coordinates/Bounding/Latitude/Latitude_Least/Decimal        mapped to	g_location	south_coordinate
-## Coordinates/Bounding/Latitude/Latitude_Most/Decimal         mapped to	g_location	north_coordinate
-## Coordinates/Bounding/Longitude/Longitude_Least/Decimal      mapped to	g_location	west_coordinate
-## Coordinates/Bounding/Longitude/Longitude_Most/Decimal       mapped to	g_location	east_coordinate
-## Coordinates/Elevation_Meters                                mapped to	NONE
-
-
-    if "Coordinates" in row:
-        for coor in row["Coordinates"]:
-            if "Standard" in coor:
-                coor_standard_latitude_decimal = verify_key(coor["Standard"]["Latitude"], "Decimal")
-                #print (coor_standard_latitude_decimal)
-                coor_standard_longitude_decimal = verify_key(coor["Standard"]["Longitude"], "Decimal")
-                #print (coor_standard_longitude_decimal)
-            if "Bounding" in coor:
-                coor_bounding_latitude_least = verify_key(coor["Bounding"]["Latitude"]["Least"], "Decimal")
-                #print (coor_bounding_latitude_least)
-                coor_bounding_latitude_most = verify_key(coor["Bounding"]["Latitude"]["Most"], "Decimal")
-                #print (coor_bounding_latitude_most)
-                coor_bounding_longitude_least = verify_key(coor["Bounding"]["Longitude"]["Least"], "Decimal")
-                #print (coor_bounding_longitude_least)
-                coor_bounding_longitude_most = verify_key(coor["Bounding"]["Longitude"]["Most"], "Decimal")
-                #print (coor_bounding_longitude_most)
-            coor_elevation_meters = verify_key(coor, "Elevation_Meters")
-            #print (coor_elevation_meters)
 
 
 ###
