@@ -389,15 +389,26 @@ for row in obj["Vocabulary"]["Subject"]:
     
     """
     filling table g_related_feature
+    
+    related_feature_id LONG NOT NULL PRIMARY KEY,
+    feature_id LONG NOT NULL, -- A machine-generated identifier assigned to uniquely distinguish a feature.
+    related_name VARCHAR(100) NOT NULL, -- Name by which the related feature is known.
+    related_feature_feature_id LONG, -- If the related feature has a record in the gazetteer, this is where its unique identifier is recorded.
+    time_period_id LONG NOT NULL,
+    related_type_term_id LONG NOT NULL,
+    time_period_note VARCHAR(255),
+    FOREIGN KEY (feature_id) REFERENCES g_feature,
+    FOREIGN KEY (related_feature_feature_id) REFERENCES g_feature,
+    FOREIGN KEY (time_period_id) REFERENCES g_time_period,
+    FOREIGN KEY (related_type_term_id) REFERENCES l_scheme_term
     """
-    # we first get and increment the 
-    
-    
-    
+    # We first get and increment the latest related feature id
+    latest_related_feature_id = get_latest_id("g_related_feature","related_feature_id ") + 1
 ###
 ## To extract Associative Relationaships if they exist
     if "Associative_Relationships" in row:
-        #print(row)
+        print (feature_id)
+        #print (feature_id)
         for rel in row["Associative_Relationships"]["Associative_Relationship"]:
             historic_flag = verify_key(rel, "Historic_Flag")
             #print (historic_flag)
@@ -415,12 +426,23 @@ for row in obj["Vocabulary"]["Subject"]:
             relatioship_type = verify_key(rel, "Relationship_Type")
             #print (relatioship_type)
             if "Related_Subject_ID" in rel:
+                print (rel["Related_Subject_ID"])
                 for rel_sub in rel["Related_Subject_ID"]:
                     vp_subject_id = verify_key(ar_date, "VP_Subject_ID")
                     #print (vp_subject_id)
                     contrib_subject_id = verify_key(ar_date, "Contrib_Subject_ID")
                     #print (contrib_subject_id)
+            
+            c.execute("INSERT INTO {tbl} \
+                    (related_feature_id,feature_id,related_name,related_feature_feature_id,time_period_id,related_type_term_id,time_period_note) \
+                     VALUES (:relfid,:fid,'None',)".format(tbl = "g_related_feature"),\
+                    {'relfid':latest_related_feature_id,'fid':feature_id})
 
+    
+    
+    # if "Descriptive_Note" in row:
+        # print (feature_id)
+        # print (row["Parent_Relationships"])
 
 ###
 ##To extract Descriptive Notes if they exist
