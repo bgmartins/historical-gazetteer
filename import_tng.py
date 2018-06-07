@@ -289,7 +289,7 @@ elif new_collection == "no":
 
 
 ### Now we open the XML file to import to the gazeteer database
-with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True})
+with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True})
 
 #print (obj["Vocabulary"]["Subject"])
 
@@ -328,12 +328,24 @@ for row in obj["Vocabulary"]["Subject"]:
         feature_name = row["Terms"]["Preferred_Term"]["Term_Text"]
     else:
         feature_name = ""
-
+    
 #    c.execute("INSERT INTO {tbl} \
 #             (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
 #              VALUES (:fnameid,:fid,1,:fname,"",129,9,"")".format(tbl = "g_feature_name"),\
 #             {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
-    
+#    print(feature_id)
+    if "Non-Preferred_Term" in row.get("Terms", {}):
+        for term in row["Terms"]["Non-Preferred_Term"]:
+#            print(term)
+            if term["Term_Type"] == "Noun":
+                feature_name = term["Term_Text"]
+                # We first extract the latest feature_name_id from the table to increment
+                latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
+#                print (feature_name)
+#                c.execute("INSERT INTO {tbl} \
+#                    (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
+#                    VALUES (:fnameid,:fid,0,:fname,"",129,9,"")".format(tbl = "g_feature_name"),\
+#                    {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
     """
     filling table g_classification
     """
@@ -387,6 +399,7 @@ for row in obj["Vocabulary"]["Subject"]:
 #                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,,'Undefined','Undefined')".format(tbl = "g_location"),\
 #                    {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
     
+    #TO-DO: We need to do this after all the features are stored in the database to avoid constrain issues
     """
     filling table g_related_feature
     
@@ -403,8 +416,9 @@ for row in obj["Vocabulary"]["Subject"]:
     FOREIGN KEY (related_type_term_id) REFERENCES l_scheme_term
     """
     # We first get and increment the latest related feature id
-    latest_related_feature_id = get_latest_id("g_related_feature","related_feature_id ") + 1
-###
+    #latest_related_feature_id = get_latest_id("g_related_feature","related_feature_id ") + 1
+
+    """
 ## To extract Associative Relationaships if they exist
     if "Associative_Relationships" in row:
         print (feature_id)
@@ -415,6 +429,7 @@ for row in obj["Vocabulary"]["Subject"]:
             description = verify_key(rel, "Description")
             #print (description)
             if "AR_Date" in rel:
+                print (rel["AR_Date"])
                 for ar_date in rel["AR_Date"]:
                     #print (ar_date)
                     ar_display_date = verify_key(ar_date, "Display_Date")
@@ -433,22 +448,22 @@ for row in obj["Vocabulary"]["Subject"]:
                     contrib_subject_id = verify_key(ar_date, "Contrib_Subject_ID")
                     #print (contrib_subject_id)
             
-            c.execute("INSERT INTO {tbl} \
-                    (related_feature_id,feature_id,related_name,related_feature_feature_id,time_period_id,related_type_term_id,time_period_note) \
-                     VALUES (:relfid,:fid,'None',)".format(tbl = "g_related_feature"),\
-                    {'relfid':latest_related_feature_id,'fid':feature_id})
-
+            # c.execute("INSERT INTO {tbl} \
+                    # (related_feature_id,feature_id,related_name,related_feature_feature_id,time_period_id,related_type_term_id,time_period_note) \
+                    # VALUES (:relfid,:fid,'None',)".format(tbl = "g_related_feature"),\
+                    # {'relfid':latest_related_feature_id,'fid':feature_id})
+    """
     
     
     # if "Descriptive_Note" in row:
         # print (feature_id)
         # print (row["Parent_Relationships"])
-
+    
 ###
 ##To extract Descriptive Notes if they exist
-
+    
 ##The structure is as follows
-
+    
 ##Descriptive_Note/Note_Text
 ##Descriptive_Note/Note_Contributors/Note_Contributors/Note_Contributor/Contributor_id
 ##Descriptive_Note/Note_Sources/Note_Source/Source/Source_ID
