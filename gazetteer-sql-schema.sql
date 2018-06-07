@@ -551,6 +551,8 @@ CREATE TABLE s_time_period (
    FOREIGN KEY (entry_source_id) REFERENCES g_entry_source
 );
 
+INSERT INTO l_author VALUES (1,'UNDEFINED AUTHOR');
+
 INSERT INTO l_contributor VALUES (1,'INESC-ID','IDSS','https://idss.inesc-id.pt/',NULL,NULL,NULL,'Lisbon',NULL,'Portugal');
 
 INSERT INTO l_scheme VALUES (0,'UNDEFINED SCHEME',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GLOBAL',0);
