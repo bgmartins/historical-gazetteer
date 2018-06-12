@@ -289,7 +289,7 @@ elif new_collection == "no":
 
 
 ### Now we open the XML file to import to the gazeteer database
-with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True})
+with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
 
 #print (obj["Vocabulary"]["Subject"])
 
@@ -297,7 +297,7 @@ with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.
 for row in obj["Vocabulary"]["Subject"]:
 
     feature_id = row["@Subject_ID"] #id of the subject
-    #print (feature_id)
+    print (feature_id)
     #print (row)
     
     if row["Descriptive_Note"] != None:
@@ -399,6 +399,45 @@ for row in obj["Vocabulary"]["Subject"]:
 #                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,,'Undefined','Undefined')".format(tbl = "g_location"),\
 #                    {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
     
+    """
+    filling the source subject area, namely tables table l_source_reference, g_source, g_entry_source
+    """
+    if "Subject_Sources" in row:
+#        print (row["Subject_Sources"]["Subject_Source"])
+        for subject_source in row["Subject_Sources"]["Subject_Source"]:
+            a = subject_source["Source"]["Source_ID"].split('/')
+            source_ref_id = a[0]
+            citation = a[1]
+            latest_entry_source_id = ""
+            if c.execute('SELECT * FROM l_source_reference WHERE source_reference_id=' + source_ref_id).fetchone() == None:
+#                c.execute("INSERT INTO {tbl} (source_reference_id,citation,reference_author_id) \
+#                           VALUES (:srefid,:cit,1)".format(tbl = "l_source_reference"),\
+#                           {'srefid':source_ref_id,'cit':citation})
+                
+                # We get and increment the latest source id
+                latest_source_id = get_latest_id("g_source","source_id") + 1
+                
+#                c.execute("INSERT INTO {tbl} (source_id,contributor_id,source_reference_id) \
+#                           VALUES (:srcid,1,:srcrefid)".format(tbl = "g_source"),\
+#                           {'srcid':latest_source_id,'srcrefid':source_ref_id})
+                
+                # We get and increment the latest entry_source id
+                latest_entry_source_id = get_latest_id("g_entry_source","entry_source_id") + 1
+                
+#                c.execute("INSERT INTO {tbl} (entry_source_id,source_id,entry_date) \
+#                            VALUES (:entsrcid,:srcid," + datetime.datetime.now() + ")".format(tbl = "g_entry_source"),\
+#                            {'entsrcid':latest_entry_source_id,'srcid':latest_source_id})
+                
+            else:
+                source_id = c.execute('SELECT source_id FROM g_source WHERE source_reference_id=' + source_ref_id).fetchone()
+                latest_entry_source_id = c.execute('SELECT entry_source_id FROM g_entrty_source WHERE source_id=' + source_id).fetchone()
+    
+#            c.execute("INSERT INTO {tbl} (feature_id,time_period_id,entry_source_id) \
+#                        VALUES (:fid,1,entsrcid")".format(tbl = "s_feature"),\
+#                        {'fid':feature_id,'entsrcid':latest_entry_source_id})    
+    
+    
+    
     #TO-DO: We need to do this after all the features are stored in the database to avoid constrain issues
     """
     filling table g_related_feature
@@ -455,64 +494,6 @@ for row in obj["Vocabulary"]["Subject"]:
     """
     
     
-    # if "Descriptive_Note" in row:
-        # print (feature_id)
-        # print (row["Parent_Relationships"])
-    
-###
-##To extract Descriptive Notes if they exist
-    
-##The structure is as follows
-    
-##Descriptive_Note/Note_Text
-##Descriptive_Note/Note_Contributors/Note_Contributors/Note_Contributor/Contributor_id
-##Descriptive_Note/Note_Sources/Note_Source/Source/Source_ID
-##Descriptive_Note/Note_Sources/Note_Source/Source/Brief_Citation
-##Descriptive_Note/Note_Sources/Note_Source/Source/Full_Citation
-##Descriptive_Note/Note_Sources/Note_Source/Source/Biblio_Note
-##Descriptive_Note/Note_Sources/Note_Source/Source/Merged_Status
-##Descriptive_Note/Note_Sources/Note_Source/Page
 
-
-###
-##To extract Parent Relationships if they exist
-
-##The structure is as follows
-
-##Parent_Relationships/Preferred_Parent/Parent_Subject_ID
-##Parent_Relationships/Preferred_Parent/Relationship_Type
-##Parent_Relationships/Preferred_Parent/Historic_Flag
-##Parent_Relationships/Preferred_Parent/Parent_Date
-##Parent_Relationships/Non_Preferred_Parent/Parent_Subject_ID
-##Parent_Relationships/Non_Preferred_Parent/Relationship_Type
-##Parent_Relationships/Non_Preferred_Parent/Historic_Flag
-##Parent_Relationships/Non_Preferred_Parent/Parent_Date
-
-
-###
-##To extract Place Types if they exist
-
-##The structure is as follows
-
-##Place_Types/Preferred_Place_Type/Place_Type_ID
-##Place_Types/Preferred_Place_Type/Display_Order
-##Place_Types/Preferred_Place_Type/Historic_Flag
-##Place_Types/Preferred_Place_Type/PT_Date
-##Place_Types/Non_Preferred_Place_Type/Place_Type_ID
-##Place_Types/Non_Preferred_Place_Type/Display_Order
-##Place_Types/Non_Preferred_Place_Type/Historic_Flag
-##Place_Types/Non_Preferred_Place_Type/PT_Date
-##
-
-
-
-
-## Let's now insert the features extracted from the XML into the database
-
-
-
-##  inserting a new feature using the collection_id as FK and getting the feature_id to use afterwards
-    #c.execute("INSERT INTO table g_feature (collection_id) VALUES (", g_collection_id, '"')
-    #feature_id = c.execute("select feature_id from g_feature order by feature_id desc limit 1")
 
 
