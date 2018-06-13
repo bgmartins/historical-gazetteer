@@ -6,7 +6,7 @@ import datetime
 #import defusedexpat
 
 ## initial parameters and global variables
-new_collection = "no"
+new_collection = "yes"
 collection_name = "TGN"
 collection_id = ""
 
@@ -258,12 +258,13 @@ def verify_key(root, key):
 def get_latest_id(table, id_field):
     c.execute("select {fld} from {tbl} order by {fld} desc limit 1;".format(tbl=table,fld=id_field))
     ## If the table has no records yet, the value 0 is returned
-    if c.fetchone() != None:
-        return c.fetchone()[0]
+    a = c.fetchone()
+    if a != None:
+        return a[0]
     else:
         return 0
 
-conn = sqlite3.connect("test.sqlite3")
+conn = sqlite3.connect("test")
 c = conn.cursor()
 
 """
@@ -292,7 +293,8 @@ elif new_collection == "no":
 with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
 
 #print (obj["Vocabulary"]["Subject"])
-
+date = datetime.date.today()
+today = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
 ## This for cycle iterates through all the subjects(features) from the XML file and adds them to the database
 for row in obj["Vocabulary"]["Subject"]:
 
@@ -312,11 +314,11 @@ for row in obj["Vocabulary"]["Subject"]:
     """
     Adding a new feature to the database
     """
-#    c.execute("INSERT INTO {tbl} \
-#             (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) \
-#              VALUES (:fid,:colid,0,1,:entnote,:entdate,:entdate)".format(tbl = "g_feature"),\
-#             {'fid':feature_id,'colid':collection_id,'entnote':descriptive_note_text,'entdate':entry_date})
-    
+    c.execute("INSERT INTO {tbl} \
+             (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) \
+             VALUES (:fid,:colid,0,1,:entnote,:entdate,:entdate)".\
+             format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id,'entnote':descriptive_note_text,'entdate':entry_date})    
+    conn.commit()
     """
     filling table g_feature_name
     """
@@ -329,23 +331,27 @@ for row in obj["Vocabulary"]["Subject"]:
     else:
         feature_name = ""
     
-#    c.execute("INSERT INTO {tbl} \
-#             (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
-#              VALUES (:fnameid,:fid,1,:fname,"",129,9,"")".format(tbl = "g_feature_name"),\
-#             {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
-#    print(feature_id)
+    c.execute("INSERT INTO {tbl} \
+             (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
+              VALUES (:fnameid,:fid,1,:fname,'',129,9,'')".format(tbl = "g_feature_name"),\
+             {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
+    conn.commit()
+    
     if "Non-Preferred_Term" in row.get("Terms", {}):
         for term in row["Terms"]["Non-Preferred_Term"]:
 #            print(term)
             if term["Term_Type"] == "Noun":
                 feature_name = term["Term_Text"]
-                # We first extract the latest feature_name_id from the table to increment
-                latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
 #                print (feature_name)
-#                c.execute("INSERT INTO {tbl} \
-#                    (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
-#                    VALUES (:fnameid,:fid,0,:fname,"",129,9,"")".format(tbl = "g_feature_name"),\
-#                    {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
+                # We first extract the latest feature_name_id from the table to increment
+#                print (latest_g_feature_name_id)
+                latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
+                
+                c.execute("INSERT INTO {tbl} \
+                    (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
+                    VALUES (:fnameid,:fid,0,:fname,'',129,9,'')".format(tbl = "g_feature_name"),\
+                    {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
+                conn.commit()
     """
     filling table g_classification
     """
@@ -354,12 +360,13 @@ for row in obj["Vocabulary"]["Subject"]:
     
     # We then map the place_type to the correct classification_term
     place_type = row["Place_Types"]["Preferred_Place_Type"]["Place_Type_ID"]
-    #adl_place_type_id = dict_classification_terms[place_type]
+    adl_place_type_id = dict_classification_terms[place_type]
     
-#    c.execute("INSERT INTO {tbl} \
-#             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
-#              VALUES (:classid,:fid,:classtermid,1,1,'')".format(tbl = "g_classification"),\
-#             {'classid':latest_classification_id,'fid':feature_id,'classtermid':adl_place_type_id})
+    c.execute("INSERT INTO {tbl} \
+             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
+              VALUES (:classid,:fid,:classtermid,1,1,'')".format(tbl = "g_classification"),\
+             {'classid':latest_classification_id,'fid':feature_id,'classtermid':adl_place_type_id})
+    conn.commit()
     
     """
     filling table g_feature_code
@@ -367,11 +374,11 @@ for row in obj["Vocabulary"]["Subject"]:
     # We first get and increment the latest feature code id
     latest_feature_code_id = get_latest_id("g_feature_code","feature_code_id") + 1
     
-#    c.execute("INSERT INTO {tbl} \
-#             (feature_code_id, feature_id, code, code_scheme_id) \
-#              VALUES (:fcodeid,:fid,'Undefined',0)".format(tbl = "g_feature_code"),\
-#             {'fcodeid':latest_feature_code_id,'fid':feature_id})
-    
+    c.execute("INSERT INTO {tbl} \
+             (feature_code_id, feature_id, code, code_scheme_id) \
+              VALUES (:fcodeid,:fid,'Undefined',0)".format(tbl = "g_feature_code"),\
+             {'fcodeid':latest_feature_code_id,'fid':feature_id})
+    conn.commit()
     """
     filling table g_location
     This only makes sense if such information is available in the TGN XML file
@@ -394,48 +401,47 @@ for row in obj["Vocabulary"]["Subject"]:
                 coor_bounding_longitude_most = verify_key(coor["Bounding"]["Longitude_Most"], "Decimal")
             coor_elevation_meters = verify_key(coor, "Elevation_Meters")
             
-#            c.execute("INSERT INTO {tbl} \
-#                    (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
-#                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,,'Undefined','Undefined')".format(tbl = "g_location"),\
-#                    {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
-    
+            c.execute("INSERT INTO {tbl} \
+                    (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
+                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,,'Undefined','Undefined')".format(tbl = "g_location"),\
+                    {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
+            conn.commit()
     """
     filling the source subject area, namely tables table l_source_reference, g_source, g_entry_source
     """
     if "Subject_Sources" in row:
-#        print (row["Subject_Sources"]["Subject_Source"])
         for subject_source in row["Subject_Sources"]["Subject_Source"]:
             a = subject_source["Source"]["Source_ID"].split('/')
             source_ref_id = a[0]
             citation = a[1]
             latest_entry_source_id = ""
             if c.execute('SELECT * FROM l_source_reference WHERE source_reference_id=' + source_ref_id).fetchone() == None:
-#                c.execute("INSERT INTO {tbl} (source_reference_id,citation,reference_author_id) \
-#                           VALUES (:srefid,:cit,1)".format(tbl = "l_source_reference"),\
-#                           {'srefid':source_ref_id,'cit':citation})
-                
-                # We get and increment the latest source id
+                c.execute("INSERT INTO {tbl} (source_reference_id,citation,reference_author_id) \
+                           VALUES (:srefid,:cit,1)".format(tbl = "l_source_reference"),\
+                           {'srefid':source_ref_id,'cit':citation})
+                conn.commit()
+                # We get and increment the latest source_id
                 latest_source_id = get_latest_id("g_source","source_id") + 1
                 
-#                c.execute("INSERT INTO {tbl} (source_id,contributor_id,source_reference_id) \
-#                           VALUES (:srcid,1,:srcrefid)".format(tbl = "g_source"),\
-#                           {'srcid':latest_source_id,'srcrefid':source_ref_id})
-                
+                c.execute("INSERT INTO {tbl} (source_id,source_mnemonic,contributor_id,source_reference_id) \
+                           VALUES (:srcid,'TGN-1',1,:srcrefid)".format(tbl = "g_source"),\
+                           {'srcid':latest_source_id,'srcrefid':source_ref_id})
+                conn.commit()
                 # We get and increment the latest entry_source id
                 latest_entry_source_id = get_latest_id("g_entry_source","entry_source_id") + 1
                 
-#                c.execute("INSERT INTO {tbl} (entry_source_id,source_id,entry_date) \
-#                            VALUES (:entsrcid,:srcid," + datetime.datetime.now() + ")".format(tbl = "g_entry_source"),\
-#                            {'entsrcid':latest_entry_source_id,'srcid':latest_source_id})
-                
+                c.execute("INSERT INTO {tbl} (entry_source_id,source_id,entry_date) \
+                            VALUES (:entsrcid,:srcid,:date)".format(tbl = "g_entry_source"),\
+                            {'entsrcid':latest_entry_source_id,'srcid':latest_source_id,'date':today})
+                conn.commit()
             else:
-                source_id = c.execute('SELECT source_id FROM g_source WHERE source_reference_id=' + source_ref_id).fetchone()
-                latest_entry_source_id = c.execute('SELECT entry_source_id FROM g_entrty_source WHERE source_id=' + source_id).fetchone()
+                source_id = c.execute('SELECT source_id FROM g_source WHERE source_reference_id=' + source_ref_id).fetchone()[0]
+                latest_entry_source_id = c.execute("SELECT entry_source_id FROM g_entry_source WHERE source_id=" + str(source_id)).fetchone()[0]
     
-#            c.execute("INSERT INTO {tbl} (feature_id,time_period_id,entry_source_id) \
-#                        VALUES (:fid,1,entsrcid")".format(tbl = "s_feature"),\
-#                        {'fid':feature_id,'entsrcid':latest_entry_source_id})    
-    
+            c.execute("INSERT INTO {tbl} (feature_id,time_period_id,entry_source_id) \
+                        VALUES (:fid,1,:entsrcid)".format(tbl = "s_feature"),\
+                        {'fid':feature_id,'entsrcid':latest_entry_source_id})
+            conn.commit()
     
     
     #TO-DO: We need to do this after all the features are stored in the database to avoid constrain issues
@@ -494,6 +500,6 @@ for row in obj["Vocabulary"]["Subject"]:
     """
     
     
-
+conn.close()
 
 
