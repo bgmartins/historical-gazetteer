@@ -431,9 +431,10 @@ CREATE TABLE s_description (
 );
 
 CREATE TABLE s_feature (
-   feature_id LONG NOT NULL PRIMARY KEY,
+   feature_id LONG NOT NULL,
    time_period_id LONG NOT NULL,
    entry_source_id LONG NOT NULL,
+   PRIMARY KEY (feature_id,entry_source_id),
    FOREIGN KEY (feature_id) REFERENCES g_feature,
    FOREIGN KEY (time_period_id) REFERENCES g_time_period,
    FOREIGN KEY (entry_source_id) REFERENCES g_entry_source
