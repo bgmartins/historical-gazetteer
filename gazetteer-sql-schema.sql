@@ -234,7 +234,6 @@ CREATE TABLE g_encoded_date (
    encoded_date_string VARCHAR(255) NOT NULL,
    FOREIGN KEY (time_period_id) REFERENCES g_time_period,
    FOREIGN KEY (date_coding_scheme_id) REFERENCES l_scheme
-   
 );
 
 CREATE TABLE g_entry_source (
