@@ -476,10 +476,10 @@ CREATE TABLE s_feature_name (
    confidence_note LONG,
    FOREIGN KEY (feature_name_id) REFERENCES g_feature_name,
    FOREIGN KEY (name) REFERENCES g_entry_source,
-   FOREIGN KEY (etymology) REFERENCES g_feature_name,
-   FOREIGN KEY (language_id) REFERENCES g_entry_source,
-   FOREIGN KEY (transliteration_scheme_id) REFERENCES g_feature_name,
-   FOREIGN KEY (confidence_note) REFERENCES g_entry_source
+   FOREIGN KEY (etymology),
+   FOREIGN KEY (transliteration_scheme_id) REFERENCES l_scheme,
+   FOREIGN KEY (language_id) REFERENCES l_language,
+   FOREIGN KEY (confidence_note)
 );
 
 CREATE TABLE s_location_geometry (
