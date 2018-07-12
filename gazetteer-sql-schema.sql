@@ -240,7 +240,7 @@ CREATE TABLE g_entry_source (
    entry_source_id LONG NOT NULL PRIMARY KEY,
    source_id LONG NOT NULL,
    entry_date DATE NOT NULL,
-   FOREIGN KEY (source_id) REFERENCES l_source_reference
+   FOREIGN KEY (source_id) REFERENCES g_source
 );
 
 CREATE TABLE g_feature_code (
@@ -553,7 +553,9 @@ CREATE TABLE s_time_period (
 
 INSERT INTO l_author VALUES (1,'UNDEFINED AUTHOR');
 
-INSERT INTO l_contributor VALUES (1,'INESC-ID','IDSS','https://idss.inesc-id.pt/',NULL,NULL,NULL,'Lisbon',NULL,'Portugal');
+INSERT INTO l_contributor VALUES (1,'INESC-ID','IDSS','https://idss.inesc-id.pt/',NULL,NULL,'Lisbon','Lisbon',NULL,'Portugal');
+INSERT INTO l_contributor VALUES (2,'Lancaster University Digital Humanities Hub','DIGHUM','http://wp.lancs.ac.uk/dighum/',NULL,NULL,NULL,'Lancaster','Lancashire','United Kingdom');
+INSERT INTO l_contributor VALUES (3,'Instituto Nacional de Antropología e Historia','INAH','http://www.inah.gob.mx/es/',NULL,NULL,NULL,'Mexico City','Mexico City','Mexico');
 
 INSERT INTO l_scheme VALUES (0,'UNDEFINED SCHEME',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GLOBAL',0);
 INSERT INTO l_scheme VALUES (1,'UNDEFINED SCHEME FOR LANGUAGE',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'LANGUAGE',0);
