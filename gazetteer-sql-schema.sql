@@ -551,11 +551,30 @@ CREATE TABLE s_time_period (
    FOREIGN KEY (entry_source_id) REFERENCES g_entry_source
 );
 
+-- Views corresponding to lite version of the Alexandria Digital Library Gazetteer Content Standard
+CREATE VIEW v_lite_feature AS SELECT feature_id, time_pediod_id, entry_date, modification_date FROM s_feature;
+CREATE VIEW v_lite_feature_name AS SELECT feature_name_id,feature_id,primary_display_name FROM s_feature_name;
+CREATE VIEW v_lite_classification AS SELECT classification_id,feature_id,scheme_term_id,primary_display,time_period_id FROM g_classification;
+CREATE VIEW v_lite_location AS SELECT location_id,feature_id,planet,west_coordinate,east_coordinate,south_coordinate,north_coordinate,bounding_box_method,bounding_box_source_time FROM g_location;
+CREATE VIEW v_lite_location_geometry AS SELECT location_geometry_id,location_id,primary_geometry,geometry_coding_scheme_id,encoded_geometry,geometry_reference_url,time_period_id FROM g_location_geometry;
+CREATE VIEW v_lite_name_to_time_period AS SELECT feature_name_id,time_period_id FROM s_name_to_time_period;
+CREATE VIEW v_lite_time_period AS SELECT time_period_id,status_term_id FROM s_time_period;
+CREATE VIEW v_lite_entry_source AS SELECT entry_source_id,source_id,entry_date FROM g_entry_source;
+CREATE VIEW v_lite_scheme AS SELECT scheme_id,scheme_name,scheme_version,scheme_type,primary_classification_scheme FROM l_scheme;
+CREATE VIEW v_lite_scheme_term AS SELECT scheme_term_id,scheme_id,term FROM l_scheme_term;
+CREATE VIEW v_lite_source AS SELECT source_id,source_mnemonic,contributor_id,source_reference_id FROM g_source;
+CREATE VIEW v_lite_source_reference AS SELECT source_reference_id,citation,reference_date FROM l_source_reference;
+CREATE VIEW v_lite_contributor AS SELECT contributor_id,organization_name,street_address,city,state_province FROM l_contributor;
+
+-- Initial data insertions
 INSERT INTO l_author VALUES (1,'UNDEFINED AUTHOR');
+INSERT INTO l_author VALUES (2,'Bruno Martins');
+INSERT INTO l_author VALUES (3,'Jacinto Estima');
+INSERT INTO l_author VALUES (4,'Patricia Murrieta-Flores');
 
 INSERT INTO l_contributor VALUES (1,'INESC-ID','IDSS','https://idss.inesc-id.pt/',NULL,NULL,'Lisbon','Lisbon',NULL,'Portugal');
-INSERT INTO l_contributor VALUES (2,'Lancaster University Digital Humanities Hub','DIGHUM','http://wp.lancs.ac.uk/dighum/',NULL,NULL,NULL,'Lancaster','Lancashire','United Kingdom');
-INSERT INTO l_contributor VALUES (3,'Instituto Nacional de Antropología e Historia','INAH','http://www.inah.gob.mx/es/',NULL,NULL,NULL,'Mexico City','Mexico City','Mexico');
+INSERT INTO l_contributor VALUES (2,'Lancaster University Digital Humanities Hub','DIGHUM','http://wp.lancs.ac.uk/dighum/',NULL,NULL,'Lancaster','Lancashire',NULL,'United Kingdom');
+INSERT INTO l_contributor VALUES (3,'Instituto Nacional de Antropología e Historia','INAH','http://www.inah.gob.mx/es/',NULL,NULL,'Mexico City','Mexico City',NULL,'Mexico');
 
 INSERT INTO l_scheme VALUES (0,'UNDEFINED SCHEME',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GLOBAL',0);
 INSERT INTO l_scheme VALUES (1,'UNDEFINED SCHEME FOR LANGUAGE',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'LANGUAGE',0);
@@ -570,6 +589,7 @@ INSERT INTO l_scheme VALUES (9,'UNDEFINED SCHEME FOR TRANSLITERATION',NULL,'1.0'
 INSERT INTO l_scheme VALUES (10,'UNDEFINED SCHEME FOR GEOMETRY CODING',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GEOMETRY CODING',0);
 INSERT INTO l_scheme VALUES (11,'ISO 639-2 Language Code List','ISO 639-2','1.0','http://www.loc.gov/standards/iso639-2/',NULL,NULL,NULL,NULL,NULL,'Codes for the representation of names of languages-- Part 2: alpha-3','LANGUAGE',0);
 INSERT INTO l_scheme VALUES (12,'Alexandria Digital Library Feature Type Thesaurus','ADL-FTT','July 3, 2002','http://legacy.alexandria.ucsb.edu/gazetteer/FeatureTypes/ver070302/index.htm',NULL,NULL,NULL,NULL,NULL,NULL,'FEATURE TYPE',0);
+INSERT INTO l_scheme VALUES (13,'Open Geospatial Consortium\'s well-known text (WKT) representation of coordinate reference systems',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GEOMETRY CODING',0);
 
 INSERT INTO l_language VALUES (1,'AAR',11);
 INSERT INTO l_language VALUES (2,'ABK',11);
