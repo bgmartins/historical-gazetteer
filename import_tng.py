@@ -224,7 +224,7 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         'agricultural center': 'agricultural facilities' }
     typedictionary = {}
     auxtypes = []
-    for line in open('tgn1-extract.xml'):
+    for line in open('tgn1.xml'):
         line = line.split("<Place_Type_ID>")
         if len(line) <= 1 : continue
         for i in range(1,len(line)):
@@ -247,6 +247,11 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         typedictionary[tk] = match[0]
     return typedictionary
 
+## function to check the intersection of a point with the mexico polygon
+def point_in_polygon(lat,long):
+    import fiona
+    import shapely
+    ## TODO: need to finish this function
 
 ## function to verify if a certain key exists and retrieve the value
 def verify_key(root, key):
@@ -270,7 +275,7 @@ c = conn.cursor()
 """
 Getting the classification terms dictionary
 """
-dict_classification_terms = build_type_dictionary() ## Still not working
+dict_classification_terms = build_type_dictionary()
 
 
 """
@@ -290,12 +295,12 @@ elif new_collection == "no":
 
 
 ### Now we open the XML file to import to the gazeteer database
-with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
+with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
 
 #print (obj["Vocabulary"]["Subject"])
 date = datetime.date.today()
 today = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
-## This for cycle iterates through all the subjects(features) from the XML file and adds them to the database
+## This cycle iterates through all the subjects(features) from the XML file and adds them to the database
 for row in obj["Vocabulary"]["Subject"]:
 
     feature_id = row["@Subject_ID"] #id of the subject
@@ -403,7 +408,7 @@ for row in obj["Vocabulary"]["Subject"]:
             
             c.execute("INSERT INTO {tbl} \
                     (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
-                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,,'Undefined','Undefined')".format(tbl = "g_location"),\
+                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,'','Undefined','Undefined')".format(tbl = "g_location"),\
                     {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
             conn.commit()
     """
