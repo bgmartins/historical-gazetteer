@@ -1,3 +1,17 @@
+DROP VIEW v_lite_feature;
+DROP VIEW v_lite_feature_name;
+DROP VIEW v_lite_classification;
+DROP VIEW v_lite_location;
+DROP VIEW v_lite_location_geometry;
+DROP VIEW v_lite_name_to_time_period;
+DROP VIEW v_lite_time_period;
+DROP VIEW v_lite_entry_source;
+DROP VIEW v_lite_scheme;
+DROP VIEW v_lite_scheme_term;
+DROP VIEW v_lite_source;
+DROP VIEW v_lite_source_reference;
+DROP VIEW v_lite_contributor;
+
 DROP TABLE IF EXISTS s_time_period;
 DROP TABLE IF EXISTS s_supplemental_note;
 DROP TABLE IF EXISTS s_related_feature;
@@ -37,6 +51,7 @@ DROP TABLE IF EXISTS g_begin_end_date;
 DROP TABLE IF EXISTS g_address;
 DROP TABLE IF EXISTS g_feature;
 DROP TABLE IF EXISTS g_time_period_to_period_name;
+DROP TABLE IF EXISTS g_time_period_to_period_location;
 DROP TABLE IF EXISTS g_time_date_range;
 DROP TABLE IF EXISTS g_collection;
 DROP TABLE IF EXISTS l_time_period_name;
@@ -44,6 +59,7 @@ DROP TABLE IF EXISTS g_time_period;
 DROP TABLE IF EXISTS l_source_reference;
 DROP TABLE IF EXISTS l_scheme_term_rank;
 DROP TABLE IF EXISTS l_scheme_term_parent;
+DROP TABLE IF EXISTS l_scheme_term_equivalence;
 DROP TABLE IF EXISTS l_scheme_term;
 DROP TABLE IF EXISTS l_language;
 DROP TABLE IF EXISTS l_scheme;
@@ -109,6 +125,14 @@ CREATE TABLE l_scheme_term_parent (
    FOREIGN KEY (parent_scheme_term_id) REFERENCES l_scheme_term
 );
 
+CREATE TABLE l_scheme_term_equivalence (
+   scheme_term_equivalence_id LONG NOT NULL PRIMARY KEY,
+   scheme_term_id LONG NOT NULL,
+   equivalent_scheme_term_id LONG NOT NULL,
+   FOREIGN KEY (scheme_term_id) REFERENCES l_scheme_term,
+   FOREIGN KEY (equivalent_scheme_term_id) REFERENCES l_scheme_term
+);
+
 CREATE TABLE l_scheme_term_rank (
    scheme_term_id LONG NOT NULL PRIMARY KEY,
    FTT_order1 LONG,
@@ -163,6 +187,14 @@ CREATE TABLE g_time_period_to_period_name (
    PRIMARY KEY (time_period_id,time_period_name_id),
    FOREIGN KEY (time_period_id) REFERENCES g_time_period,
    FOREIGN KEY (time_period_name_id) REFERENCES l_time_period_name
+);
+
+CREATE TABLE g_time_period_to_period_location (
+   time_period_id LONG NOT NULL,  
+   time_period_location_id LONG NOT NULL,
+   PRIMARY KEY (time_period_id,time_period_location_id),
+   FOREIGN KEY (time_period_id) REFERENCES g_time_period,
+   FOREIGN KEY (time_period_location_id) REFERENCES g_location
 );
 
 CREATE TABLE g_feature (
@@ -299,7 +331,7 @@ CREATE TABLE g_feature_name (
 
 CREATE TABLE g_location (
    location_id LONG NOT NULL PRIMARY KEY,
-   feature_id LONG NOT NULL, -- A machine-generated identifier assigned to uniquely distinguish a feature.
+   feature_id LONG, -- A machine-generated identifier assigned to uniquely distinguish a feature.
    planet VARCHAR(20) NOT NULL,
    bounding_box_geodetic VARCHAR(20),
    west_coordinate FLOAT NOT NULL, -- Longitude value for the west edge of the location in decimal degrees.  Negative values are used for coordinates west of the prime meridian.
