@@ -165,6 +165,14 @@ CREATE TABLE g_time_period_to_period_name (
    FOREIGN KEY (time_period_name_id) REFERENCES l_time_period_name
 );
 
+CREATE TABLE g_time_period_to_period_location (
+   time_period_id LONG NOT NULL,  
+   time_period_location_id LONG NOT NULL,
+   PRIMARY KEY (time_period_id,time_period_location_id),
+   FOREIGN KEY (time_period_id) REFERENCES g_time_period,
+   FOREIGN KEY (time_period_location_id) REFERENCES g_location
+);
+
 CREATE TABLE g_feature (
    feature_id LONG NOT NULL PRIMARY KEY, -- A machine-generated identifier assigned to uniquely distinguish a feature.
    collection_id LONG, -- A machine-generated identifier assigned to uniquely distinguish a collection.
@@ -299,7 +307,7 @@ CREATE TABLE g_feature_name (
 
 CREATE TABLE g_location (
    location_id LONG NOT NULL PRIMARY KEY,
-   feature_id LONG NOT NULL, -- A machine-generated identifier assigned to uniquely distinguish a feature.
+   feature_id LONG, -- A machine-generated identifier assigned to uniquely distinguish a feature.
    planet VARCHAR(20) NOT NULL,
    bounding_box_geodetic VARCHAR(20),
    west_coordinate FLOAT NOT NULL, -- Longitude value for the west edge of the location in decimal degrees.  Negative values are used for coordinates west of the prime meridian.
