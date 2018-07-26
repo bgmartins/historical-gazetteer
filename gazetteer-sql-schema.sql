@@ -1,3 +1,17 @@
+DROP VIEW v_lite_feature;
+DROP VIEW v_lite_feature_name;
+DROP VIEW v_lite_classification;
+DROP VIEW v_lite_location;
+DROP VIEW v_lite_location_geometry;
+DROP VIEW v_lite_name_to_time_period;
+DROP VIEW v_lite_time_period;
+DROP VIEW v_lite_entry_source;
+DROP VIEW v_lite_scheme;
+DROP VIEW v_lite_scheme_term;
+DROP VIEW v_lite_source;
+DROP VIEW v_lite_source_reference;
+DROP VIEW v_lite_contributor;
+
 DROP TABLE IF EXISTS s_time_period;
 DROP TABLE IF EXISTS s_supplemental_note;
 DROP TABLE IF EXISTS s_related_feature;
@@ -37,6 +51,7 @@ DROP TABLE IF EXISTS g_begin_end_date;
 DROP TABLE IF EXISTS g_address;
 DROP TABLE IF EXISTS g_feature;
 DROP TABLE IF EXISTS g_time_period_to_period_name;
+DROP TABLE IF EXISTS g_time_period_to_period_location;
 DROP TABLE IF EXISTS g_time_date_range;
 DROP TABLE IF EXISTS g_collection;
 DROP TABLE IF EXISTS l_time_period_name;
