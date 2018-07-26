@@ -59,6 +59,7 @@ DROP TABLE IF EXISTS g_time_period;
 DROP TABLE IF EXISTS l_source_reference;
 DROP TABLE IF EXISTS l_scheme_term_rank;
 DROP TABLE IF EXISTS l_scheme_term_parent;
+DROP TABLE IF EXISTS l_scheme_term_equivalence;
 DROP TABLE IF EXISTS l_scheme_term;
 DROP TABLE IF EXISTS l_language;
 DROP TABLE IF EXISTS l_scheme;
@@ -122,6 +123,14 @@ CREATE TABLE l_scheme_term_parent (
    parent_scheme_term_id LONG NOT NULL,
    FOREIGN KEY (scheme_term_id) REFERENCES l_scheme_term,
    FOREIGN KEY (parent_scheme_term_id) REFERENCES l_scheme_term
+);
+
+CREATE TABLE l_scheme_term_equivalence (
+   scheme_term_equivalence_id LONG NOT NULL PRIMARY KEY,
+   scheme_term_id LONG NOT NULL,
+   equivalent_scheme_term_id LONG NOT NULL,
+   FOREIGN KEY (scheme_term_id) REFERENCES l_scheme_term,
+   FOREIGN KEY (equivalent_scheme_term_id) REFERENCES l_scheme_term
 );
 
 CREATE TABLE l_scheme_term_rank (
