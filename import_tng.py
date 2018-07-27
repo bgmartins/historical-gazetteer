@@ -224,7 +224,7 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         'agricultural center': 'agricultural facilities' }
     typedictionary = {}
     auxtypes = []
-    for line in open('tgn1.xml'):
+    for line in open('tgn1-extract.xml'):
         line = line.split("<Place_Type_ID>")
         if len(line) <= 1 : continue
         for i in range(1,len(line)):
@@ -247,11 +247,24 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         typedictionary[tk] = match[0]
     return typedictionary
 
-## function to check the intersection of a point with the mexico polygon
-def point_in_polygon(lat,long):
-    import fiona
-    import shapely
-    ## TODO: need to finish this function
+## function to check if a point is cintained by the mexico polygon
+def point_in_polygon(lat,lon):
+    import json
+    from shapely.geometry import shape, Point
+
+    with open('mexico-administrative.geojson') as f:
+        js = json.load(f)
+
+    point = Point(float(lon), float(lat))
+    
+    for feature in js['features']:
+        #print (type(feature))
+        polygon = shape(feature['geometry'])
+        if polygon.contains(point):
+            return True
+        else:
+            return False
+    f.close()
 
 ## function to verify if a certain key exists and retrieve the value
 def verify_key(root, key):
@@ -295,7 +308,7 @@ elif new_collection == "no":
 
 
 ### Now we open the XML file to import to the gazeteer database
-with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
+with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
 
 #print (obj["Vocabulary"]["Subject"])
 date = datetime.date.today()
@@ -307,203 +320,218 @@ for row in obj["Vocabulary"]["Subject"]:
     print (feature_id)
     #print (row)
     
-    if row["Descriptive_Note"] != None:
-        if "Note_Text" in row.get("Descriptive_Note", {}):
-            descriptive_note_text = row["Descriptive_Note"]["Note_Text"]
-    else:
-        descriptive_note_text = ""
-    #print(type(row))
-    #print (row(["Descriptive_Note"]["Note_Text"]))
-    entry_date = datetime.datetime.now()
-    
-    """
-    Adding a new feature to the database
-    """
-    c.execute("INSERT INTO {tbl} \
-             (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) \
-             VALUES (:fid,:colid,0,1,:entnote,:entdate,:entdate)".\
-             format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id,'entnote':descriptive_note_text,'entdate':entry_date})    
-    conn.commit()
-    """
-    filling table g_feature_name
-    """
-    # We first extract the latest feature_name_id from the table to increment
-    latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
-    
-    # We also need to get the Noun, which is the preferred term inside terms
-    if row["Terms"]["Preferred_Term"]["Term_Type"] == "Noun":
-        feature_name = row["Terms"]["Preferred_Term"]["Term_Text"]
-    else:
-        feature_name = ""
-    
-    c.execute("INSERT INTO {tbl} \
-             (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
-              VALUES (:fnameid,:fid,1,:fname,'',129,9,'')".format(tbl = "g_feature_name"),\
-             {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
-    conn.commit()
-    
-    if "Non-Preferred_Term" in row.get("Terms", {}):
-        for term in row["Terms"]["Non-Preferred_Term"]:
-#            print(term)
-            if term["Term_Type"] == "Noun":
-                feature_name = term["Term_Text"]
-#                print (feature_name)
-                # We first extract the latest feature_name_id from the table to increment
-#                print (latest_g_feature_name_id)
-                latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
-                
-                c.execute("INSERT INTO {tbl} \
-                    (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
-                    VALUES (:fnameid,:fid,0,:fname,'',129,9,'')".format(tbl = "g_feature_name"),\
-                    {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
-                conn.commit()
-    """
-    filling table g_classification
-    """
-    # We first get and increment the latest classification id
-    latest_classification_id = get_latest_id("g_classification","classification_id") + 1
-    
-    # We then map the place_type to the correct classification_term
-    place_type = row["Place_Types"]["Preferred_Place_Type"]["Place_Type_ID"]
-    adl_place_type_id = dict_classification_terms[place_type]
-    
-    c.execute("INSERT INTO {tbl} \
-             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
-              VALUES (:classid,:fid,:classtermid,1,1,'')".format(tbl = "g_classification"),\
-             {'classid':latest_classification_id,'fid':feature_id,'classtermid':adl_place_type_id})
-    conn.commit()
-    
-    """
-    filling table g_feature_code
-    """
-    # We first get and increment the latest feature code id
-    latest_feature_code_id = get_latest_id("g_feature_code","feature_code_id") + 1
-    
-    c.execute("INSERT INTO {tbl} \
-             (feature_code_id, feature_id, code, code_scheme_id) \
-              VALUES (:fcodeid,:fid,'Undefined',0)".format(tbl = "g_feature_code"),\
-             {'fcodeid':latest_feature_code_id,'fid':feature_id})
-    conn.commit()
-    """
-    filling table g_location
-    This only makes sense if such information is available in the TGN XML file
-    Besides, the data is available in two types: either we have a point or a bounding box.
-    """
     if "Coordinates" in row:
+        
         for coor in row["Coordinates"]:
-            # We get and increment the latest location id
-            latest_location_id = get_latest_id("g_location","location_id") + 1
             if "Standard" in coor:
                 coor_bounding_latitude_least = verify_key(coor["Standard"]["Latitude"], "Decimal")
-                coor_bounding_latitude_most = verify_key(coor["Standard"]["Latitude"], "Decimal")
                 coor_bounding_longitude_least = verify_key(coor["Standard"]["Longitude"], "Decimal")
-                coor_bounding_longitude_most = verify_key(coor["Standard"]["Longitude"], "Decimal")
+                print (type(coor_bounding_latitude_least))
+                if point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == True:
+                    
+                    if row["Descriptive_Note"] != None:
+                        if "Note_Text" in row.get("Descriptive_Note", {}):
+                            descriptive_note_text = row["Descriptive_Note"]["Note_Text"]
+                    else:
+                        descriptive_note_text = ""
+                    #print(type(row))
+                    #print (row(["Descriptive_Note"]["Note_Text"]))
+                    entry_date = datetime.datetime.now()
+                    
+                    """
+                    Adding a new feature to the database
+                    """
+                    c.execute("INSERT INTO {tbl} \
+                             (feature_id, collection_id, is_complete, time_period_id, entry_note, entry_date, modification_date) \
+                             VALUES (:fid,:colid,0,1,:entnote,:entdate,:entdate)".\
+                             format(tbl = "g_feature"),{'fid':feature_id,'colid':collection_id,'entnote':descriptive_note_text,'entdate':entry_date})    
+                    conn.commit()
+                    """
+                    filling table g_feature_name
+                    """
+                    # We first extract the latest feature_name_id from the table to increment
+                    latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
+                    
+                    # We also need to get the Noun, which is the preferred term inside terms
+                    if row["Terms"]["Preferred_Term"]["Term_Type"] == "Noun":
+                        feature_name = row["Terms"]["Preferred_Term"]["Term_Text"]
+                    else:
+                        feature_name = ""
+                    
+                    c.execute("INSERT INTO {tbl} \
+                             (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
+                              VALUES (:fnameid,:fid,1,:fname,'',129,9,'')".format(tbl = "g_feature_name"),\
+                             {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
+                    conn.commit()
+                    
+                    if "Non-Preferred_Term" in row.get("Terms", {}):
+                        for term in row["Terms"]["Non-Preferred_Term"]:
+                #            print(term)
+                            if term["Term_Type"] == "Noun":
+                                feature_name = term["Term_Text"]
+                #                print (feature_name)
+                                # We first extract the latest feature_name_id from the table to increment
+                #                print (latest_g_feature_name_id)
+                                latest_g_feature_name_id = get_latest_id("g_feature_name", "feature_name_id") + 1
+                                
+                                c.execute("INSERT INTO {tbl} \
+                                    (feature_name_id, feature_id, primary_display, name, etymology, language_id, transliteration_scheme_id, confidence_note) \
+                                    VALUES (:fnameid,:fid,0,:fname,'',129,9,'')".format(tbl = "g_feature_name"),\
+                                    {'fnameid':latest_g_feature_name_id,'fid':feature_id,'fname':feature_name})
+                                conn.commit()
+                    """
+                    filling table g_classification
+                    """
+                    # We first get and increment the latest classification id
+                    latest_classification_id = get_latest_id("g_classification","classification_id") + 1
+                    
+                    # We then map the place_type to the correct classification_term
+                    place_type = row["Place_Types"]["Preferred_Place_Type"]["Place_Type_ID"]
+                    adl_place_type_id = dict_classification_terms[place_type]
+                    
+                    c.execute("INSERT INTO {tbl} \
+                             (classification_id, feature_id, classification_term_id, primary_display, time_period_id,time_period_note) \
+                              VALUES (:classid,:fid,:classtermid,1,1,'')".format(tbl = "g_classification"),\
+                             {'classid':latest_classification_id,'fid':feature_id,'classtermid':adl_place_type_id})
+                    conn.commit()
+                    
+                    """
+                    filling table g_feature_code
+                    """
+                    # We first get and increment the latest feature code id
+                    latest_feature_code_id = get_latest_id("g_feature_code","feature_code_id") + 1
+                    
+                    c.execute("INSERT INTO {tbl} \
+                             (feature_code_id, feature_id, code, code_scheme_id) \
+                              VALUES (:fcodeid,:fid,'Undefined',0)".format(tbl = "g_feature_code"),\
+                             {'fcodeid':latest_feature_code_id,'fid':feature_id})
+                    conn.commit()
+                    """
+                    filling table g_location
+                    This only makes sense if such information is available in the TGN XML file
+                    Besides, the data is available in two types: either we have a point or a bounding box.
+                    """
+                    if "Coordinates" in row:
+                        for coor in row["Coordinates"]:
+                            # We get and increment the latest location id
+                            latest_location_id = get_latest_id("g_location","location_id") + 1
+                            if "Standard" in coor:
+                                coor_bounding_latitude_least = verify_key(coor["Standard"]["Latitude"], "Decimal")
+                                coor_bounding_latitude_most = verify_key(coor["Standard"]["Latitude"], "Decimal")
+                                coor_bounding_longitude_least = verify_key(coor["Standard"]["Longitude"], "Decimal")
+                                coor_bounding_longitude_most = verify_key(coor["Standard"]["Longitude"], "Decimal")
 
-            if "Bounding" in coor:
-                coor_bounding_latitude_least = verify_key(coor["Bounding"]["Latitude_Least"], "Decimal")
-                coor_bounding_latitude_most = verify_key(coor["Bounding"]["Latitude_Most"], "Decimal")
-                coor_bounding_longitude_least = verify_key(coor["Bounding"]["Longitude_Least"], "Decimal")
-                coor_bounding_longitude_most = verify_key(coor["Bounding"]["Longitude_Most"], "Decimal")
-            coor_elevation_meters = verify_key(coor, "Elevation_Meters")
-            
-            c.execute("INSERT INTO {tbl} \
-                    (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
-                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,'','Undefined','Undefined')".format(tbl = "g_location"),\
-                    {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
-            conn.commit()
-    """
-    filling the source subject area, namely tables table l_source_reference, g_source, g_entry_source
-    """
-    if "Subject_Sources" in row:
-        for subject_source in row["Subject_Sources"]["Subject_Source"]:
-            a = subject_source["Source"]["Source_ID"].split('/')
-            source_ref_id = a[0]
-            citation = a[1]
-            latest_entry_source_id = ""
-            if c.execute('SELECT * FROM l_source_reference WHERE source_reference_id=' + source_ref_id).fetchone() == None:
-                c.execute("INSERT INTO {tbl} (source_reference_id,citation,reference_author_id) \
-                           VALUES (:srefid,:cit,1)".format(tbl = "l_source_reference"),\
-                           {'srefid':source_ref_id,'cit':citation})
-                conn.commit()
-                # We get and increment the latest source_id
-                latest_source_id = get_latest_id("g_source","source_id") + 1
-                
-                c.execute("INSERT INTO {tbl} (source_id,source_mnemonic,contributor_id,source_reference_id) \
-                           VALUES (:srcid,'TGN-1',1,:srcrefid)".format(tbl = "g_source"),\
-                           {'srcid':latest_source_id,'srcrefid':source_ref_id})
-                conn.commit()
-                # We get and increment the latest entry_source id
-                latest_entry_source_id = get_latest_id("g_entry_source","entry_source_id") + 1
-                
-                c.execute("INSERT INTO {tbl} (entry_source_id,source_id,entry_date) \
-                            VALUES (:entsrcid,:srcid,:date)".format(tbl = "g_entry_source"),\
-                            {'entsrcid':latest_entry_source_id,'srcid':latest_source_id,'date':today})
-                conn.commit()
+                            if "Bounding" in coor:
+                                coor_bounding_latitude_least = verify_key(coor["Bounding"]["Latitude_Least"], "Decimal")
+                                coor_bounding_latitude_most = verify_key(coor["Bounding"]["Latitude_Most"], "Decimal")
+                                coor_bounding_longitude_least = verify_key(coor["Bounding"]["Longitude_Least"], "Decimal")
+                                coor_bounding_longitude_most = verify_key(coor["Bounding"]["Longitude_Most"], "Decimal")
+                            coor_elevation_meters = verify_key(coor, "Elevation_Meters")
+                            
+                            c.execute("INSERT INTO {tbl} \
+                                    (location_id, feature_id, planet, bounding_box_geodetic, west_coordinate, east_coordinate, south_coordinate, north_coordinate, deleted_column1, bounding_box_method, bounding_box_source_type) \
+                                     VALUES (:locid,:fid,'',4326,:longleast,:longmost,:latleast,:latmost,'','Undefined','Undefined')".format(tbl = "g_location"),\
+                                    {'locid':latest_location_id,'fid':feature_id,'longleast':coor_bounding_longitude_least,'longmost':coor_bounding_longitude_most,'latleast':coor_bounding_latitude_least,'latmost':coor_bounding_latitude_most})
+                            conn.commit()
+                    """
+                    filling the source subject area, namely tables table l_source_reference, g_source, g_entry_source
+                    """
+                    if "Subject_Sources" in row:
+                        for subject_source in row["Subject_Sources"]["Subject_Source"]:
+                            a = subject_source["Source"]["Source_ID"].split('/')
+                            source_ref_id = a[0]
+                            citation = a[1]
+                            latest_entry_source_id = ""
+                            if c.execute('SELECT * FROM l_source_reference WHERE source_reference_id=' + source_ref_id).fetchone() == None:
+                                c.execute("INSERT INTO {tbl} (source_reference_id,citation,reference_author_id) \
+                                           VALUES (:srefid,:cit,1)".format(tbl = "l_source_reference"),\
+                                           {'srefid':source_ref_id,'cit':citation})
+                                conn.commit()
+                                # We get and increment the latest source_id
+                                latest_source_id = get_latest_id("g_source","source_id") + 1
+                                
+                                c.execute("INSERT INTO {tbl} (source_id,source_mnemonic,contributor_id,source_reference_id) \
+                                           VALUES (:srcid,'TGN-1',1,:srcrefid)".format(tbl = "g_source"),\
+                                           {'srcid':latest_source_id,'srcrefid':source_ref_id})
+                                conn.commit()
+                                # We get and increment the latest entry_source id
+                                latest_entry_source_id = get_latest_id("g_entry_source","entry_source_id") + 1
+                                
+                                c.execute("INSERT INTO {tbl} (entry_source_id,source_id,entry_date) \
+                                            VALUES (:entsrcid,:srcid,:date)".format(tbl = "g_entry_source"),\
+                                            {'entsrcid':latest_entry_source_id,'srcid':latest_source_id,'date':today})
+                                conn.commit()
+                            else:
+                                source_id = c.execute('SELECT source_id FROM g_source WHERE source_reference_id=' + source_ref_id).fetchone()[0]
+                                latest_entry_source_id = c.execute("SELECT entry_source_id FROM g_entry_source WHERE source_id=" + str(source_id)).fetchone()[0]
+                    
+                            c.execute("INSERT INTO {tbl} (feature_id,time_period_id,entry_source_id) \
+                                        VALUES (:fid,1,:entsrcid)".format(tbl = "s_feature"),\
+                                        {'fid':feature_id,'entsrcid':latest_entry_source_id})
+                            conn.commit()
+                    
+                    
+                    #TO-DO: We need to do this after all the features are stored in the database to avoid constrain issues
+                    """
+                    filling table g_related_feature
+                    
+                    related_feature_id LONG NOT NULL PRIMARY KEY,
+                    feature_id LONG NOT NULL, -- A machine-generated identifier assigned to uniquely distinguish a feature.
+                    related_name VARCHAR(100) NOT NULL, -- Name by which the related feature is known.
+                    related_feature_feature_id LONG, -- If the related feature has a record in the gazetteer, this is where its unique identifier is recorded.
+                    time_period_id LONG NOT NULL,
+                    related_type_term_id LONG NOT NULL,
+                    time_period_note VARCHAR(255),
+                    FOREIGN KEY (feature_id) REFERENCES g_feature,
+                    FOREIGN KEY (related_feature_feature_id) REFERENCES g_feature,
+                    FOREIGN KEY (time_period_id) REFERENCES g_time_period,
+                    FOREIGN KEY (related_type_term_id) REFERENCES l_scheme_term
+                    """
+                    # We first get and increment the latest related feature id
+                    #latest_related_feature_id = get_latest_id("g_related_feature","related_feature_id ") + 1
+
+                    """
+                ## To extract Associative Relationaships if they exist
+                    if "Associative_Relationships" in row:
+                        print (feature_id)
+                        #print (feature_id)
+                        for rel in row["Associative_Relationships"]["Associative_Relationship"]:
+                            historic_flag = verify_key(rel, "Historic_Flag")
+                            #print (historic_flag)
+                            description = verify_key(rel, "Description")
+                            #print (description)
+                            if "AR_Date" in rel:
+                                print (rel["AR_Date"])
+                                for ar_date in rel["AR_Date"]:
+                                    #print (ar_date)
+                                    ar_display_date = verify_key(ar_date, "Display_Date")
+                                    #print (ar_display_date)
+                                    ar_start_date = verify_key(ar_date, "Start_Date")
+                                    #print (ar_start_date)
+                                    ar_end_date = verify_key(ar_date, "End_Date")
+                                    #print (ar_end_date)
+                            relatioship_type = verify_key(rel, "Relationship_Type")
+                            #print (relatioship_type)
+                            if "Related_Subject_ID" in rel:
+                                print (rel["Related_Subject_ID"])
+                                for rel_sub in rel["Related_Subject_ID"]:
+                                    vp_subject_id = verify_key(ar_date, "VP_Subject_ID")
+                                    #print (vp_subject_id)
+                                    contrib_subject_id = verify_key(ar_date, "Contrib_Subject_ID")
+                                    #print (contrib_subject_id)
+                            
+                            # c.execute("INSERT INTO {tbl} \
+                                    # (related_feature_id,feature_id,related_name,related_feature_feature_id,time_period_id,related_type_term_id,time_period_note) \
+                                    # VALUES (:relfid,:fid,'None',)".format(tbl = "g_related_feature"),\
+                                    # {'relfid':latest_related_feature_id,'fid':feature_id})
+                    """
+                else:
+                    print ('Feature ID: #' + feature_id + ' is not inside Mexico')
+                    
             else:
-                source_id = c.execute('SELECT source_id FROM g_source WHERE source_reference_id=' + source_ref_id).fetchone()[0]
-                latest_entry_source_id = c.execute("SELECT entry_source_id FROM g_entry_source WHERE source_id=" + str(source_id)).fetchone()[0]
-    
-            c.execute("INSERT INTO {tbl} (feature_id,time_period_id,entry_source_id) \
-                        VALUES (:fid,1,:entsrcid)".format(tbl = "s_feature"),\
-                        {'fid':feature_id,'entsrcid':latest_entry_source_id})
-            conn.commit()
-    
-    
-    #TO-DO: We need to do this after all the features are stored in the database to avoid constrain issues
-    """
-    filling table g_related_feature
-    
-    related_feature_id LONG NOT NULL PRIMARY KEY,
-    feature_id LONG NOT NULL, -- A machine-generated identifier assigned to uniquely distinguish a feature.
-    related_name VARCHAR(100) NOT NULL, -- Name by which the related feature is known.
-    related_feature_feature_id LONG, -- If the related feature has a record in the gazetteer, this is where its unique identifier is recorded.
-    time_period_id LONG NOT NULL,
-    related_type_term_id LONG NOT NULL,
-    time_period_note VARCHAR(255),
-    FOREIGN KEY (feature_id) REFERENCES g_feature,
-    FOREIGN KEY (related_feature_feature_id) REFERENCES g_feature,
-    FOREIGN KEY (time_period_id) REFERENCES g_time_period,
-    FOREIGN KEY (related_type_term_id) REFERENCES l_scheme_term
-    """
-    # We first get and increment the latest related feature id
-    #latest_related_feature_id = get_latest_id("g_related_feature","related_feature_id ") + 1
-
-    """
-## To extract Associative Relationaships if they exist
-    if "Associative_Relationships" in row:
-        print (feature_id)
-        #print (feature_id)
-        for rel in row["Associative_Relationships"]["Associative_Relationship"]:
-            historic_flag = verify_key(rel, "Historic_Flag")
-            #print (historic_flag)
-            description = verify_key(rel, "Description")
-            #print (description)
-            if "AR_Date" in rel:
-                print (rel["AR_Date"])
-                for ar_date in rel["AR_Date"]:
-                    #print (ar_date)
-                    ar_display_date = verify_key(ar_date, "Display_Date")
-                    #print (ar_display_date)
-                    ar_start_date = verify_key(ar_date, "Start_Date")
-                    #print (ar_start_date)
-                    ar_end_date = verify_key(ar_date, "End_Date")
-                    #print (ar_end_date)
-            relatioship_type = verify_key(rel, "Relationship_Type")
-            #print (relatioship_type)
-            if "Related_Subject_ID" in rel:
-                print (rel["Related_Subject_ID"])
-                for rel_sub in rel["Related_Subject_ID"]:
-                    vp_subject_id = verify_key(ar_date, "VP_Subject_ID")
-                    #print (vp_subject_id)
-                    contrib_subject_id = verify_key(ar_date, "Contrib_Subject_ID")
-                    #print (contrib_subject_id)
-            
-            # c.execute("INSERT INTO {tbl} \
-                    # (related_feature_id,feature_id,related_name,related_feature_feature_id,time_period_id,related_type_term_id,time_period_note) \
-                    # VALUES (:relfid,:fid,'None',)".format(tbl = "g_related_feature"),\
-                    # {'relfid':latest_related_feature_id,'fid':feature_id})
-    """
-    
+                print ('Feature: ID #' + feature_id + ' only has BBOX coordinates')
+    else:
+        print ('Feature: ID #' + feature_id + ' does not contain coordinates')
     
 conn.close()
 
