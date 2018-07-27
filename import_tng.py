@@ -258,7 +258,6 @@ def point_in_polygon(lat,lon):
     point = Point(float(lon), float(lat))
     
     for feature in js['features']:
-        #print (type(feature))
         polygon = shape(feature['geometry'])
         if polygon.contains(point):
             return True
