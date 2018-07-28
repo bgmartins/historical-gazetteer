@@ -313,15 +313,16 @@ with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), 
 #print (obj["Vocabulary"]["Subject"])
 date = datetime.date.today()
 today = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
+
+t = open(r'csv-test', 'a')
+writer = csv.writer(t)
+
 ## This cycle iterates through all the subjects(features) from the XML file and adds them to the database
 for row in obj["Vocabulary"]["Subject"]:
 
     feature_id = row["@Subject_ID"] #id of the subject
     print (feature_id)
     #print (row)
-    
-    with open(r'csv-test', 'a') as t:
-        writer = csv.writer(t)
     
     if "Coordinates" in row:
         
