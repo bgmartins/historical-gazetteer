@@ -3,6 +3,7 @@ import sqlite3
 import py_stringmatching as sm
 import xmltodict
 import datetime
+import csv
 #import defusedexpat
 
 ## initial parameters and global variables
@@ -319,13 +320,16 @@ for row in obj["Vocabulary"]["Subject"]:
     print (feature_id)
     #print (row)
     
+    with open(r'csv-test', 'a') as t:
+        writer = csv.writer(t)
+    
     if "Coordinates" in row:
         
         for coor in row["Coordinates"]:
             if "Standard" in coor:
                 coor_bounding_latitude_least = verify_key(coor["Standard"]["Latitude"], "Decimal")
                 coor_bounding_longitude_least = verify_key(coor["Standard"]["Longitude"], "Decimal")
-                print (type(coor_bounding_latitude_least))
+                
                 if point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == True:
                     
                     if row["Descriptive_Note"] != None:
@@ -333,8 +337,7 @@ for row in obj["Vocabulary"]["Subject"]:
                             descriptive_note_text = row["Descriptive_Note"]["Note_Text"]
                     else:
                         descriptive_note_text = ""
-                    #print(type(row))
-                    #print (row(["Descriptive_Note"]["Note_Text"]))
+                        
                     entry_date = datetime.datetime.now()
                     
                     """
@@ -524,13 +527,18 @@ for row in obj["Vocabulary"]["Subject"]:
                                     # VALUES (:relfid,:fid,'None',)".format(tbl = "g_related_feature"),\
                                     # {'relfid':latest_related_feature_id,'fid':feature_id})
                     """
-                else:
-                    print ('Feature ID: #' + feature_id + ' is not inside Mexico')
+                    row = [feature_id, 'added']
+                    writer.writerow(row)                    
                     
+                else:
+                    row = [feature_id, 'not inside Mexico']
+                    writer.writerow(row)
             else:
-                print ('Feature: ID #' + feature_id + ' only has BBOX coordinates')
+                row = [feature_id, 'only BBOX coordinates']
+                writer.writerow(row)
     else:
-        print ('Feature: ID #' + feature_id + ' does not contain coordinates')
+        row = [feature_id, 'no coordinates']
+        writer.writerow(row)
     
 conn.close()
 
