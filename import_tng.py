@@ -225,7 +225,7 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         'agricultural center': 'agricultural facilities' }
     typedictionary = {}
     auxtypes = []
-    for line in open('tgn1-extract.xml'):
+    for line in open('tgn1.xml'):
         line = line.split("<Place_Type_ID>")
         if len(line) <= 1 : continue
         for i in range(1,len(line)):
@@ -308,7 +308,7 @@ elif new_collection == "no":
 
 
 ### Now we open the XML file to import to the gazeteer database
-with open("tgn1-extract.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
+with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
 
 #print (obj["Vocabulary"]["Subject"])
 date = datetime.date.today()
