@@ -282,7 +282,7 @@ def get_latest_id(table, id_field):
     else:
         return 0
 
-conn = sqlite3.connect("test")
+conn = sqlite3.connect("test-db")
 c = conn.cursor()
 
 """
