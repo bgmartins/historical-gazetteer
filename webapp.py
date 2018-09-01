@@ -688,12 +688,7 @@ def open_browser_tab(host, port):
     thread.daemon = True
     thread.start()
 
-def main():
-    # This function exists to act as a console script entry-point.
-    parser = get_option_parser()
-    options, args = parser.parse_args()
-    if not args: args = [ "gazetteer.db" ]
-    db_file = args[0]
+def myapp(db_file):
     global dataset
     global migrator
     if peewee_version >= (3, 0, 0): dataset_kwargs = {'bare_fields': True}
@@ -701,6 +696,15 @@ def main():
     dataset = SqliteDataSet('sqlite:///%s' % db_file, **dataset_kwargs)
     migrator = dataset._migrator
     dataset.close()
+    return app
+
+def main():
+    # This function exists to act as a console script entry-point.
+    parser = get_option_parser()
+    options, args = parser.parse_args()
+    if not args: args = [ "gazetteer.db" ]
+    db_file = args[0]
+    app = myapp(db_file)
     if options.browser: open_browser_tab(options.host, options.port)
     app.run(host=options.host, port=options.port, debug=options.debug)
 
