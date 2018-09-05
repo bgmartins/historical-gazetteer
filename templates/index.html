@@ -1,6 +1,5 @@
 {% extends "base_tables.html" %}
 
-<!-- {% block content_title %}{{ dataset.base_name }}{% endblock %} -->
 {% block content_title %}Gazetteer Database{% endblock %}
 
 {% block content %}
@@ -8,7 +7,7 @@
     <tbody>
       <tr>
         <th>Database File</th>
-        <td>{{ dataset.filename }}</td>
+        <td>{{ dataset.base_name }} &mdash; {{ dataset.filename }}</td>
       </tr>
       <tr>
         <th>Size</th>
