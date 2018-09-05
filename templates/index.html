@@ -1,12 +1,13 @@
 {% extends "base_tables.html" %}
 
-{% block content_title %}{{ dataset.base_name }}{% endblock %}
+<!-- {% block content_title %}{{ dataset.base_name }}{% endblock %} -->
+{% block content_title %}Gazetteer Database{% endblock %}
 
 {% block content %}
   <table class="table table-striped">
     <tbody>
       <tr>
-        <th>Filename</th>
+        <th>Database File</th>
         <td>{{ dataset.filename }}</td>
       </tr>
       <tr>
@@ -22,20 +23,24 @@
         <td>{{ dataset.modified.strftime('%A %B %d, %Y at %I:%M:%p') }}</td>
       </tr>
       <tr>
-        <th>Tables</th>
+        <th>Number of Tables</th>
         <td>{{ dataset.tables|length }}</td>
       </tr>
       <tr>
-        <th>Indexes</th>
+        <th>Number of Indexes</th>
         <td>{{ dataset.get_all_indexes()|length }}</td>
       </tr>
       <tr>
-        <th>Triggers</th>
+        <th>Number of Triggers</th>
         <td>{{ dataset.get_all_triggers()|length }}</td>
       </tr>
       <tr>
-        <th>Views</th>
+        <th>Number of Views</th>
         <td>{{ dataset.get_all_views()|length }}</td>
+      </tr>
+      <tr>
+        <th>User Interfaces</th>
+        <td><a href="">map-based data access</a> <a href="">data insertion</a></td>
       </tr>
     </tbody>
   </table>
