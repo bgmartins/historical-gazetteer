@@ -29,7 +29,7 @@ mapzen.whosonfirst.config = (function(){
 			// mapzen.whosonfirst.pelias.apikey("");
 
 			// Mapzen vector tiles require an API key
-			mapzen.whosonfirst.leaflet.tangram.set_api_key("");
+			mapzen.whosonfirst.leaflet.tangram.set_api_key("ckD92axlTP6zj4BK6rhhhA");
 			
 			// general debugging
 			// mapzen.whosonfirst.log.show();
