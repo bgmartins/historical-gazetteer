@@ -80,12 +80,7 @@ mapzen.whosonfirst.leaflet.tangram = (function(){
 
 		'attributions': function(){
 
-			var attributions = {
-				'Tangram': 'https://mapzen.com/tangram',
-				'© OSM contributors': 'http://www.openstreetmap.org/',
-				'Who\'s On First': 'http://whosonfirst.mapzen.com/',
-				'Mapzen': 'https://mapzen.com/',
-			};
+			var attributions = { };
 
 			return attributions;
 		},

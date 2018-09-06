@@ -10,7 +10,7 @@ mapzen.whosonfirst.config = (function(){
 			mapzen.whosonfirst.data.endpoint("http://localhost:9999/");
 			mapzen.whosonfirst.pip.endpoint("http://localhost:8080/");
 
-			mapzen.whosonfirst.iamhere.scenefile("/index.wsgi/static/tangram/refill.yaml");
+			mapzen.whosonfirst.iamhere.scenefile("/~gazetteer/index.wsgi/static/tangram/refill.yaml");
 
 			// filtering by more than one but not all placetypes indexed
 			// in the pip server is best thought of as broken for the time
