@@ -3,7 +3,7 @@ mapzen.whosonfirst = mapzen.whosonfirst || {};
 
 mapzen.whosonfirst.iamhere = (function(){
 
-	var _scenefile = '/tangram/refill.yaml';
+	var _scenefile = './tangram/refill.yaml';
 	
 	var map;
 	var current_layers = {};
