@@ -331,7 +331,7 @@ for row in obj["Vocabulary"]["Subject"]:
                 coor_bounding_latitude_least = verify_key(coor["Standard"]["Latitude"], "Decimal")
                 coor_bounding_longitude_least = verify_key(coor["Standard"]["Longitude"], "Decimal")
                 
-                if point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == True:
+                if point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == True or point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == False:
                     
                     if row["Descriptive_Note"] != None:
                         if "Note_Text" in row.get("Descriptive_Note", {}):
