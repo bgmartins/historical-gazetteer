@@ -249,16 +249,17 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
     return typedictionary
 
 ## function to check if a point is cintained by the mexico polygon
-def point_in_polygon(lat,lon):
+def point_in_polygon(lon,lat):
     import json
     from shapely.geometry import shape, Point
-
+    
     with open('mexico-administrative.geojson') as f:
         js = json.load(f)
 
     point = Point(float(lon), float(lat))
     
     for feature in js['features']:
+        
         polygon = shape(feature['geometry'])
         if polygon.contains(point):
             return True
@@ -331,7 +332,7 @@ for row in obj["Vocabulary"]["Subject"]:
                 coor_bounding_latitude_least = verify_key(coor["Standard"]["Latitude"], "Decimal")
                 coor_bounding_longitude_least = verify_key(coor["Standard"]["Longitude"], "Decimal")
                 
-                if point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == True or point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == False:
+                if point_in_polygon(coor_bounding_longitude_least, coor_bounding_latitude_least) == True:
                     
                     if row["Descriptive_Note"] != None:
                         if "Note_Text" in row.get("Descriptive_Note", {}):
