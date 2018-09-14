@@ -508,10 +508,10 @@ CREATE TABLE s_feature_name (
    confidence_note LONG,
    FOREIGN KEY (feature_name_id) REFERENCES g_feature_name,
    FOREIGN KEY (name) REFERENCES g_entry_source,
-   FOREIGN KEY (etymology),
+   FOREIGN KEY (etymology) REFERENCES g_entry_source,
    FOREIGN KEY (transliteration_scheme_id) REFERENCES l_scheme,
    FOREIGN KEY (language_id) REFERENCES l_language,
-   FOREIGN KEY (confidence_note)
+   FOREIGN KEY (confidence_note) REFERENCES g_entry_source
 );
 
 CREATE TABLE s_location_geometry (
@@ -621,7 +621,7 @@ INSERT INTO l_scheme VALUES (9,'UNDEFINED SCHEME FOR TRANSLITERATION',NULL,'1.0'
 INSERT INTO l_scheme VALUES (10,'UNDEFINED SCHEME FOR GEOMETRY CODING',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GEOMETRY CODING',0);
 INSERT INTO l_scheme VALUES (11,'ISO 639-2 Language Code List','ISO 639-2','1.0','http://www.loc.gov/standards/iso639-2/',NULL,NULL,NULL,NULL,NULL,'Codes for the representation of names of languages-- Part 2: alpha-3','LANGUAGE',0);
 INSERT INTO l_scheme VALUES (12,'Alexandria Digital Library Feature Type Thesaurus','ADL-FTT','July 3, 2002','http://legacy.alexandria.ucsb.edu/gazetteer/FeatureTypes/ver070302/index.htm',NULL,NULL,NULL,NULL,NULL,NULL,'FEATURE TYPE',0);
-INSERT INTO l_scheme VALUES (13,'Open Geospatial Consortium\'s well-known text (WKT) representation of coordinate reference systems',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GEOMETRY CODING',0);
+INSERT INTO l_scheme VALUES (13,'Open Geospatial Consortium''s well-known text (WKT) representation of coordinate reference systems',NULL,'1.0',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'GEOMETRY CODING',0);
 
 INSERT INTO l_language VALUES (1,'AAR',11);
 INSERT INTO l_language VALUES (2,'ABK',11);
