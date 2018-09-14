@@ -242,6 +242,9 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         match = ()
         for type2 in auxtypes:
             sim = metric.get_sim_score(type1, type2[1].lower())
+            print( type1 )
+            print( type2 )
+            print( sim )
             if sim >= max : 
                 max = sim
                 match = type2
