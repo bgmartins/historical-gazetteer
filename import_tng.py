@@ -245,7 +245,10 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
             if sim >= max : 
                 max = sim
                 match = type2
-        if max == 0 : print( typedictionary[tk] )
+        if max == 0 : 
+            print( typedictionary[tk] )
+            print( match )
+            
         typedictionary[tk] = match[0]
     return typedictionary
 
