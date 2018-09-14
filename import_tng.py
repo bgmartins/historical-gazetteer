@@ -242,17 +242,9 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         match = ()
         for type2 in auxtypes:
             sim = metric.get_sim_score(type1, type2[1].lower())
-            print( type1 )
-            print( type2 )
-            print( sim )
-            if sim >= max : 
+            if sim > max : 
                 max = sim
                 match = type2
-        if max == 0 : 
-            print( tk )
-            print( typedictionary[tk] )
-            print( match )
-            
         typedictionary[tk] = match[0]
     return typedictionary
 
@@ -291,7 +283,7 @@ def get_latest_id(table, id_field):
     else:
         return 0
 
-conn = sqlite3.connect("test-db")
+conn = sqlite3.connect("./gazetteer.db")
 c = conn.cursor()
 
 """
