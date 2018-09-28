@@ -4,8 +4,8 @@ mapzen.whosonfirst.leaflet = mapzen.whosonfirst.leaflet || {};
 
 mapzen.whosonfirst.leaflet.tangram = (function(){
 
-	var _scenefile = './tangram/refill.yaml'
-	var _key = 'mapzen-XXXXXXX';
+	var _scenefile = './tangram/simple.yaml'
+	var _key = '3XqXMjEdT2StnrIRJ4HYbg';
 	
 	var _cache = {};
 
