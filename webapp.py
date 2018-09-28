@@ -11,6 +11,7 @@ import time
 import webbrowser
 from collections import namedtuple, OrderedDict
 from functools import wraps
+from flask import jsonify
 
 # Py3k compat.
 if sys.version_info[0] == 3:
@@ -170,7 +171,16 @@ class SqliteDataSet(DataSet):
             for virtual_table in virtual_tables)
 
 #
-# Flask views.
+# Flask views associated to gazetteer app.
+#
+
+@app.route('/linked-places/', methods=['GET', 'POST'])
+def export_linked_places():
+    data = [ "aux" , "test" ]
+    return jsonify(data)
+
+#
+# Flask views associated to SQL browser.
 #
 
 @app.route('/')
