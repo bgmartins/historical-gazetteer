@@ -12,6 +12,7 @@ import webbrowser
 from collections import namedtuple, OrderedDict
 from functools import wraps
 from flask import jsonify
+from export_linked_places import export_gazetteer_to_linked_places
 
 # Py3k compat.
 if sys.version_info[0] == 3:
@@ -65,7 +66,6 @@ from peewee import *
 from peewee import IndexMetadata
 from playhouse.dataset import DataSet
 from playhouse.migrate import migrate
-
 
 CUR_DIR = os.path.realpath(os.path.dirname(__file__))
 DEBUG = False
@@ -176,7 +176,7 @@ class SqliteDataSet(DataSet):
 
 @app.route('/linked-places/', methods=['GET', 'POST'])
 def export_linked_places():
-    data = [ "aux" , "test" ]
+    data = export_gazetteer_to_linked_places(os.path.realpath(dataset._database.database))
     return jsonify(data)
 
 #
