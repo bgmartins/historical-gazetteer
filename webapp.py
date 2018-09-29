@@ -176,7 +176,7 @@ class SqliteDataSet(DataSet):
 
 @app.route('/linked-places/', methods=['GET', 'POST'])
 def export_linked_places():
-    data = export_gazetteer_to_linked_places(os.path.realpath(dataset._database.database))
+    data = export_gazetteer_to_linked_places(db_file)
     return jsonify(data)
 
 #
@@ -698,9 +698,11 @@ def open_browser_tab(host, port):
     thread.daemon = True
     thread.start()
 
-def myapp(db_file):
+def myapp(filename):
     global dataset
     global migrator
+    global db_file
+    db_file = filename
     if peewee_version >= (3, 0, 0): dataset_kwargs = {'bare_fields': True}
     else: dataset_kwargs = {}
     dataset = SqliteDataSet('sqlite:///%s' % db_file, **dataset_kwargs)
