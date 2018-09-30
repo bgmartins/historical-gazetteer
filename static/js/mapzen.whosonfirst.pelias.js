@@ -3,8 +3,8 @@ mapzen.whosonfirst = mapzen.whosonfirst || {};
 
 mapzen.whosonfirst.pelias = (function(){
 
-		var _endpoint = 'https://search.mapzen.com/v1/search';
-		var _apikey = '';
+		var _endpoint = '/~gazetteer/index.wsgi/gazetteer-search/';
+		var _apikey = 'gazetteer-search';
 
 		var self = {
 
