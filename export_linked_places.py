@@ -17,4 +17,5 @@ def export_gazetteer_to_linked_places( database ):
     data["features"].append(feature)
   return data
 
-print(export_gazetteer_to_linked_places('gazetteer.db'))
+if __name__ == '__main__':
+  print(export_gazetteer_to_linked_places('gazetteer.db'))

@@ -78,6 +78,7 @@ app = Flask(
     static_folder=os.path.join(CUR_DIR, 'static'),
     template_folder=os.path.join(CUR_DIR, 'templates'))
 app.config.from_object(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 dataset = None
 migrator = None
 
