@@ -31,11 +31,11 @@ mapzen.whosonfirst.iamhere = (function(){
 				// and do the concordance dance
 
 				
-				var swlat = 37.70120736474139;
-				var swlon = -122.68707275390624;
-				var nelat = 37.80924146650164;
-				var nelon = -122.21912384033203;
-
+				var swlat = 14.5388286402;
+				var swlon = -117.12776;
+				var nelat = 32.72083;
+				var nelon = -86.811982388;
+				
 				map = mapzen.whosonfirst.leaflet.tangram.map_with_bbox('map', swlat, swlon, nelat, nelon);
 				
 				L.hash(map);
