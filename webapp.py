@@ -176,7 +176,7 @@ class SqliteDataSet(DataSet):
 
 @app.route('/linked-places/', methods=['GET', 'POST'])
 def export_linked_places():
-    data = export_gazetteer_to_linked_places(db_file)
+    data = export_gazetteer_to_linked_places(dataset.filename)
     return jsonify(data)
 
 #
@@ -712,6 +712,7 @@ def myapp(filename):
 
 def main():
     # This function exists to act as a console script entry-point.
+    global db_file
     parser = get_option_parser()
     options, args = parser.parse_args()
     if not args: args = [ "gazetteer.db" ]
