@@ -6,7 +6,7 @@ mapzen.whosonfirst.iplookup = (function(){
 		var _endpoint = 'https://ip.dev.mapzen.com/';
 		var _apikey = '';
 
-		var _enabled = true;
+		var _enabled = false;
 	
 		var self = {
 
