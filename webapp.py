@@ -9,6 +9,7 @@ import sys
 import threading
 import time
 import webbrowser
+from math import sin, cos, acos, radians
 from collections import namedtuple, OrderedDict
 from functools import wraps
 from flask import jsonify
@@ -183,37 +184,35 @@ def export_linked_places():
 @app.route('/pip/', methods=['GET', 'POST'])
 def pip():
     def distance(p1_lat,p1_long,p2_lat,p2_long):
-	multiplier = 6371 \t
-	return ( multiplier *
-	acos(
-		cos( radians(p1_lat) ) *
-		cos( radians(p2_lat) ) *
-		cos( radians(p2_long) - radians(p1_long) ) +
-		sin( radians(p1_lat) ) * sin( radians(p2_lat) )
-		)
-	)
-    dataset.create_function("distance", 4, distance)
-    latitude=(request.form.get('latitude') or '').strip()
-    longitude=(request.form.get('longitude') or '').strip()
-    placetype=(request.form.get('placetype') or '').strip()
+        multiplier = 6371
+        return ( multiplier * acos( cos( radians(p1_lat) ) * cos( radians(p2_lat) ) * cos( radians(p2_long) - radians(p1_long) ) + sin( radians(p1_lat) ) * sin( radians(p2_lat) ) ) )
+    #dataset.create_function("distance", 4, distance)
+    latitude=get_request_data().get('latitude')
+    longitude=get_request_data().get('longitude')
+    placetype=get_request_data().get('placetype')
     try:
-        latitude = float(latitude)
-        longitude = float(longitude)
+        latitude = float(latitude.strip())
+        longitude = float(longitude.strip())
         response = []
-        for r in dataset.query("SELECT g_feature.feature_id, name, code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND primary_display=1"):
+        for r in dataset.query("SELECT g_feature.feature_id, g_feature_name.name, g_feature_code.code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND g_feature_name.primary_display=1"):
             aux = { "Id": r[0], "Name": r[1], "Placetype": r[2] }
             response.append(aux)
         return jsonify(response)
-    except: return jsonify({})
+    except Exception as e: return jsonify({ "error": repr(e) })
     
 @app.route('/gazetteer-data/', methods=['GET', 'POST'])
 def gazetteer_data():
     # check data here : https://raw.githubusercontent.com/whosonfirst-data/whosonfirst-data/master/data/101/711/873/101711873.geojson
     return jsonify({})
 
+@app.route('/gazetteer-id/', methods=['GET', 'POST'])
+def gazetteer_id():
+    data = export_gazetteer_to_linked_places(dataset.filename)
+    return jsonify(data)
+
 @app.route('/gazetteer-search/', methods=['GET', 'POST'])
 def gazetteer_search():
-    text = (request.form.get('text') or '').strip()
+    text = (get_request_data().get('text') or '').strip()
     if not text: return jsonify({})
     response = []
     for r in dataset.query("SELECT DISTINCT feature_id FROM g_feature WHERE feature_id IN ( SELECT feature_id from g_feature_name WHERE name LIKE '%?%' )", text):
