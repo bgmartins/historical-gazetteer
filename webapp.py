@@ -180,6 +180,28 @@ def export_linked_places():
     data = export_gazetteer_to_linked_places(dataset.filename)
     return jsonify(data)
 
+@app.route('/pip/', methods=['GET', 'POST'])
+def pip():
+    latitude=(request.form.get('latitude') or '').strip()
+    longitude=(request.form.get('longitude') or '').strip()
+    try:
+        latitude = float(latitude)
+        longitude = float(longitude)
+        response = { "latitude": latitude , "longitude": longitude }
+        return jsonify(response)
+    except: return jsonify({})
+    
+@app.route('/gazetteer-data/', methods=['GET', 'POST'])
+def gazetteer_data():
+    return jsonify({})
+
+@app.route('/gazetteer-search/', methods=['GET', 'POST'])
+def gazetteer_search():
+    text = (request.form.get('text') or '').strip()
+    if not text: return jsonify({})
+    response = { "text": text }
+    return jsonify(response)
+
 #
 # Flask views associated to SQL browser.
 #
