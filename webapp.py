@@ -184,15 +184,20 @@ def export_linked_places():
 def pip():
     latitude=(request.form.get('latitude') or '').strip()
     longitude=(request.form.get('longitude') or '').strip()
+    placetype=(request.form.get('placetype') or '').strip()
     try:
         latitude = float(latitude)
         longitude = float(longitude)
-        response = { "latitude": latitude , "longitude": longitude }
+        response = []
+        for r in dataset.query("SELECT g_feature.feature_id, name FROM g_feature, g_feature_name WHERE g_feature.feature_id=g_feature_name.feature_id AND primary_display=1"):
+            aux = { "Id": r[0], "Name": r[1], "Placetype": "Feature"}
+            response.append(aux)
         return jsonify(response)
     except: return jsonify({})
     
 @app.route('/gazetteer-data/', methods=['GET', 'POST'])
 def gazetteer_data():
+    # check data here : https://raw.githubusercontent.com/whosonfirst-data/whosonfirst-data/master/data/101/711/873/101711873.geojson
     return jsonify({})
 
 @app.route('/gazetteer-search/', methods=['GET', 'POST'])
