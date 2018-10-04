@@ -21,7 +21,7 @@ def export_gazetteer_to_linked_places( database ):
       wkt = "POINT(" + repr(geo[0]) + " " + repr(geo[1]) + ")"
       geo = { "type": "Point", "coordinates": [geo[0],geo[1]], "geo_wkt": wkt, "when": [], "src": "" }
       feature_obj["geometry"]["geometries"].append(geo)    
-    for type in conn.cursor().execute("SELECT feature_code_id, l_scheme_term.term FROM g_feature_code, l_scheme_term WHERE l_scheme_term.scheme_id=g_feature_code.code_scheme_id AND l_scheme_term.scheme_term_id=g_feature_code.feature_code_id AND g_feature_code.feature_id=" + repr(feature[0])):
+    for type in conn.cursor().execute("SELECT feature_code_id, l_scheme_term.term FROM g_classification, l_scheme_term WHERE l_scheme_term.scheme_term_id=g_classification.classification_term_id AND g_classification.feature_id=" + repr(feature[0])):
       type_obj = { "identifier": type_obj[0], "label": type_obj[1], "sourceLabel": type_obj[1], "when": [] }
       feature_obj["types"].append(type_obj)
     data["features"].append(feature_obj)
