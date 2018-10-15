@@ -2393,6 +2393,23 @@ INSERT INTO l_scheme_term VALUES (1259,12,'youth facilities',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (1260,12,'zip code areas',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (1261,12,'zoological gardens',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (1262,12,'zoos',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1263,2,'related to',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1264,2,'distinguished from',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1265,2,'adjacent to',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1266,2,'coextensive with',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1267,2,'ally of',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1268,2,'member of',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1269,2,'member is',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1270,2,'moved from',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1271,2,'moved to',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1272,2,'successor of',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1273,2,'predecessor of',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1274,2,'historical connection',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1275,2,'possibly identified as',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1276,2,'possibly equivalent to',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1277,2,'parent of',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1278,2,'child of',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (1279,3,'undefined',NULL,NULL,NULL);
 
 INSERT INTO l_scheme_term_parent SELECT 1, T1.scheme_term_id, T2.scheme_term_id FROM l_scheme_term T1, l_scheme_term T2 WHERE T1.term='abyssal features' AND T2.term='seafloor features';
 INSERT INTO l_scheme_term_parent SELECT 2, T1.scheme_term_id, T2.scheme_term_id FROM l_scheme_term T1, l_scheme_term T2 WHERE T1.term='agricultural regions' AND T2.term='regions';
@@ -2598,25 +2615,6 @@ INSERT INTO l_scheme_term_parent SELECT 201, T1.scheme_term_id, T2.scheme_term_i
 INSERT INTO l_scheme_term_parent SELECT 202, T1.scheme_term_id, T2.scheme_term_id FROM l_scheme_term T1, l_scheme_term T2 WHERE T1.term='wetlands' AND T2.term='biogeographic regions';
 INSERT INTO l_scheme_term_parent SELECT 203, T1.scheme_term_id, T2.scheme_term_id FROM l_scheme_term T1, l_scheme_term T2 WHERE T1.term='windmills' AND T2.term='manmade features';
 INSERT INTO l_scheme_term_parent SELECT 204, T1.scheme_term_id, T2.scheme_term_id FROM l_scheme_term T1, l_scheme_term T2 WHERE T1.term='woods' AND T2.term='forests';
-
-INSERT INTO l_scheme_term VALUES (1263,2,'related to',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1264,2,'distinguished from',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1265,2,'adjacent to',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1266,2,'coextensive with',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1267,2,'ally of',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1268,2,'member of',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1269,2,'member is',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1270,2,'moved from',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1271,2,'moved to',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1272,2,'successor of',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1273,2,'predecessor of',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1274,2,'historical connection',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1275,2,'possibly identified as',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1276,2,'possibly equivalent to',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1277,2,'parent of',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (1278,2,'child of',NULL,NULL,NULL);
-
-INSERT INTO l_scheme_term VALUES (1279,3,'undefined',NULL,NULL,NULL);
 
 INSERT INTO l_time_period_name VALUES (1,'undefined',4,NULL);
 INSERT INTO l_time_period_name VALUES (2,'undefined-current',4,NULL);
