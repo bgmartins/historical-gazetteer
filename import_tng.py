@@ -7,7 +7,7 @@ import csv
 #import defusedexpat
 
 ## initial parameters and global variables
-new_collection = "yes"
+new_collection = "no"
 collection_name = "TGN"
 collection_id = ""
 
@@ -309,7 +309,7 @@ elif new_collection == "no":
 
 
 ### Now we open the XML file to import to the gazeteer database
-with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True})
+with open("tgn1.xml", encoding='utf-8') as fd: obj = xmltodict.parse(fd.read(), encoding='utf-8', force_list={'Associative_Relationship':True, 'AR_Date':True, 'Coordinates':True, 'Non-Preferred_Term':True,'Subject_Source':True, 'Associative_Relationships':True})
 
 #print (obj["Vocabulary"]["Subject"])
 date = datetime.date.today()
@@ -317,6 +317,7 @@ today = str(date.day) + '/' + str(date.month) + '/' + str(date.year)
 
 t = open(r'csv-test', 'a')
 writer = csv.writer(t)
+
 
 ## This cycle iterates through all the subjects(features) from the XML file and adds them to the database
 for row in obj["Vocabulary"]["Subject"]:
@@ -542,6 +543,113 @@ for row in obj["Vocabulary"]["Subject"]:
         row = [feature_id, 'no coordinates']
         writer.writerow(row)
     
+
+
+## After adding all the features to the database, this cycle iterates once again through all the subjects(features) to extract information on the related features
+for row in obj["Vocabulary"]["Subject"]:
+    
+    feature_id = row["@Subject_ID"] #id of the subject
+    #print (feature_id)
+    
+    ''' We need to test this because there are no associative relationship within the location of test (Colonial Mexico)
+    if "Associative_Relationships" in row:
+        #print("I am in")
+        for associatives in row["Associative_Relationships"]:
+            for associative in associatives["Associative_Relationship"]:
+                historic_flag = associative["Historic_Flag"]                                #This atribute goes to
+                relationship_type = associative["Relationship_Type"]                        
+                related_subject_id = associative["Related_Subject_ID"]["VP_Subject_ID"]     #feature ID of the feature with which this feature is related
+                if hasattr(associative,'AR_Date'):
+                    display_date = associative["AR_Date"][0]["Display_Date"]                    
+                    start_date = associative["AR_Date"][0]["Start_Date"]                        
+                    end_date = associative["AR_Date"][0]["End_Date"]                            
+                
+                if hasattr(associative,'Description'):
+                    description = associative["Description"]                                
+                else:
+                    description = None
+                    
+                if hasattr(associative,'Contrib_Subject_ID'):
+                    contrib_subject_id = associative["Contrib_Subject_ID"]                  
+                else:
+                    contrib_subject_id = None
+                    
+                # TODO 'Inserir na tabela related features os dados das features relacionadas'
+                
+                # Verify if the data range fits within an existing time period
+                
+                #print(historic_flag)
+                #print(relationship_type)
+                #print(related_subject_id)
+                #print(display_date)
+                #print(start_date)
+                #print(end_date)
+                #print(description)
+                #print(contrib_subject_id)
+                
+                #Check if the related feature exists in the gazeetter database
+                associative_exists = c.execute("SELECT feature_id FROM g_feature WHERE feature_id = " + related_subject_id).fetchone()
+                if associative_exists is not None:
+                    ##TODO: write each inexisting feature into a CSV
+                    
+                    #rel_feature = (c.execute("SELECT * FROM g_feature f, g_feature_name n \
+                    #                        WHERE f.feature_id == n.feature_id AND \
+                    #                        f.feature_id = " + feature_id)).fetchone()
+                    
+                    print (associative_exists)
+                    
+    '''
+                
+    if "Parent_Relationships" in row:
+        #print("I am in")
+        
+        parent_subject_id = row["Parent_Relationships"]["Preferred_Parent"]["Parent_Subject_ID"]
+        
+        #Check if the parent feature exists in the gazeetter database
+        parent_exists = c.execute("SELECT feature_id FROM g_feature WHERE feature_id = " + parent_subject_id).fetchone()
+        
+        if parent_exists is not None:
+            parent_relationship_type = row["Parent_Relationships"]["Preferred_Parent"]["Relationship_Type"].split("/")[1]
+            historic_flag = row["Parent_Relationships"]["Preferred_Parent"]["Historic_Flag"]
+            
+            # We need to check if the time_period is current, historic, or none
+            time_period_id = 1
+            if historic_flag.lower() == "current":
+                time_period_id = 2
+            elif historic_flag.lower() == "historic":
+                time_period_id = 3
+            
+            print (feature_id)
+            print (parent_subject_id)
+            
+            # We first extract the latest related_feature_if from the table g_related_feature to increment
+            latest_related_feature_id = get_latest_id("g_related_feature", "related_feature_id") + 1
+            
+            c.execute("INSERT INTO {tbl} \
+                (related_feature_id,feature_id,related_name,related_feature_feature_id,time_period_id,related_type_term_id) \
+                VALUES (:relfid,:fid,'None',:rffid,:tpid,1278)".format(tbl = "g_related_feature"),\
+                {'relfid':latest_related_feature_id,'fid':feature_id,'rffid':parent_subject_id,'tpid':time_period_id})
+            
+            conn.commit()
+
 conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
