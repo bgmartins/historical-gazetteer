@@ -1,5 +1,5 @@
 import re
-import shapefile
+import geopandas
 import pandas as pd
 from os import listdir
 from os.path import isfile, join, splitext
@@ -8,13 +8,8 @@ from pandas import ExcelFile
 from similarity.jarowinkler import JaroWinkler
 
 def read_shapefile(shp_path):
-	sf = shapefile.Reader(shp_path)
-	fields = [x[0] for x in sf.fields][1:]
-	records = sf.records()
-	shps = [s.points for s in sf.shapes()]
-	df = pd.DataFrame(columns=fields, data=records)
-	df = df.assign(coords=shps)
-	return df
+    df = geopandas.read_file(shp_path)
+    return df
 
 def read_index(index_path):
     map1 = { }
@@ -38,8 +33,6 @@ def read_gis():
     map2 = { }
     for shp_path in [f for f in listdir('./decm-points') if isfile(join('./decm-points', f)) and splitext(join('./decm-points', f))[1] == ".shp"]:
         data2 = read_shapefile(join('./decm-points', shp_path))
-        print(shp_path)
-        print(data2.columns.values)
         for index, row in data2.iterrows():
             if not( 'Placename' in row ): continue
             id = str(index)
@@ -94,9 +87,9 @@ results = [ ]
 for match in matches:
     gis_data = read_shapefile(join('./decm-points', match[2]))
     index_data = pd.read_excel(join('./decm-indexes', match[0]), sheet_name='PlaceNames')
-    try: index_name = index_data.loc[index_data['id'] == match[1], 'name'][0]
+    try: index_name = index_data.loc[index_data['id'] == match[1], 'name'].iloc[0]
     except: index_name = ''
-    try: index_alternative_names = index_data.loc[index_data['id'] == match[1], 'alt_name']
+    try: index_alternative_names = index_data.loc[index_data['id'] == match[1], 'alt_name'].iloc[0]
     except: index_alternative_names = ''
     result = {'index': match[0], 
               'id_index': match[1], 
@@ -104,8 +97,8 @@ for match in matches:
               'index_alternative_names': index_alternative_names, 
               'GIS_file': match[2], 
               'GIS_id': match[3], 
-              'coords_lon': gis_data.ix[int(match[3]),"coords"][0][0],
-              'coords_lat': gis_data.ix[int(match[3]),"coords"][0][1],
+              'coords_lon': gis_data.ix[int(match[3]),"geometry"].centroid.x,
+              'coords_lat': gis_data.ix[int(match[3]),"geometry"].centroid.y,
               'GIS_placename': gis_data.ix[int(match[3]),"Placename"],
               'GIS_modernname': gis_data.ix[int(match[3]),"ModernName"],
               'GIS_alternative_names': gis_data.ix[int(match[3]),"Alt_names"]}
