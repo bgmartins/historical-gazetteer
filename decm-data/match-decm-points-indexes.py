@@ -1,4 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import re
+import ftfy
 import geopandas
 import pandas as pd
 from os import listdir
@@ -7,23 +11,20 @@ from pandas import ExcelWriter
 from pandas import ExcelFile
 from similarity.jarowinkler import JaroWinkler
 
-def read_shapefile(shp_path):
-    df = geopandas.read_file(shp_path)
-    return df
-
 def read_index(index_path):
     map1 = { }
-    data1 = pd.read_excel(index_path, sheet_name='PlaceNames')
+    data1 = pd.read_excel(index_path, sheet_name='PlaceNames', encoding='utf8')
     for index, row in data1.iterrows():
 	    id = str(row['id'])
 	    id = re.sub('\\..*', '', id)
-	    name = str(row['name'])
+	    name = ftfy.fix_text(str(row['name']).strip())
 	    if len(name)==0: continue
-	    try: alternative_name = str(row['alt_names'])
+	    try: ftfy.fix_text(alternative_name = str(row['alt_names']))
 	    except: alternative_name = ""
 	    if name in map1: map1[name] = map1[name] + [id]
 	    else: map1[name] = [id]
-	    for name in re.split(" *, *", alternative_name):
+	    for name in re.split(" *[;,] *", alternative_name):
+		    name = name.strip()
 		    if len(name)==0: continue
 		    if name in map1: map1[name] = map1[name] + [id]
 		    else: map1[name] = [id]
@@ -32,16 +33,17 @@ def read_index(index_path):
 def read_gis(): 
     map2 = { }
     for shp_path in [f for f in listdir('./decm-points') if isfile(join('./decm-points', f)) and splitext(join('./decm-points', f))[1] == ".shp"]:
-        data2 = read_shapefile(join('./decm-points', shp_path))
+        data2 = geopandas.read_file(join('./decm-points', shp_path))
         for index, row in data2.iterrows():
             if not( 'Placename' in row ): continue
             id = str(index)
-            name = str(row['Placename'])
+            name = ftfy.fix_text(str(row['Placename']).strip())
             if len(name)==0: continue
-            alternative_name = str(row['Alt_names']) + " , " + str(row['ModernName'])
+            alternative_name = ftfy.fix_text(str(row['Alt_names']) + " , " + str(row['ModernName']))
             if name in map2: map2[name] = map2[name] + [(shp_path,id)]
             else: map2[name] = [(shp_path,id)]
-            for name in re.split(" *, *", alternative_name):
+            for name in re.split(" *[;,] *", alternative_name):
+                name = name.strip()
                 if len(name)==0: continue
                 if name in map2: map2[name] = map2[name] + [(shp_path,id)]
                 else: map2[name] = [(shp_path,id)]
@@ -57,6 +59,7 @@ map2, data2 = read_gis()
 for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-indexes', f)) and splitext(join('./decm-indexes', f))[1] == ".xlsx"]:
     map1, data1 = read_index(join('./decm-indexes', index_path))
     for name1, ids1 in map1.items():
+        print("Matching name", name1, "from", index_path) 
         numMatch = 0
         numMatchApprox = 0
         aux = True
@@ -68,10 +71,10 @@ for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-i
                 numMatch += 1
                 aux = False
         sim_threshold = 0.975
-        while aux and sim_threshold >= 0.75:
+        while aux and sim_threshold >= 0.925:
             aux = True
             for name2, ids2 in map2.items():
-                if jarowinkler.similarity(name1.lower(),name2.lower()) > sim_threshold:
+                if jarowinkler.similarity(name1.lower()[::-1],name2.lower()[::-1]) > sim_threshold:
                     for id1 in ids1:
                         for id2 in ids2:
                             matches.add( (index_path, id1, id2[0], id2[1]) )
@@ -85,7 +88,7 @@ for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-i
         
 results = [ ]           
 for match in matches:
-    gis_data = read_shapefile(join('./decm-points', match[2]))
+    gis_data = geopandas.read_file(join('./decm-points', match[2]))
     index_data = pd.read_excel(join('./decm-indexes', match[0]), sheet_name='PlaceNames')
     try: index_name = index_data[index_data['id'] == int(match[1])]['name'].values[0]
     except: index_name = ''
@@ -104,7 +107,7 @@ for match in matches:
               'GIS_alternative_names': gis_data.ix[int(match[3]),"Alt_names"]}
     results = results + [ result ]    
 writer = pd.ExcelWriter('decm-results-match-points-indexes.xlsx', engine='xlsxwriter')
-df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1')
+df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1', encoding='utf8')
 writer.save()
     
 print("Number of places in indexes =", num_index_places)
