@@ -101,11 +101,11 @@ for match in matches:
               'index_alternative_names': index_alternative_names, 
               'GIS_file': match[2], 
               'GIS_id': match[3], 
-              'coords_lon': gis_data.ix[int(match[3]),"geometry"].centroid.x,
-              'coords_lat': gis_data.ix[int(match[3]),"geometry"].centroid.y,
-              'GIS_placename': gis_data.ix[int(match[3]),"Placename"],
-              'GIS_modernname': gis_data.ix[int(match[3]),"ModernName"],
-              'GIS_alternative_names': gis_data.ix[int(match[3]),"Alt_names"]}
+              'coords_lon': gis_data.ix[int(match[3]) - 1,"geometry"].centroid.x,
+              'coords_lat': gis_data.ix[int(match[3]) - 1,"geometry"].centroid.y,
+              'GIS_placename': gis_data.ix[int(match[3]) - 1,"Placename"],
+              'GIS_modernname': gis_data.ix[int(match[3]) - 1,"ModernName"],
+              'GIS_alternative_names': gis_data.ix[int(match[3]) - 1,"Alt_names"]}
     results = results + [ result ]    
 writer = pd.ExcelWriter('decm-results-match-points-indexes.xlsx', engine='xlsxwriter')
 df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1', encoding='iso-8859-1')
