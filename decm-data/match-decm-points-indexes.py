@@ -36,7 +36,8 @@ def read_gis():
         data2 = geopandas.read_file(join('./decm-points', shp_path))
         for index, row in data2.iterrows():
             if not( 'Placename' in row ): continue
-            id = str(index)
+            id = str(row['My_FID']).strip()
+            print(id, " *** ", index)
             name = ftfy.fix_text(str(row['Placename']).strip())
             if len(name)==0: continue
             alternative_name = ftfy.fix_text(str(row['Alt_names']) + " , " + str(row['ModernName']))
@@ -70,8 +71,8 @@ for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-i
                         matches.add( (index_path, id1, id2[0], id2[1]) )
                 numMatch += 1
                 aux = False
-        sim_threshold = 0.975
-        while aux and sim_threshold >= 0.925:
+        sim_threshold = 0.995
+        while aux and sim_threshold >= 0.9:
             aux = True
             for name2, ids2 in map2.items():
                 if jarowinkler.similarity(name1.lower()[::-1],name2.lower()[::-1]) > sim_threshold:
@@ -80,7 +81,7 @@ for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-i
                             matches.add( (index_path, id1, id2[0], id2[1]) )
                     numMatchApprox += 1
                     aux = False
-            sim_threshold -= 0.025
+            sim_threshold -= 0.005
         num_index_places += 1
         if numMatch > 0 or numMatchApprox > 0: num_index_places_matched += 1
         if numMatch == 0 and numMatchApprox > 0: num_index_places_matched_approx += 1
@@ -90,9 +91,9 @@ results = [ ]
 for match in matches:
     gis_data = geopandas.read_file(join('./decm-points', match[2]))
     index_data = pd.read_excel(join('./decm-indexes', match[0]), sheet_name='PlaceNames')
-    try: index_name = index_data[index_data['id'] == int(match[1])]['name'].values[0]
+    try: index_name = ftfy.fix_text(index_data[index_data['id'] == int(match[1])]['name'].values[0])
     except: index_name = ''
-    try: index_alternative_names = index_data[index_data['id'] == int(match[1])]['alt_names'].values[0]
+    try: index_alternative_names = ftfy.fix_text(index_data[index_data['id'] == int(match[1])]['alt_names'].values[0])
     except: index_alternative_names = ''
     result = {'index': match[0], 
               'id_index': match[1], 
@@ -107,7 +108,7 @@ for match in matches:
               'GIS_alternative_names': gis_data.ix[int(match[3]),"Alt_names"]}
     results = results + [ result ]    
 writer = pd.ExcelWriter('decm-results-match-points-indexes.xlsx', engine='xlsxwriter')
-df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1', encoding='utf8')
+df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1', encoding='iso-8859-1')
 writer.save()
     
 print("Number of places in indexes =", num_index_places)
