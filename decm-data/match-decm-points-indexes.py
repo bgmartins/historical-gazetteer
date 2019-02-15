@@ -19,7 +19,7 @@ def read_index(index_path):
 	    id = re.sub('\\..*', '', id)
 	    name = str(row['name'])
 	    if len(name)==0: continue
-	    try: alternative_name = str(row['alt_name'])
+	    try: alternative_name = str(row['alt_names'])
 	    except: alternative_name = ""
 	    if name in map1: map1[name] = map1[name] + [id]
 	    else: map1[name] = [id]
@@ -87,9 +87,9 @@ results = [ ]
 for match in matches:
     gis_data = read_shapefile(join('./decm-points', match[2]))
     index_data = pd.read_excel(join('./decm-indexes', match[0]), sheet_name='PlaceNames')
-    try: index_name = index_data.loc[index_data['id'] == match[1], 'name'].iloc[0]
+    try: index_name = index_data[index_data['id'] == int(match[1])]['name'].values[0]
     except: index_name = ''
-    try: index_alternative_names = index_data.loc[index_data['id'] == match[1], 'alt_name'].iloc[0]
+    try: index_alternative_names = index_data[index_data['id'] == int(match[1])]['alt_names'].values[0]
     except: index_alternative_names = ''
     result = {'index': match[0], 
               'id_index': match[1], 
@@ -107,8 +107,8 @@ writer = pd.ExcelWriter('decm-results-match-points-indexes.xlsx', engine='xlsxwr
 df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1')
 writer.save()
     
-print("Number of places in indexes = ", num_index_places)
-print("Number of places in indexes that are matched = ", num_index_places_matched)
-print("Number of places in indexes that are matched exactly = ", ( num_index_places_matched - num_index_places_matched_approx) )
-print("Number of places in indexes that are matched to multiple alternatives = ", ( num_index_places_matched - num_index_places_matched_single) )
-print("Number of places in indexes that are unambiguously matched = ", num_index_places_matched_single)
+print("Number of places in indexes =", num_index_places)
+print("Number of places in indexes that are matched =", num_index_places_matched)
+print("Number of places in indexes that are matched exactly =", ( num_index_places_matched - num_index_places_matched_approx) )
+print("Number of places in indexes that are matched to multiple alternatives =", ( num_index_places_matched - num_index_places_matched_single) )
+print("Number of places in indexes that are unambiguously matched =", num_index_places_matched_single)
