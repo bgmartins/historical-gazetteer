@@ -33,11 +33,10 @@ def read_index(index_path):
 def read_gis(): 
     map2 = { }
     for shp_path in [f for f in listdir('./decm-points') if isfile(join('./decm-points', f)) and splitext(join('./decm-points', f))[1] == ".shp"]:
-        data2 = geopandas.read_file(join('./decm-points', shp_path))
+        data2 = geopandas.read_file(join('./decm-points', shp_path), encoding='utf8')
         for index, row in data2.iterrows():
             if not( 'Placename' in row ): continue
             id = str(row['My_FID']).strip()
-            print(id, " *** ", index)
             name = ftfy.fix_text(str(row['Placename']).strip())
             if len(name)==0: continue
             alternative_name = ftfy.fix_text(str(row['Alt_names']) + " , " + str(row['ModernName']))
@@ -89,12 +88,15 @@ for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-i
         
 results = [ ]           
 for match in matches:
-    gis_data = geopandas.read_file(join('./decm-points', match[2]))
-    index_data = pd.read_excel(join('./decm-indexes', match[0]), sheet_name='PlaceNames')
-    try: index_name = ftfy.fix_text(index_data[index_data['id'] == int(match[1])]['name'].values[0])
-    except: index_name = ''
+    gis_data = geopandas.read_file(join('./decm-points', match[2]), encoding='utf8')
+    index_data = pd.read_excel(join('./decm-indexes', match[0]), sheet_name='PlaceNames', encoding='utf8')
+    index_name = ftfy.fix_text(index_data[index_data['id'] == int(match[1])]['name'].values[0])
     try: index_alternative_names = ftfy.fix_text(index_data[index_data['id'] == int(match[1])]['alt_names'].values[0])
     except: index_alternative_names = ''
+    try: gis_alternative_names = ftfy.fix_text(gis_data.ix[int(match[3]) - 1,"Alt_names"])
+    except: gis_alternative_names = gis_data.ix[int(match[3]) - 1,"Alt_names"]
+    try: gis_name = ftfy.fix_text(gis_data.ix[int(match[3]) - 1,"Placename"])
+    except: gis_name = gis_data.ix[int(match[3]) - 1,"Placename"]
     result = {'index': match[0], 
               'id_index': match[1], 
               'index_name': index_name,    
@@ -103,12 +105,12 @@ for match in matches:
               'GIS_id': match[3], 
               'coords_lon': gis_data.ix[int(match[3]) - 1,"geometry"].centroid.x,
               'coords_lat': gis_data.ix[int(match[3]) - 1,"geometry"].centroid.y,
-              'GIS_placename': gis_data.ix[int(match[3]) - 1,"Placename"],
-              'GIS_modernname': gis_data.ix[int(match[3]) - 1,"ModernName"],
-              'GIS_alternative_names': gis_data.ix[int(match[3]) - 1,"Alt_names"]}
+              'GIS_placename': gis_name,
+              'GIS_modernname': ftfy.fix_text(str(gis_data.ix[int(match[3]) - 1,"ModernName"])),
+              'GIS_alternative_names': gis_alternative_names }
     results = results + [ result ]    
 writer = pd.ExcelWriter('decm-results-match-points-indexes.xlsx', engine='xlsxwriter')
-df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1', encoding='iso-8859-1')
+df = pd.DataFrame(results).to_excel(writer, sheet_name='Sheet1', encoding='utf8')
 writer.save()
     
 print("Number of places in indexes =", num_index_places)
