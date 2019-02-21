@@ -5,7 +5,7 @@ sqlite3 gazetteer.db <gazetteer-sql-schema.sql
 python3 import_periodo.py
 spatialite gazetteer.db "update g_location_geometry set encoded_geometry = GeomFromText(encoded_geometry,4326)"
 spatialite gazetteer.db "update g_location set bounding_box_geodetic = BuildMbr(west_coordinate,south_coordinate,east_coordinate,north_coordinate,4326)"
-python3 import_decm_polygons.py
+python3 import_decm.py
 
 # Download schema crawler
 mkdir temp
