@@ -15,7 +15,7 @@ def get_identifier(table_name, column_name):
     res = conn.execute("SELECT CASE WHEN MAX(" + column_name + ") = COUNT(*) THEN MAX(" + column_name + ") + 1 WHEN MIN(" + column_name + ") > 1 THEN 1 WHEN MAX(" + column_name + ") <> COUNT(*) THEN (SELECT MIN(" + column_name + ")+1 FROM " + table_name + " WHERE (" + column_name + "+1) NOT IN (SELECT " + column_name + " FROM " + table_name + ")) ELSE 1 END FROM " + table_name)
     return res.fetchone()[0]
 
-def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc, dissolve = False ): 
+def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc, dissolve = False, alt_names=[] ): 
     source_id = get_identifier("g_source","source_id")
     source_reference_id = get_identifier("l_source_reference","source_reference_id")
     entry_source_id = get_identifier("g_entry_source","entry_source_id")  
@@ -49,6 +49,13 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
         conn.execute("INSERT INTO s_location_geometry ( location_geometry_id, time_period_id, entry_source_id ) VALUES (?,?,?)", (location_geometry_id,time_period_id,entry_source_id) )
         conn.execute("INSERT INTO s_feature_name ( feature_name_id, name, language_id, transliteration_scheme_id, confidence_note ) VALUES (?,?,?,9,?)", (feature_name_id,entry_source_id,language_id,entry_source_id) )
         conn.execute("INSERT INTO s_classification ( classification_id, classification_term_id, time_period_id, entry_source_id ) VALUES (?,?,?,?)", (classification_id,entry_source_id,entry_source_id,entry_source_id) )
+        alternative_names = ""
+        for i in alt_names: alternative_names = alternative_names + " , " + ftfy.fix_text(str(row['Alt_names'])
+        for alt_name in set(re.split(" *[;,] *", alternative_names)):
+            if len(alt_name.strip()) == 0 and alt_name.strip() == name: continue
+            feature_alt_name_id = get_identifier("g_feature_name","feature_name_id")
+            conn.execute("INSERT INTO g_feature_name ( feature_name_id , feature_id , primary_display , language_id , transliteration_scheme_id , name ) VALUES (?,?,?,?,9,?)", ( feature_alt_name_id feature_id, True, language_id, alt_name ) )
+            conn.execute("INSERT INTO s_feature_name ( feature_name_id, name, language_id, transliteration_scheme_id, confidence_note ) VALUES (?,?,?,9,?)", (feature_alt_name_id,entry_source_id,language_id,entry_source_id) )
         conn.commit()
 
 collection_id = get_identifier("g_collection", "collection_id")
@@ -82,7 +89,11 @@ import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/79_se_f
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/80_se_frontier_control_limits.shp" , "region", "Book from Gerhard published on 1979", "Gerhard", "regions", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/87_civil_divisions_1580.shp" , "chief_town", "Book from Gerhard published on 1972b", "Gerhard", "administrative divisions", None )
 
-#import_from_shapefile( collection_id , "decm-data/decm-polygons/78_se_frontier_gobierno.shp" , "Gobierno", "Cline 1972", Cline", "administrative divisions", None )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Garza.shp" , "Placename", "Book Garza", "Garza", "localities", None, ['Alt_names', 'ModernName'] )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Gerhard_North.shp" , "Placename", "Book Gerhard_North", "Gerhard_North", "localities", None, ['Alt_names', 'ModernName'] )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Gerhard_South.shp" , "Placename", "Book Gerhard_South", "Gerhard_South", "localities", None, ['Alt_names', 'ModernName'] )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Suma.shp" , "Placename", "Book Suma", "Suma", "localities", None, ['Alt_names', 'ModernName'] )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Suma_txt.shp" , "Placename", "Book Suma txt", "Suma txt", "localities", None, ['Alt_names', 'ModernName'] )
 
 #rows = conn.execute("SELECT DISTINCT l2.feature_id, g_feature_name.name, l1.feature_id, g1.time_period_id from g_location_geometry g1, g_location_geometry g2, g_location l1, g_location l2, g_feature_name WHERE within(g1.encoded_geometry,g2.encoded_geometry) AND g1.location_id=l1.location_id AND g2.location_id=l2.location_id AND g_feature_name.feature_id=l2.feature_id AND g_feature_name.primary_display=1 AND g1.time_period_id=g2.time_period_id").fetchall()
 #for row in rows:
