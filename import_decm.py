@@ -60,3 +60,5 @@ import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/2_Gobie
 #    conn.execute("INSERT INTO g_related_feature ( related_feature_id, feature_id, related_name, related_feature_feature_id, time_period_id, related_type_term_id ) VALUES (?,?,?,?,?,?)", (related_feature_id, row[0], row[1], row[2], row[3], 1278) )
 #conn.commit()
 
+#polygon = conn.execute("SELECT AsGeoJSON(ST_Boundary(ST_Union(encoded_geometry))) FROM g_location_geometry").fetchone()[0]
+#with open('covered-region.geojson', 'w') as outfile: json.dump(polygon, outfile)
