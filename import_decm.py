@@ -15,7 +15,7 @@ def get_identifier(table_name, column_name):
     res = conn.execute("SELECT CASE WHEN MAX(" + column_name + ") = COUNT(*) THEN MAX(" + column_name + ") + 1 WHEN MIN(" + column_name + ") > 1 THEN 1 WHEN MAX(" + column_name + ") <> COUNT(*) THEN (SELECT MIN(" + column_name + ")+1 FROM " + table_name + " WHERE (" + column_name + "+1) NOT IN (SELECT " + column_name + " FROM " + table_name + ")) ELSE 1 END FROM " + table_name)
     return res.fetchone()[0]
 
-def import_polygons_from_shapefile( collection_id, shp_path , attribute_name , source_desc , source_mnemonic , feature_type , date_desc ): 
+def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc ): 
     source_id = get_identifier("g_source","source_id")
     source_reference_id = get_identifier("l_source_reference","source_reference_id")
     entry_source_id = get_identifier("g_entry_source","entry_source_id")  
