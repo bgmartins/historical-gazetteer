@@ -15,7 +15,7 @@ def get_identifier(table_name, column_name):
     res = conn.execute("SELECT CASE WHEN MAX(" + column_name + ") = COUNT(*) THEN MAX(" + column_name + ") + 1 WHEN MIN(" + column_name + ") > 1 THEN 1 WHEN MAX(" + column_name + ") <> COUNT(*) THEN (SELECT MIN(" + column_name + ")+1 FROM " + table_name + " WHERE (" + column_name + "+1) NOT IN (SELECT " + column_name + " FROM " + table_name + ")) ELSE 1 END FROM " + table_name)
     return res.fetchone()[0]
 
-def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc ): 
+def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc, dissolve = False ): 
     source_id = get_identifier("g_source","source_id")
     source_reference_id = get_identifier("l_source_reference","source_reference_id")
     entry_source_id = get_identifier("g_entry_source","entry_source_id")  
@@ -23,6 +23,9 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
     conn.execute("INSERT INTO g_source ( source_id, source_mnemonic, contributor_id, source_reference_id ) VALUES (?,?,2,?)", (source_id, source_mnemonic, source_reference_id) )
     conn.execute("INSERT INTO g_entry_source ( entry_source_id, source_id, entry_date ) VALUES (?,?,'now')", (entry_source_id,source_id) )
     data = geopandas.read_file(shp_path, encoding='utf8')
+    if dissolve:
+        data = data[[attribute_name, 'geometry']]
+        data = data.dissolve(by=attribute_name).reset_index()
     for index, row in data.iterrows():
         name = ftfy.fix_text(str(row[attribute_name]).strip())
         geo = str(row["geometry"])
@@ -53,7 +56,9 @@ conn.execute("INSERT INTO g_collection VALUES (?, 'DECM Data', '')", (collection
 
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/2_Gobiernos.shp" , "Gobierno", "Book from Cline published on 1972", "Cline", "administrative divisions", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/6_Audiencias.shp" , "Audiencia", "Book from Cline published on 1972", "Cline", "administrative divisions", None )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/6_Audiencias_capitals.shp" , "Audiencia", "Book from Cline published on 1972", "Cline", "capitals", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/7_Dioceses.shp" , "Diocese", "Book from Cline published on 1972", "Cline", "administrative divisions", None )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/7_Dioceses_Bishopric.shp" , "Name", "Book from Cline published on 1972", "Cline", "capitals", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/10_ethnohistorical_regions.shp" , "region", "Book from Cline published on 1972", "Cline", "subdivisions", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/12_provincias_1570.shp" , "Provincia", "Book from Gerhard published on 1972a", "Gerhard", "provinces", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/58_gerhard_dioceses.shp" , "Diocese", "Book from Gerhard published on 1972b", "Gerhard", "administrative divisions", None )
@@ -70,6 +75,7 @@ import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/70_H_II
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/72_H_II_2_inset.shp" , "entidad", "Information from Instituto de Geografia - Universidad Nacional Autonoma de Mexico", "IG-UNAM", "regions", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/73_texcoco_lago.shp" , "entity", "Arqueología Mexicana", "?????", "regions", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/76_se_frontier_subdelegacion.shp" , "name", "Book from Gerhard published on 1979", "Gerhard", "administrative divisions", None )
+import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/76_se_frontier_subdelegacion.shp" , "gobierno", "Book from Gerhard published on 1979", "Gerhard", "administrative divisions", None , dissolve = True)
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/77_se_frontier_intendancy.shp" , "intendancy", "Book from Gerhard published on 1979", "Gerhard", "administrative divisions", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/78_se_frontier_gobierno.shp" , "gobierno", "Book from Gerhard published on 1979", "Gerhard", "administrative divisions", None )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-polygons/79_se_frontier_audiencia.shp" , "audiencia", "Book from Gerhard published on 1979", "Gerhard", "administrative divisions", None )
