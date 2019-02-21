@@ -52,7 +52,7 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
         alternative_names = ""
         for i in alt_names: alternative_names = alternative_names + " , " + ftfy.fix_text(str(row[alt_names]))
         for alt_name in re.split(" *[;,] *", alternative_names):
-            if len(alt_name.strip()) == 0 and alt_name.strip() == name: continue
+            if len(alt_name.strip()) == 0 or alt_name.strip() == name: continue
             feature_alt_name_id = get_identifier("g_feature_name","feature_name_id")
             conn.execute("INSERT INTO g_feature_name ( feature_name_id , feature_id , primary_display , language_id , transliteration_scheme_id , name ) VALUES (?,?,?,?,9,?)", ( feature_alt_name_id, feature_id, True, language_id, alt_name ) )
             conn.execute("INSERT INTO s_feature_name ( feature_name_id, name, language_id, transliteration_scheme_id, confidence_note ) VALUES (?,?,?,9,?)", (feature_alt_name_id,entry_source_id,language_id,entry_source_id) )
