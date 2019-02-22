@@ -32,8 +32,8 @@ def read_index(index_path):
    
 def read_gis(): 
     map2 = { }
-    for shp_path in [f for f in listdir('./decm-points') if isfile(join('./decm-points', f)) and splitext(join('./decm-points', f))[1] == ".shp"]:
-        data2 = geopandas.read_file(join('./decm-points', shp_path), encoding='utf8')
+    for shp_path in [f for f in listdir('../decm-data/decm-points') if isfile(join('../decm-data/decm-points', f)) and splitext(join('../decm-data/decm-points', f))[1] == ".shp"]:
+        data2 = geopandas.read_file(join('../decm-data/decm-points', shp_path), encoding='utf8')
         for index, row in data2.iterrows():
             if not( 'Placename' in row ): continue
             id = str(row['My_FID']).strip()
@@ -56,8 +56,8 @@ num_index_places_matched_approx = 0
 num_index_places_matched_single = 0
 matches = set()
 map2, data2 = read_gis()
-for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-indexes', f)) and splitext(join('./decm-indexes', f))[1] == ".xlsx"]:
-    map1, data1 = read_index(join('./decm-indexes', index_path))
+for index_path in [f for f in listdir('../decm-data/decm-indexes') if isfile(join('../decm-data/decm-indexes', f)) and splitext(join('../decm-data/decm-indexes', f))[1] == ".xlsx"]:
+    map1, data1 = read_index(join('../decm-data/decm-indexes', index_path))
     for name1, ids1 in map1.items():
         print("Matching name", name1, "from", index_path) 
         numMatch = 0
@@ -88,8 +88,8 @@ for index_path in [f for f in listdir('./decm-indexes') if isfile(join('./decm-i
         
 results = [ ]           
 for match in matches:
-    gis_data = geopandas.read_file(join('./decm-points', match[2]), encoding='utf8')
-    index_data = pd.read_excel(join('./decm-indexes', match[0]), sheet_name='PlaceNames', encoding='utf8')
+    gis_data = geopandas.read_file(join('../decm-data/decm-points', match[2]), encoding='utf8')
+    index_data = pd.read_excel(join('../decm-data/decm-indexes', match[0]), sheet_name='PlaceNames', encoding='utf8')
     index_name = ftfy.fix_text(index_data[index_data['id'] == int(match[1])]['name'].values[0])
     try: index_alternative_names = ftfy.fix_text(index_data[index_data['id'] == int(match[1])]['alt_names'].values[0])
     except: index_alternative_names = ''

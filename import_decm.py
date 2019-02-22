@@ -3,19 +3,20 @@ import re
 import ftfy
 import geopandas
 import sqlite3
+import hashlib
 import pandas as pd
 
 database = "gazetteer.db"
 if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
 conn = sqlite3.connect( database )
 conn.enable_load_extension(True)
-#conn.execute('SELECT load_extension("mod_spatialite")')
+conn.execute("SELECT load_extension('mod_spatialite')")
 
 def get_identifier(table_name, column_name):
     res = conn.execute("SELECT CASE WHEN MAX(" + column_name + ") = COUNT(*) THEN MAX(" + column_name + ") + 1 WHEN MIN(" + column_name + ") > 1 THEN 1 WHEN MAX(" + column_name + ") <> COUNT(*) THEN (SELECT MIN(" + column_name + ")+1 FROM " + table_name + " WHERE (" + column_name + "+1) NOT IN (SELECT " + column_name + " FROM " + table_name + ")) ELSE 1 END FROM " + table_name)
     return res.fetchone()[0]
 
-def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc, dissolve = False, alt_names=[] ): 
+def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc, hash_feature_id = False, dissolve = False, alt_names=[] ): 
     source_id = get_identifier("g_source","source_id")
     source_reference_id = get_identifier("l_source_reference","source_reference_id")
     entry_source_id = get_identifier("g_entry_source","entry_source_id")  
@@ -30,11 +31,12 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
         name = ftfy.fix_text(str(row[attribute_name]).strip())
         geo = str(row["geometry"])
         bbox = row["geometry"].bounds
+        if hash_feature_id: feature_id = int(hashlib.md5((name + " - " + geo).encode('utf-8')).hexdigest(), 16) & 0xFFFFFFFFFFFF
+        else: feature_id = get_identifier("g_feature","feature_id")
         if date_desc is None: date_desc = 'undefined-historical'
         time_period_id = conn.execute("SELECT g_time_period_to_period_name.time_period_id FROM l_time_period_name, g_time_period_to_period_name WHERE l_time_period_name.time_period_name_id=g_time_period_to_period_name.time_period_name_id AND time_period_name=?",(date_desc,)).fetchone()[0]
         classification_term_id = conn.execute("SELECT scheme_term_id FROM l_scheme_term WHERE term=? ORDER BY term_order_number, term_rank_number",(feature_type,)).fetchone()[0]
         language_id  = conn.execute("SELECT language_id FROM l_language WHERE language_code LIKE 'SPA'").fetchone()[0]
-        feature_id = get_identifier("g_feature","feature_id")
         feature_name_id = get_identifier("g_feature_name","feature_name_id")
         location_id = get_identifier("g_location","location_id")        
         location_geometry_id = get_identifier("g_location_geometry","location_geometry_id")
@@ -95,11 +97,12 @@ import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Gerhard_S
 import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Suma.shp" , "Placename", "Book Suma", "Suma", "localities", None, ['Alt_names', 'ModernName'] )
 import_polygons_from_shapefile( collection_id , "decm-data/decm-points/Suma_txt.shp" , "Placename", "Book Suma txt", "Suma txt", "localities", None, ['Alt_names', 'ModernName'] )
 
-#rows = conn.execute("SELECT DISTINCT l2.feature_id, g_feature_name.name, l1.feature_id, g1.time_period_id from g_location_geometry g1, g_location_geometry g2, g_location l1, g_location l2, g_feature_name WHERE within(g1.encoded_geometry,g2.encoded_geometry) AND g1.location_id=l1.location_id AND g2.location_id=l2.location_id AND g_feature_name.feature_id=l2.feature_id AND g_feature_name.primary_display=1 AND g1.time_period_id=g2.time_period_id").fetchall()
-#for row in rows:
-#    related_feature_id = get_identifier("g_related_feature","related_feature_id")
-#    conn.execute("INSERT INTO g_related_feature ( related_feature_id, feature_id, related_name, related_feature_feature_id, time_period_id, related_type_term_id ) VALUES (?,?,?,?,?,?)", (related_feature_id, row[0], row[1], row[2], row[3], 1278) )
-#conn.commit()
+rows = conn.execute("SELECT DISTINCT l2.feature_id, g_feature_name.name, l1.feature_id, g1.time_period_id from g_location_geometry g1, g_location_geometry g2, g_location l1, g_location l2, g_feature_name WHERE within(g1.encoded_geometry,g2.encoded_geometry) AND g1.location_id=l1.location_id AND g2.location_id=l2.location_id AND g_feature_name.feature_id=l2.feature_id AND g_feature_name.primary_display=1 AND g1.time_period_id=g2.time_period_id").fetchall()
+for row in rows:
+    related_feature_id = get_identifier("g_related_feature","related_feature_id")
+    conn.execute("INSERT INTO g_related_feature ( related_feature_id, feature_id, related_name, related_feature_feature_id, time_period_id, related_type_term_id ) VALUES (?,?,?,?,?,?)", (related_feature_id, row[0], row[1], row[2], row[3], 1278) )
+conn.commit()
 
 #polygon = conn.execute("SELECT AsGeoJSON(ST_Boundary(ST_Union(encoded_geometry))) FROM g_location_geometry").fetchone()[0]
 #with open('covered-region.geojson', 'w') as outfile: json.dump(polygon, outfile)
+
