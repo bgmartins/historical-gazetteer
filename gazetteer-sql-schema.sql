@@ -1,16 +1,16 @@
-DROP VIEW v_lite_feature;
-DROP VIEW v_lite_feature_name;
-DROP VIEW v_lite_classification;
-DROP VIEW v_lite_location;
-DROP VIEW v_lite_location_geometry;
-DROP VIEW v_lite_name_to_time_period;
-DROP VIEW v_lite_time_period;
-DROP VIEW v_lite_entry_source;
-DROP VIEW v_lite_scheme;
-DROP VIEW v_lite_scheme_term;
-DROP VIEW v_lite_source;
-DROP VIEW v_lite_source_reference;
-DROP VIEW v_lite_contributor;
+DROP VIEW IF EXISTS v_lite_feature;
+DROP VIEW IF EXISTS v_lite_feature_name;
+DROP VIEW IF EXISTS v_lite_classification;
+DROP VIEW IF EXISTS v_lite_location;
+DROP VIEW IF EXISTS v_lite_location_geometry;
+DROP VIEW IF EXISTS v_lite_name_to_time_period;
+DROP VIEW IF EXISTS v_lite_time_period;
+DROP VIEW IF EXISTS v_lite_entry_source;
+DROP VIEW IF EXISTS v_lite_scheme;
+DROP VIEW IF EXISTS v_lite_scheme_term;
+DROP VIEW IF EXISTS v_lite_source;
+DROP VIEW IF EXISTS v_lite_source_reference;
+DROP VIEW IF EXISTS v_lite_contributor;
 
 DROP TABLE IF EXISTS s_time_period;
 DROP TABLE IF EXISTS s_supplemental_note;
@@ -599,10 +599,15 @@ CREATE VIEW v_lite_source_reference AS SELECT source_reference_id,citation,refer
 CREATE VIEW v_lite_contributor AS SELECT contributor_id,organization_name,street_address,city,state_province FROM l_contributor;
 
 -- Initial data insertions
-INSERT INTO l_author VALUES (1,'UNDEFINED AUTHOR');
-INSERT INTO l_author VALUES (2,'Bruno Martins');
-INSERT INTO l_author VALUES (3,'Jacinto Estima');
-INSERT INTO l_author VALUES (4,'Patricia Murrieta-Flores');
+INSERT INTO l_author VALUES (0,'UNDEFINED AUTHOR');
+INSERT INTO l_author VALUES (1,'Bruno Martins');
+INSERT INTO l_author VALUES (2,'Jacinto Estima');
+INSERT INTO l_author VALUES (3,'Patricia Murrieta-Flores');
+INSERT INTO l_author VALUES (4,'Raquel Liceras-Garrido');
+INSERT INTO l_author VALUES (5,'Mariana Favila');
+INSERT INTO l_author VALUES (6,'Ian Gregory');
+INSERT INTO l_author VALUES (7,'Katherine Bellamy');
+INSERT INTO l_author VALUES (8,'Diego Jimenez');
 
 INSERT INTO l_contributor VALUES (1,'INESC-ID','IDSS','https://idss.inesc-id.pt/',NULL,NULL,'Lisbon','Lisbon',NULL,'Portugal');
 INSERT INTO l_contributor VALUES (2,'Lancaster University Digital Humanities Hub','DIGHUM','http://wp.lancs.ac.uk/dighum/',NULL,NULL,'Lancaster','Lancashire',NULL,'United Kingdom');
