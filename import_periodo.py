@@ -35,9 +35,9 @@ for c in data["periodCollections"]:
         if "eng-latn" in localizedLabels: localizedLabels = " - ".join(localizedLabels["eng-latn"])                
         id = "http://n2t.net/ark:/99152/" + id
         try: 
-            if start == "modern": start = "9999-99-99"
+            if start == "present": start = "9999-99-99"
             else: start = str(int(start)) + "-01-01"
-            if stop == "modern": stop = "9999-99-99"
+            if stop == "present": stop = "9999-99-99"
             else: stop = str(int(stop)) + "-12-31"
         except : 
             print("*** ERROR CONVERTING ONE OF THE TEMPORAL PERIODS ***")
