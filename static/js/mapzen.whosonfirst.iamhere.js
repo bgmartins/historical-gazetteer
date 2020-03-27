@@ -3,7 +3,7 @@ mapzen.whosonfirst = mapzen.whosonfirst || {};
 
 mapzen.whosonfirst.iamhere = (function(){
 
-	var _scenefile = './tangram/refill.yaml';
+	var _scenefile = 'static/tangram/simple.yaml';
 	
 	var map;
 	var current_layers = {};
@@ -15,11 +15,10 @@ mapzen.whosonfirst.iamhere = (function(){
 		var self = {
 			
 			'init': function(){
-
 				var s = mapzen.whosonfirst.iamhere.scenefile()
 				mapzen.whosonfirst.leaflet.tangram.scenefile(s);
 
-				// TO DO (20151214/thisisaaronland)
+				// TO DO (20151214/this is a ar on land)
 
 				// 1. Just finish this:
 				// https://github.com/whosonfirst/p5-Whosonfirst-MaxMind-Writer
@@ -36,7 +35,14 @@ mapzen.whosonfirst.iamhere = (function(){
 				var nelat = 32.72083;
 				var nelon = -86.811982388;
 				
+				
 				map = mapzen.whosonfirst.leaflet.tangram.map_with_bbox('map', swlat, swlon, nelat, nelon);
+				
+				var tileUrl = 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=49a5b5dc29214864871852883a050425';
+				layer = new L.TileLayer(tileUrl, {maxZoom: 16});
+				map.addLayer(layer);		
+
+				console.log(map.layers);
 				
 				L.hash(map);
 
@@ -521,7 +527,7 @@ mapzen.whosonfirst.iamhere = (function(){
 			},
 
 			'reverse_geocode': function(lat, lon){
-
+				
 				var e = mapzen.whosonfirst.pip.endpoint();
 
 				if ((! navigator.onLine) && (! self.is_localhost(e))){

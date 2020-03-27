@@ -4,10 +4,11 @@ mapzen.whosonfirst.leaflet = mapzen.whosonfirst.leaflet || {};
 
 mapzen.whosonfirst.leaflet.tangram = (function(){
 
-	var _scenefile = './tangram/simple.yaml'
-	var _key = '3XqXMjEdT2StnrIRJ4HYbg';
+	var _scenefile = 'static/tangram/simple.yaml'
 	
 	var _cache = {};
+	
+	var _key=""
 
 	var self = {
 
@@ -36,7 +37,7 @@ mapzen.whosonfirst.leaflet.tangram = (function(){
 			if (! _cache[id]){
 				var map = L.map(id);
 				map.scrollWheelZoom.disable();
-
+				
 				var tangram = self.tangram();
 				tangram.addTo(map);
 

@@ -36,16 +36,18 @@ mapzen.whosonfirst.net = (function(){
 			}
 			
 			var req = new XMLHttpRequest();
+			//req.open('GET', url, true);
+			//req.send();
 			
-			req.onload = function(){
+			req.onload  = function(){
 				
 				try {
-					var geojson = JSON.parse(this.responseText);
+    				var geojson = JSON.parse(this.reponseText);
+    				//console.log(geojson);
 				}
 				
 				catch (e){
 					mapzen.whosonfirst.log.error("failed to parse " + url + ", because " + e);
-
 					if (on_fail){
 						on_fail();
 					}
@@ -60,19 +62,6 @@ mapzen.whosonfirst.net = (function(){
 				}
 			};
 			
-			try {				    
-				req.open("get", url, true);
-				req.send();
-			}
-			
-			catch(e){
-				mapzen.whosonfirst.log.error("failed to fetch " + url + ", because ");
-				mapzen.whosonfirst.log.debug(e);   
-
-				if (on_fail){
-					on_fail();
-				}
-			}
 		},
 
 	};

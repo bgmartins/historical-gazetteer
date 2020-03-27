@@ -1,6 +1,10 @@
 {% extends "base_tables.html" %}
 
-{% block content_title %}Gazetteer Database{% endblock %}
+{% block content_title %}Gazetteer Database
+<a href="{{ url_for('logout') }}">
+          <small>Logout</small>
+        </a>
+{% endblock %}
 
 {% block content %}
   <table class="table table-striped">
@@ -39,7 +43,7 @@
       </tr>
       <tr>
         <th>User Interfaces</th>
-        <td><a href="{{ url_for('static', filename='index.html') }}">map-based data access</a> &mdash; <a href="{{ url_for('static', filename='gazetteer-insert.html') }}">data insertion</a> &mdash; <a href="{{ url_for('export_linked_places') }}">linked places export</a></td>
+        <td><a href="{{ url_for('static', filename='index.html') }}">map-based data access</a> &mdash; <a href="{{ url_for('static', filename='gazetteer-insert.html') }}">data insertion</a> &mdash; <a href="{{ url_for('export_linked_places') }}">linked places export</a> &mdash; <a href="{{ url_for('gazetteer_data') }}">whos on first</a></td>
       </tr>
     </tbody>
   </table>

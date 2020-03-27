@@ -10,37 +10,31 @@ lights:
         ambient: 1
 
 sources:
-    mapzen:
+    thunderforest:
         type: TopoJSON
-        url: https://tile.nextzen.org/tilezen/vector/v1/all/{z}/{x}/{y}.topojson
-        url_params:
-            api_key: 3XqXMjEdT2StnrIRJ4HYbg
+        url: https://tile.thunderforest.com/thunderforest.outdoors-v2.json?apikey=49a5b5dc29214864871852883a050425
         max_zoom: 16
 
 layers:
-    earth:
-        data: { source: mapzen }
-        draw:
-            polygons:
-                order: function() { return feature.sort_rank; }
-                color: '#ddeeee'
-
-    landuse:
-        data: { source: mapzen }
-        draw:
-            polygons:
-                order: function() { return feature.sort_rank; }
-                color: '#aaffaa'
-
     water:
-        data: { source: mapzen }
+        data: { source: thunderforest }
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
                 color: '#88bbee'
-
-    roads:
-        data: { source: mapzen }
+	buildings:
+		data: {source: thunderforest}
+		draw:
+			order: function() { return feature.sort_rank; }
+			color:  |
+                    function () {
+                        var h = feature.height || 20;
+                        h = Math.min((h + 50)/ 255, .8); // max brightness: .8
+                        h = Math.max(h, .4); // min brightness: .4
+                        return [h, h, h];
+                    }
+	roads:
+        data: { source: thunderforest }
         filter:
             not: { kind: [path, rail, ferry] }
         draw:
@@ -49,40 +43,10 @@ layers:
                 color: gray
                 width: 8
                 cap: round
-        highway:
-            filter:
-                kind: highway
-            draw:
-                lines:
-                    order: function() { return feature.sort_rank; }
-                    color: '#cc6666'
-                    width: 12
-                    outline:
-                        color: grey
-                        width: 1.5
-        minor_road:
-            filter:
-                kind: minor_road
-            draw:
-                lines:
-                    order: function() { return feature.sort_rank; }
-                    color: lightgrey
-                    width: 5
-
-    buildings:
-        data: { source: mapzen }
+			
+	landuse:
+        data: { source: thunderforest }
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
-                color: |
-                    function () {
-                        var h = feature.height || 20;
-                        h = Math.min((h + 50)/ 255, .8); // max brightness: .8
-                        h = Math.max(h, .4); // min brightness: .4
-                        return [h, h, h];
-                    }
-        3d-buildings:
-            filter: { $zoom: { min: 15 } }
-            draw:
-                polygons:
-                    extrude: function () { return feature.height > 20 || $zoom >= 16; }
+                color: '#aaffaa'

@@ -3,7 +3,7 @@ mapzen.whosonfirst = mapzen.whosonfirst || {};
 
 mapzen.whosonfirst.pip = (function(){
 
-		var _endpoint = '/~gazetteer/index.wsgi/pip/';
+		var _endpoint = '/pip/';
 
 		var self = {
 

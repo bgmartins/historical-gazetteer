@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+
+import logging
+import json
 import datetime
 import math
 import optparse
@@ -14,6 +17,8 @@ from collections import namedtuple, OrderedDict
 from functools import wraps
 from flask import jsonify
 from export_linked_places import export_gazetteer_to_linked_places
+from export_whos_on_first import export_to_whos_on_first
+from getpass import getpass
 
 # Py3k compat.
 if sys.version_info[0] == 3:
@@ -186,7 +191,7 @@ def pip():
     def distance(p1_lat,p1_long,p2_lat,p2_long):
         multiplier = 6371
         return ( multiplier * acos( cos( radians(p1_lat) ) * cos( radians(p2_lat) ) * cos( radians(p2_long) - radians(p1_long) ) + sin( radians(p1_lat) ) * sin( radians(p2_lat) ) ) )
-    #dataset.create_function("distance", 4, distance)
+    # dataset.create_function("distance", 4, distance)
     latitude=get_request_data().get('latitude')
     longitude=get_request_data().get('longitude')
     placetype=get_request_data().get('placetype')
@@ -194,16 +199,20 @@ def pip():
         latitude = float(latitude.strip())
         longitude = float(longitude.strip())
         response = []
-        for r in dataset.query("SELECT g_feature.feature_id, g_feature_name.name, g_feature_code.code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND g_feature_name.primary_display=1"):
+        for r in dataset.query("SELECT g_feature.feature_id, g_feature_name.name,g_feature_code.code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND g_feature_name.primary_display=1"):
             aux = { "Id": r[0], "Name": r[1], "Placetype": r[2] }
             response.append(aux)
+        
         return jsonify(response)
     except Exception as e: return jsonify({ "error": repr(e) })
     
 @app.route('/gazetteer-data/', methods=['GET', 'POST'])
 def gazetteer_data():
+    data = export_to_whos_on_first(dataset.filename)
+    with open('data.json', 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
     # check data here : https://raw.githubusercontent.com/whosonfirst-data/whosonfirst-data/master/data/101/711/873/101711873.geojson
-    return jsonify({})
+    return jsonify(data)
 
 @app.route('/gazetteer-id/', methods=['GET', 'POST'])
 def gazetteer_id():
@@ -223,6 +232,31 @@ def gazetteer_search():
 #
 # Flask views associated to SQL browser.
 #
+    
+@app.route('/login/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if request.form.get('password') == app.config['PASSWORD']:
+            session['authorized'] = True
+            return redirect(url_for('index'))
+        flash('The password you entered is incorrect.', 'danger')
+    return render_template('login.html')
+
+@app.route('/logout/', methods=['GET'])
+def logout():
+    session.pop('authorized', None)
+    return redirect(url_for('login'))
+
+def install_auth_handler(password):
+    app.config['PASSWORD'] = password
+
+    @app.before_request
+    def check_password():
+        if not session.get('authorized') and request.path != '/login/' and \
+           not request.path.startswith(('/static/', '/favicon')):
+            # flash('You must log-in to view the database browser.', 'danger')
+            session['next_url'] = request.base_url
+            return redirect(url_for('login'))
 
 @app.route('/')
 def index():
@@ -677,7 +711,10 @@ def get_query_images():
 
 @app.context_processor
 def _general():
-    return {'dataset': dataset}
+    return {
+            'dataset': dataset,
+            'login_required': bool(app.config.get('PASSWORD'))
+    }
 
 @app.context_processor
 def _now():
@@ -721,6 +758,25 @@ def get_option_parser():
         default=True,
         dest='browser',
         help='Do not automatically open browser page.')
+    parser.add_option(
+        '-P',
+        '--password',
+        default=True,
+        action='store_true',
+        dest='prompt_password',
+        help='Prompt for password to access database browser.')
+    parser.add_option(
+        '-r',
+        '--read-only',
+        action='store_true',
+        default=True,
+        dest='read_only',
+        help='Open database in read-only mode.')
+    parser.add_option(
+        '-u',
+        '--url-prefix',
+        dest='url_prefix',
+        help='URL prefix for application.')
     return parser
 
 def die(msg, exit_code=1):
@@ -739,14 +795,32 @@ def open_browser_tab(host, port):
     thread.daemon = True
     thread.start()
 
-def myapp(filename):
+def myapp(filename, read_only=False, password=None, url_prefix=None):
     global dataset
     global migrator
-    global db_file
-    db_file = filename
-    if peewee_version >= (3, 0, 0): dataset_kwargs = {'bare_fields': True}
-    else: dataset_kwargs = {}
-    dataset = SqliteDataSet('sqlite:///%s' % db_file, **dataset_kwargs)
+
+    if password:
+        install_auth_handler(password)
+
+    if read_only:
+        if sys.version_info < (3, 4, 0):
+            die('Python 3.4.0 or newer is required for read-only access.')
+        if peewee_version < (3, 5, 1):
+            die('Peewee 3.5.1 or newer is required for read-only access.')
+        db = SqliteDatabase('%s' % filename, uri=True)
+        try:
+            db.connect()
+        except OperationalError:
+            die('Unable to open database file in read-only mode. Ensure that '
+                'the database exists in order to use read-only mode.')
+        db.close()
+        dataset = SqliteDataSet(db, bare_fields=True)
+    else:
+        dataset = SqliteDataSet('sqlite:///%s' % filename, bare_fields=True)
+
+    if url_prefix:
+        app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix=url_prefix)
+
     migrator = dataset._migrator
     dataset.close()
     return app
@@ -757,8 +831,21 @@ def main():
     parser = get_option_parser()
     options, args = parser.parse_args()
     if not args: args = [ "gazetteer.db" ]
+    print(options)
+    password = None
+    if options.prompt_password:
+        if os.environ.get('SQLITE_WEB_PASSWORD'):
+            password = os.environ['SQLITE_WEB_PASSWORD']
+        else:
+            while True:
+                password = getpass('Enter password: ')
+                password_confirm = getpass('Confirm password: ')
+                if password != password_confirm:
+                    print('Passwords did not match!')
+                else:
+                    break
     db_file = args[0]
-    app = myapp(db_file)
+    app = myapp(db_file, options.read_only, password,  options.url_prefix)
     if options.browser: open_browser_tab(options.host, options.port)
     app.run(host=options.host, port=options.port, debug=options.debug)
 
