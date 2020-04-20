@@ -1,0 +1,681 @@
+Geonames Feature Code,Geonames Label,Wikidata URI,Wikidata label,AAT ID,AAT label,description,Geonames Feature Class,Wikipedia Code
+ADM1,first-order administrative division,http://www.wikidata.org/entity/Q10864048,first-level administrative country subdivision,http://vocab.getty.edu/aat/300387064,first level subdivisions (political entities),"a primary administrative division of a country, such as a state in the United States",A,A.ADM1
+ADM1H,historical first-order administrative division,,,,,a former first-order administrative division,A,A.ADM1H
+ADM2,second-order administrative division,http://www.wikidata.org/entity/Q13220204,second-level administrative country subdivision,http://vocab.getty.edu/aat/300387145,second level subdivisions (political entities),a subdivision of a first-order administrative division,A,A.ADM2
+ADM2H,historical second-order administrative division,,,,,a former second-order administrative division,A,A.ADM2H
+ADM3,third-order administrative division,http://www.wikidata.org/entity/Q13221722,third-order administrative division,http://vocab.getty.edu/aat/300387198,third level subdivisions (political entities),a subdivision of a second-order administrative division,A,A.ADM3
+ADM3H,historical third-order administrative division,,,,,a former third-order administrative division,A,A.ADM3H
+ADM4,fourth-order administrative division,http://www.wikidata.org/entity/Q14757767,fourth-level administrative country subdivision,http://vocab.getty.edu/aat/300387199,fourth level subdivisions (political entities),a subdivision of a third-order administrative division,A,A.ADM4
+ADM4H,historical fourth-order administrative division,,,,,a former fourth-order administrative division,A,A.ADM4H
+ADM5,fifth-order administrative division,http://www.wikidata.org/entity/Q15640612,fifth-level administrative country subdivision,,,a subdivision of a fourth-order administrative division,A,A.ADM5
+ADM5H,historical fifth-order administrative division,,,,,a former fifth-order administrative division,A,A.ADM5H
+ADMD,administrative division,http://www.wikidata.org/entity/Q15284,first-level NUTS of the European Union,http://vocab.getty.edu/aat/300265612,municipalities,"an administrative division of a country, undifferentiated as to administrative level",A,A.ADMD
+ADMDH,historical administrative division ,http://www.wikidata.org/entity/Q19832712,historical administrative division,,,"a former administrative division of a political entity, undifferentiated as to administrative level",A,A.ADMDH
+LTER,leased area,,,,,"a tract of land leased to another country, usually for military installations",A,A.LTER
+PCL,political entity,http://www.wikidata.org/entity/Q7225121,political structure,,,,A,A.PCL
+PCLD,dependent political entity,http://www.wikidata.org/entity/Q46395,British Overseas Territories,,,,A,A.PCLD
+PCLF,freely associated state,http://www.wikidata.org/entity/Q1138279,associated state,,,,A,A.PCLF
+PCLH,historical political entity,http://www.wikidata.org/entity/Q3024240,historical country,,,a former political entity,A,A.PCLH
+PCLI,independent political entity,http://www.wikidata.org/entity/Q6256,country,,,,A,A.PCLI
+PCLIX,section of independent political entity,,,,,,A,A.PCLIX
+PCLS,semi-independent political entity,,,,,,A,A.PCLS
+PRSH,parish,http://www.wikidata.org/entity/Q102496,parish,,,an ecclesiastical district,A,A.PRSH
+TERR,territory,http://www.wikidata.org/entity/Q462778,insular area,,,,A,A.TERR
+ZN,zone,http://www.wikidata.org/entity/Q219858,zone,,,,A,A.ZN
+ZNB,buffer zone,http://www.wikidata.org/entity/Q1054581,buffer zone,,,a zone recognized as a buffer between two nations in which military presence is minimal or absent,A,A.ZNB
+AIRS,seaplane landing area,,,,,a place on a waterbody where floatplanes land and take off,H,H.AIRS
+ANCH,anchorage,http://www.wikidata.org/entity/Q10952797,anchorage,,,an area where vessels may anchor,H,H.ANCH
+BAY,bay,http://www.wikidata.org/entity/Q39594,bay,http://vocab.getty.edu/aat/300132316,bays (bodies of water),"a coastal indentation between two capes or headlands, larger than a cove but smaller than a gulf",H,H.BAY
+BAYS,bays,http://www.wikidata.org/entity/Q39594,bay,http://vocab.getty.edu/aat/300132316,bays (bodies of water),"coastal indentations between two capes or headlands, larger than a cove but smaller than a gulf",H,H.BAYS
+BGHT,bight(s),http://www.wikidata.org/entity/Q17018380,bight,,,an open body of water forming a slight recession in a coastline,H,H.BGHT
+BNK,bank(s),http://www.wikidata.org/entity/Q468756,shore,,,"an elevation, typically located on a shelf, over which the depth of water is relatively shallow but sufficient for most surface navigation",H,H.BNK
+BNKR,stream bank,http://www.wikidata.org/entity/Q3706062,stream bank,,,a sloping margin of a stream channel which normally confines the stream to its channel on land,H,H.BNKR
+BNKX,section of bank,,,,,,H,H.BNKX
+BOG,bog(s),http://www.wikidata.org/entity/Q1681353,bog,,,"a wetland characterized by peat forming sphagnum moss, sedge, and other acid-water plants",H,H.BOG
+CAPG,icecap,http://www.wikidata.org/entity/Q878077,ice cap,http://vocab.getty.edu/aat/300266566,ice caps,a dome-shaped mass of glacial ice covering an area of mountain summits or other high lands; smaller than an ice sheet,H,H.CAPG
+CHN,channel,http://www.wikidata.org/entity/Q1210950,channel,http://vocab.getty.edu/aat/300008713,channels (water bodies),"the deepest part of a stream, bay, lagoon, or strait, through which the main current flows",H,H.CHN
+CHNL,lake channel(s),http://www.wikidata.org/entity/Q55465414,lake channel,http://vocab.getty.edu/aat/300387028,lake channels,"that part of a lake having water deep enough for navigation between islands, shoals, etc.",H,H.CHNL
+CHNM,marine channel,http://www.wikidata.org/entity/Q55465477,marine channel,http://vocab.getty.edu/aat/300387026,marine channels,that part of a body of water deep enough for navigation through an area otherwise not suitable,H,H.CHNM
+CHNN,navigation channel,http://www.wikidata.org/entity/Q41982239,navigation channel,http://vocab.getty.edu/aat/300386965,navigation channels,a buoyed channel of sufficient depth for the safe navigation of vessels,H,H.CHNN
+CNFL,confluence,http://www.wikidata.org/entity/Q723748,confluence,http://vocab.getty.edu/aat/300387046,confluences,a place where two or more streams or intermittent streams flow together,H,H.CNFL
+CNL,canal,http://www.wikidata.org/entity/Q12284,canal,http://vocab.getty.edu/aat/300006075,canals (waterways),an artificial watercourse,H,H.CNL
+CNLA,aqueduct,http://www.wikidata.org/entity/Q474,aqueduct,http://vocab.getty.edu/aat/300006165,aqueducts,a conduit used to carry water,H,H.CNLA
+CNLB,canal bend,,,,,a conspicuously curved or bent section of a canal,H,H.CNLB
+CNLD,drainage canal,http://www.wikidata.org/entity/Q28109789,drainage canal,,,an artificial waterway carrying water away from a wetland or from drainage ditches,H,H.CNLD
+CNLI,irrigation canal,http://www.wikidata.org/entity/Q2935978,irrigation canal,,,a canal which serves as a main conduit for irrigation water,H,H.CNLI
+CNLN,navigation canal(s),http://www.wikidata.org/entity/Q12284,canal,http://vocab.getty.edu/aat/300006075,canals (waterways),a watercourse constructed for navigation of vessels,H,H.CNLN
+CNLQ,abandoned canal,,,,,,H,H.CNLQ
+CNLSB,underground irrigation canal(s),http://www.wikidata.org/entity/Q55468440,underground irrigation canal,,,a gently inclined underground tunnel bringing water for irrigation from aquifers,H,H.CNLSB
+CNLX,section of canal,http://www.wikidata.org/entity/Q57208181,section of a canal,,,,H,H.CNLX
+COVE,cove(s),http://www.wikidata.org/entity/Q31615,cove,http://vocab.getty.edu/aat/300132317,coves (bodies of water),"a small coastal indentation, smaller than a bay",H,H.COVE
+CRKT,tidal creek(s),http://www.wikidata.org/entity/Q27250,tidal creek,http://vocab.getty.edu/aat/300387084,tidal watercourses,a meandering channel in a coastal wetland subject to bi-directional tidal currents,H,H.CRKT
+CRNT,current,,,,,a horizontal flow of water in a given direction with uniform velocity,H,H.CRNT
+CUTF,cutoff,http://www.wikidata.org/entity/Q61455616,cutoff channel,,,a channel formed as a result of a stream cutting through a meander neck,H,H.CUTF
+DCK,dock(s),http://www.wikidata.org/entity/Q124282,dock,,,"a waterway between two piers, or cut into the land for the berthing of ships",H,H.DCK
+DCKB,docking basin,,,,,a part of a harbor where ships dock,H,H.DCKB
+DOMG,icecap dome,,,,,a comparatively elevated area on an icecap,H,H.DOMG
+DPRG,icecap depression,,,,,a comparatively depressed area on an icecap,H,H.DPRG
+DTCH,ditch,http://www.wikidata.org/entity/Q2048319,ditch,http://vocab.getty.edu/aat/300006178,ditches,a small artificial watercourse dug for draining or irrigating the land,H,H.DTCH
+DTCHD,drainage ditch,http://www.wikidata.org/entity/Q2048319,ditch,http://vocab.getty.edu/aat/300006178,ditches,a ditch which serves to drain the land,H,H.DTCHD
+DTCHI,irrigation ditch,http://www.wikidata.org/entity/Q2048319,ditch,http://vocab.getty.edu/aat/300006178,ditches,a ditch which serves to distribute irrigation water,H,H.DTCHI
+DTCHM,ditch mouth(s),,,,,"an area where a drainage ditch enters a lagoon, lake or bay",H,H.DTCHM
+ESTY,estuary,http://www.wikidata.org/entity/Q47053,estuary,http://vocab.getty.edu/aat/300266571,estuaries,a funnel-shaped stream mouth or embayment where fresh water mixes with sea water under tidal influences,H,H.ESTY
+FISH,fishing area,http://www.wikidata.org/entity/Q47521850,fishing area,http://vocab.getty.edu/aat/300387251,fishing spots (sites),"a fishing ground, bank or area where fishermen go to catch fish",H,H.FISH
+FJD,fjord,http://www.wikidata.org/entity/Q45776,fjord,http://vocab.getty.edu/aat/300008676,fiords,"a long, narrow, steep-walled, deep-water arm of the sea at high latitudes, usually along mountainous coasts",H,H.FJD
+FJDS,fjords,http://www.wikidata.org/entity/Q45776,fjord,http://vocab.getty.edu/aat/300008676,fiords,"long, narrow, steep-walled, deep-water arms of the sea at high latitudes, usually along mountainous coasts",H,H.FJDS
+FLLS,waterfall(s),http://www.wikidata.org/entity/Q34038,waterfall,http://vocab.getty.edu/aat/300006792,cascades (water features),a perpendicular or very steep descent of the water of a stream,H,H.FLLS
+FLLSX,section of waterfall(s),http://www.wikidata.org/entity/Q34038,waterfall,http://vocab.getty.edu/aat/300006792,cascades (water features),,H,H.FLLSX
+FLTM,mud flat(s),http://www.wikidata.org/entity/Q31796,mudflat,,,"a relatively level area of mud either between high and low tide lines, or subject to flooding",H,H.FLTM
+FLTT,tidal flat(s),http://www.wikidata.org/entity/Q31796,mudflat,,,a large flat area of mud or sand attached to the shore and alternately covered and uncovered by the tide,H,H.FLTT
+GLCR,glacier(s),http://www.wikidata.org/entity/Q35666,glacier,http://vocab.getty.edu/aat/300008835,glaciers (bodies of water),"a mass of ice, usually at high latitudes or high elevations, with sufficient thickness to flow away from the source area in lobes, tongues, or masses",H,H.GLCR
+GULF,gulf,http://www.wikidata.org/entity/Q1322134,gulf,http://vocab.getty.edu/aat/300132315,gulfs (bodies of water),"a large recess in the coastline, larger than a bay",H,H.GULF
+GYSR,geyser,http://www.wikidata.org/entity/Q83471,geyser,http://vocab.getty.edu/aat/300380167,geysers,a type of hot spring with intermittent eruptions of jets of hot water and steam,H,H.GYSR
+HBR,harbor(s),http://www.wikidata.org/entity/Q283202,harbor,http://vocab.getty.edu/aat/300008678,harbors,a haven or space of deep water so sheltered by the adjacent land as to afford a safe anchorage for ships,H,H.HBR
+HBRX,section of harbor,,,,,,H,H.HBRX
+INLT,inlet,http://www.wikidata.org/entity/Q1172599,inlet,http://vocab.getty.edu/aat/300185707,inlets,"a narrow waterway extending into the land, or connecting a bay or lagoon with a larger body of water",H,H.INLT
+INLTQ,former inlet,,,,,"an inlet which has been filled in, or blocked by deposits",H,H.INLTQ
+LBED,lake bed(s),http://www.wikidata.org/entity/Q14253637,dry lake,http://vocab.getty.edu/aat/300387087,dry lakes,a dried up or drained area of a former lake,H,H.LBED
+LGN,lagoon,http://www.wikidata.org/entity/Q187223,lagoon,http://vocab.getty.edu/aat/300008679,lagoons (bodies of water),"a shallow coastal waterbody, completely or partly separated from a larger body of water by a barrier island, coral reef or other depositional feature",H,H.LGN
+LGNS,lagoons,http://www.wikidata.org/entity/Q187223,lagoon,http://vocab.getty.edu/aat/300008679,lagoons (bodies of water),"shallow coastal waterbodies, completely or partly separated from a larger body of water by a barrier island, coral reef or other depositional feature",H,H.LGNS
+LGNX,section of lagoon,http://www.wikidata.org/entity/Q57208127,section of a lagoon,,,,H,H.LGNX
+LK,lake,http://www.wikidata.org/entity/Q23397,lake,http://vocab.getty.edu/aat/300008680,lakes (bodies of water),a large inland body of standing water,H,H.LK
+LKC,crater lake,http://www.wikidata.org/entity/Q204324,volcanic crater lake,http://vocab.getty.edu/aat/300266561,crater lakes,a lake in a crater or caldera,H,H.LKC
+LKI,intermittent lake,http://www.wikidata.org/entity/Q10313934,intermittent lake,http://vocab.getty.edu/aat/300387086,intermittent lakes,,H,H.LKI
+LKN,salt lake,http://www.wikidata.org/entity/Q188025,salt lake,http://vocab.getty.edu/aat/300266556,salt lakes,an inland body of salt water with no outlet,H,H.LKN
+LKNI,intermittent salt lake,http://www.wikidata.org/entity/Q55470156,intermittent salt lake,,,,H,H.LKNI
+LKO,oxbow lake,http://www.wikidata.org/entity/Q209333,oxbow lake,http://vocab.getty.edu/aat/300136982,oxbow (shape),a crescent-shaped lake commonly found adjacent to meandering streams,H,H.LKO
+LKOI,intermittent oxbow lake,http://www.wikidata.org/entity/Q55470128,intermittent oxbow lake,,,,H,H.LKOI
+LKS,lakes,http://www.wikidata.org/entity/Q23397,group of lakes,http://vocab.getty.edu/aat/300008680,lakes (bodies of water),large inland bodies of standing water,H,H.LKS
+LKSB,underground lake,http://www.wikidata.org/entity/Q1048337,underground lake,http://vocab.getty.edu/aat/300387021,underground lakes,a standing body of water in a cave,H,H.LKSB
+LKSC,crater lakes,http://www.wikidata.org/entity/Q204324,volcanic crater lake,http://vocab.getty.edu/aat/300266561,crater lakes,lakes in a crater or caldera,H,H.LKSC
+LKSI,intermittent lakes,http://www.wikidata.org/entity/Q10313934,intermittent lake,http://vocab.getty.edu/aat/300387086,intermittent lakes,,H,H.LKSI
+LKSN,salt lakes,http://www.wikidata.org/entity/Q188025,salt lake,http://vocab.getty.edu/aat/300266556,salt lakes,inland bodies of salt water with no outlet,H,H.LKSN
+LKSNI,intermittent salt lakes,,,,,,H,H.LKSNI
+LKX,section of lake,http://www.wikidata.org/entity/Q57208156,section of a lake,,,,H,H.LKX
+MFGN,salt evaporation ponds,http://www.wikidata.org/entity/Q244326,salt evaporation pond,,,diked salt ponds used in the production of solar evaporated salt,H,H.MFGN
+MGV,mangrove swamp,http://www.wikidata.org/entity/Q28129994,mangrove swamp,,,a tropical tidal mud flat characterized by mangrove vegetation,H,H.MGV
+MOOR,moor(s),http://www.wikidata.org/entity/Q34795826,moor,,,an area of open ground overlaid with wet peaty soils,H,H.MOOR
+MRSH,marsh(es),http://www.wikidata.org/entity/Q30198,marsh,http://vocab.getty.edu/aat/300008903,marshes,a wetland dominated by grass-like vegetation,H,H.MRSH
+MRSHN,salt marsh,http://www.wikidata.org/entity/Q29925,salt marsh,,,"a flat area, subject to periodic salt water inundation, dominated by grassy salt-tolerant plants",H,H.MRSHN
+NRWS,narrows,http://www.wikidata.org/entity/Q6966332,narrows,http://vocab.getty.edu/aat/300266563,narrows (watercourse),"a navigable narrow part of a bay, strait, river, etc.",H,H.NRWS
+OCN,ocean,http://www.wikidata.org/entity/Q9430,ocean,http://vocab.getty.edu/aat/300008687,oceans,one of the major divisions of the vast expanse of salt water covering part of the earth,H,H.OCN
+OVF,overfalls,,,,,an area of breaking waves caused by the meeting of currents or by waves moving against the current,H,H.OVF
+PND,pond,http://www.wikidata.org/entity/Q3253281,pond,http://vocab.getty.edu/aat/300008688,ponds (water),a small standing waterbody,H,H.PND
+PNDI,intermittent pond,http://www.wikidata.org/entity/Q55711375,intermittent pond,,,,H,H.PNDI
+PNDN,salt pond,http://www.wikidata.org/entity/Q7846183,Tropical salt pond ecosystem,,,"a small standing body of salt water often in a marsh or swamp, usually along a seacoast",H,H.PNDN
+PNDNI,intermittent salt pond(s),,,,,,H,H.PNDNI
+PNDS,ponds,http://www.wikidata.org/entity/Q42055295,group of ponds,,,small standing waterbodies,H,H.PNDS
+PNDSF,fishponds,http://www.wikidata.org/entity/Q1265665,fish pond,http://vocab.getty.edu/aat/300008689,fishponds,ponds or enclosures in which fish are kept or raised,H,H.PNDSF
+PNDSI,intermittent ponds,,,,,,H,H.PNDSI
+PNDSN,salt ponds,http://www.wikidata.org/entity/Q244326,salt evaporation pond,,,"small standing bodies of salt water often in a marsh or swamp, usually along a seacoast",H,H.PNDSN
+POOL,pool(s),http://www.wikidata.org/entity/Q3253281,pond,http://vocab.getty.edu/aat/300008688,ponds (water),"a small and comparatively still, deep part of a larger body of water such as a stream or harbor; or a small body of standing water",H,H.POOL
+POOLI,intermittent pool,,,,,,H,H.POOLI
+RCH,reach,http://www.wikidata.org/entity/Q7300165,reach,,,a straight section of a navigable stream or channel between two bends,H,H.RCH
+RDGG,icecap ridge,,,,,a linear elevation on an icecap,H,H.RDGG
+RDST,roadstead,http://www.wikidata.org/entity/Q913035,roadstead,,,an open anchorage affording less protection than a harbor,H,H.RDST
+RF,reef(s),http://www.wikidata.org/entity/Q184358,reef,http://vocab.getty.edu/aat/300008808,reefs,a surface-navigation hazard composed of consolidated material,H,H.RF
+RFC,coral reef(s),http://www.wikidata.org/entity/Q11292,coral reef,http://vocab.getty.edu/aat/300387631,coral reefs,a surface-navigation hazard composed of coral,H,H.RFC
+RFX,section of reef,http://www.wikidata.org/entity/Q184358,reef,http://vocab.getty.edu/aat/300008808,reefs,,H,H.RFX
+RPDS,rapids,http://www.wikidata.org/entity/Q695793,rapids,http://vocab.getty.edu/aat/300008739,rapids,"a turbulent section of a stream associated with a steep, irregular stream bed",H,H.RPDS
+RSV,reservoir(s),http://www.wikidata.org/entity/Q131681,reservoir,http://vocab.getty.edu/aat/300006191,reservoirs (water distribution structures),an artificial pond or lake,H,H.RSV
+RSVI,intermittent reservoir,http://www.wikidata.org/entity/Q55470036,intermittent reservoir,,,,H,H.RSVI
+RSVT,water tank,http://www.wikidata.org/entity/Q6501028,water tank,http://vocab.getty.edu/aat/300006203,water tanks,"a contained pool or tank of water at, below, or above ground level",H,H.RSVT
+RVN,ravine(s),http://www.wikidata.org/entity/Q2042028,ravine,http://vocab.getty.edu/aat/300008773,ravines,"a small, narrow, deep, steep-sided stream channel, smaller than a gorge",H,H.RVN
+SBKH,sabkha(s),http://www.wikidata.org/entity/Q637600,sabkha,http://vocab.getty.edu/aat/300386999,sabkhas,a salt flat or salt encrusted plain subject to periodic inundation from flooding or high tides,H,H.SBKH
+SD,sound,http://www.wikidata.org/entity/Q491713,sound,http://vocab.getty.edu/aat/300266558,sounds (bodies of water),a long arm of the sea forming a channel between the mainland and an island or islands; or connecting two larger bodies of water,H,H.SD
+SEA,sea,http://www.wikidata.org/entity/Q165,sea,http://vocab.getty.edu/aat/300008694,seas,a large body of salt water more or less confined by continuous land or chains of islands forming a subdivision of an ocean,H,H.SEA
+SHOL,shoal(s),http://www.wikidata.org/entity/Q28337,shoal,http://vocab.getty.edu/aat/300387036,shoals (landforms),a surface-navigation hazard composed of unconsolidated material,H,H.SHOL
+SILL,sill,,,,,"the low part of an underwater gap or saddle separating basins, including a similar feature at the mouth of a fjord",H,H.SILL
+SPNG,spring(s),http://www.wikidata.org/entity/Q124714,spring,http://vocab.getty.edu/aat/300008697,springs (bodies of water),a place where ground water flows naturally out of the ground,H,H.SPNG
+SPNS,sulphur spring(s),http://www.wikidata.org/entity/Q12054316,sulphur spring,,,a place where sulphur ground water flows naturally out of the ground,H,H.SPNS
+SPNT,hot spring(s),http://www.wikidata.org/entity/Q177380,hot spring,http://vocab.getty.edu/aat/300312197,hot springs,a place where hot ground water flows naturally out of the ground,H,H.SPNT
+STM,stream,http://www.wikidata.org/entity/Q4022,natural watercourse,http://vocab.getty.edu/aat/300008707,rivers,a body of running water moving to a lower level in a channel on land,H,H.STM
+STMA,anabranch,http://www.wikidata.org/entity/Q661702,anabranch,http://vocab.getty.edu/aat/300266560,anabranches,a diverging branch flowing out of a main stream and rejoining it downstream,H,H.STMA
+STMB,stream bend,,,,,a conspicuously curved or bent segment of a stream,H,H.STMB
+STMC,canalized stream,,,,,"a stream that has been substantially ditched, diked, or straightened",H,H.STMC
+STMD,distributary(-ies),http://www.wikidata.org/entity/Q591942,distributary,http://vocab.getty.edu/aat/300387055,distributaries (streams),"a branch which flows away from the main stream, as in a delta or irrigation canal",H,H.STMD
+STMH,headwaters,http://www.wikidata.org/entity/Q7376362,river source,,,"the source and upper part of a stream, including the upper drainage basin",H,H.STMH
+STMI,intermittent stream,http://www.wikidata.org/entity/Q55659107,intermittent natural watercourse,,,,H,H.STMI
+STMIX,section of intermittent stream,,,,,,H,H.STMIX
+STMM,stream mouth(s),http://www.wikidata.org/entity/Q1233637,river mouth,http://vocab.getty.edu/aat/300387057,river mouths,"a place where a stream discharges into a lagoon, lake, or the sea",H,H.STMM
+STMQ,abandoned watercourse,http://www.wikidata.org/entity/Q21550332,abandoned watercourses (geographic features),http://vocab.getty.edu/aat/300387088,abandoned watercourses (geographic features),"a former stream or distributary no longer carrying flowing water, but still evident due to lakes, wetland, topographic or vegetation patterns",H,H.STMQ
+STMS,streams,http://www.wikidata.org/entity/Q47521,stream,http://vocab.getty.edu/aat/300008699,streams,bodies of running water moving to a lower level in a channel on land,H,H.STMS
+STMSB,lost river,http://www.wikidata.org/entity/Q6683669,Losing stream,,,"a surface stream that disappears into an underground channel, or dries up in an arid area",H,H.STMSB
+STMX,section of stream,http://www.wikidata.org/entity/Q57208171,section of a natural watercourse,,,,H,H.STMX
+STRT,strait,http://www.wikidata.org/entity/Q37901,strait,http://vocab.getty.edu/aat/300266559,straits,"a relatively narrow waterway, usually narrower and less extensive than a sound, connecting two larger bodies of water",H,H.STRT
+SWMP,swamp,http://www.wikidata.org/entity/Q166735,swamp,http://vocab.getty.edu/aat/300008905,swamps,a wetland dominated by tree vegetation,H,H.SWMP
+SYSI,irrigation system,http://www.wikidata.org/entity/Q6129871,irrigation system,http://vocab.getty.edu/aat/300055262,irrigation systems,"a network of ditches and one or more of the following elements: water supply, reservoir, canal, pump, well, drain, etc.",H,H.SYSI
+TNLC,canal tunnel,http://www.wikidata.org/entity/Q5031071,canal tunnel,,,a tunnel through which a canal passes,H,H.TNLC
+WAD,wadi,http://www.wikidata.org/entity/Q187971,wadi,http://vocab.getty.edu/aat/300379998,wadis,"a valley or ravine, bounded by relatively steep banks, which in the rainy season becomes a watercourse; found primarily in North Africa and the Middle East",H,H.WAD
+WADB,wadi bend,,,,,a conspicuously curved or bent segment of a wadi,H,H.WADB
+WADJ,wadi junction,,,,,a place where two or more wadies join,H,H.WADJ
+WADM,wadi mouth,,,,,"the lower terminus of a wadi where it widens into an adjoining floodplain, depression, or waterbody",H,H.WADM
+WADS,wadies,http://www.wikidata.org/entity/Q187971,wadi,http://vocab.getty.edu/aat/300379998,wadis,"valleys or ravines, bounded by relatively steep banks, which in the rainy season become watercourses; found primarily in North Africa and the Middle East",H,H.WADS
+WADX,section of wadi,http://www.wikidata.org/entity/Q57208177,section of a wadi,,,,H,H.WADX
+WHRL,whirlpool,,,,,"a turbulent, rotating movement of water in a stream",H,H.WHRL
+WLL,well,http://www.wikidata.org/entity/Q43483,borehole,http://vocab.getty.edu/aat/300152327,water wells,"a cylindrical hole, pit, or tunnel drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface",H,H.WLL
+WLLQ,abandoned well,,,,,,H,H.WLLQ
+WLLS,wells,,,,,"cylindrical holes, pits, or tunnels drilled or dug down to a depth from which water, oil, or gas can be pumped or brought to the surface",H,H.WLLS
+WTLD,wetland,http://www.wikidata.org/entity/Q170321,wetland,http://vocab.getty.edu/aat/300008899,wetlands,"an area subject to inundation, usually characterized by bog, marsh, or swamp vegetation",H,H.WTLD
+WTLDI,intermittent wetland,http://www.wikidata.org/entity/Q55463449,intermittent wetland,http://vocab.getty.edu/aat/300387011,intermittent wetlands,,H,H.WTLDI
+WTRC,watercourse,http://www.wikidata.org/entity/Q355304,watercourse,http://vocab.getty.edu/aat/300387091,watercourses,"a natural, well-defined channel produced by flowing water, or an artificial channel designed to carry flowing water",H,H.WTRC
+WTRH,waterhole(s),http://www.wikidata.org/entity/Q3177968,vivarium,http://vocab.getty.edu/aat/300387029,waterholes,"a natural hole, hollow, or small depression that contains water, used by man and animals, especially in arid areas",H,H.WTRH
+AGRC,agricultural colony,,,,,a tract of land set aside for agricultural settlement,L,L.AGRC
+AMUS,amusement park,http://www.wikidata.org/entity/Q194195,amusement park,http://vocab.getty.edu/aat/300000512,amusement parks,"Amusement Park are theme parks, adventure parks offering entertainment, similar to funfairs but with a fix location",L,L.AMUS
+AREA,area,,,,,a tract of land without homogeneous character or boundaries,L,L.AREA
+BSND,drainage basin,http://www.wikidata.org/entity/Q166620,drainage basin,http://vocab.getty.edu/aat/300387498,drainage basins,an area drained by a stream,L,L.BSND
+BSNP,petroleum basin,,,,,an area underlain by an oil-rich structural basin,L,L.BSNP
+BTL,battlefield,http://www.wikidata.org/entity/Q4895508,battlefield,,,a site of a land battle of historical importance,L,L.BTL
+CLG,clearing,http://www.wikidata.org/entity/Q4358873,glade,,,an area in a forest with trees removed,L,L.CLG
+CMN,common,http://www.wikidata.org/entity/Q2259176,common land,http://vocab.getty.edu/aat/300008666,common land (cultural landscape),a park or pasture for community use,L,L.CMN
+CNS,concession area,http://www.wikidata.org/entity/Q327209,concession,,,"a lease of land by a government for economic development, e.g., mining, forestry",L,L.CNS
+COLF,coalfield,,,,,a region in which coal deposits of possible economic value occur,L,L.COLF
+CONT,continent,http://www.wikidata.org/entity/Q5107,continent,http://vocab.getty.edu/aat/300128176,continents,"continent: Europe, Africa, Asia, North America, South America, Oceania, Antarctica",L,L.CONT
+CST,coast,http://www.wikidata.org/entity/Q93352,coast,,,a zone of variable width straddling the shoreline,L,L.CST
+CTRB,business center,http://www.wikidata.org/entity/Q203180,serviced office,,,a place where a number of businesses are located,L,L.CTRB
+DEVH,housing development,http://www.wikidata.org/entity/Q5916199,housing development,http://vocab.getty.edu/aat/300000498,housing developments,a tract of land on which many houses of similar design are built according to a development plan,L,L.DEVH
+FLD,field(s),,,,,an open as opposed to wooded area,L,L.FLD
+FLDI,irrigated field(s),,,,,a tract of level or terraced land which is irrigated,L,L.FLDI
+GASF,gasfield,http://www.wikidata.org/entity/Q1349255,natural gas field,http://vocab.getty.edu/aat/300387352,gas fields,an area containing a subterranean store of natural gas of economic value,L,L.GASF
+GRAZ,grazing area,,,,,an area of grasses and shrubs used for grazing,L,L.GRAZ
+GVL,gravel area,,,,,an area covered with gravel,L,L.GVL
+INDS,industrial area,http://www.wikidata.org/entity/Q329683,industrial park,http://vocab.getty.edu/aat/300000411,industrial parks,an area characterized by industrial activity,L,L.INDS
+LAND,arctic land,,,,,a tract of land in the Arctic,L,L.LAND
+LCTY,locality,,,,,a minor area or place of unspecified or mixed character and indefinite boundaries,L,L.LCTY
+MILB,military base,http://www.wikidata.org/entity/Q245016,military base,http://vocab.getty.edu/aat/300000455,military bases,"a place used by an army or other armed service for storing arms and supplies, and for accommodating and training troops, a base from which operations can be initiated",L,L.MILB
+MNA,mining area,,,,,an area of mine sites where minerals and ores are extracted,L,L.MNA
+MVA,maneuver area,http://www.wikidata.org/entity/Q57208460,manoeuver area,,,a tract of land where military field exercises are carried out,L,L.MVA
+NVB,naval base,http://www.wikidata.org/entity/Q1324633,naval base,http://vocab.getty.edu/aat/300000467,naval bases,"an area used to store supplies, provide barracks for troops and naval personnel, a port for naval vessels, and from which operations are initiated",L,L.NVB
+OAS,oasis(-es),http://www.wikidata.org/entity/Q43742,oasis,http://vocab.getty.edu/aat/300008686,oases (landscapes),an area in a desert made productive by the availability of water,L,L.OAS
+OILF,oilfield,http://www.wikidata.org/entity/Q211748,oil field,http://vocab.getty.edu/aat/300000401,oil fields,an area containing a subterranean store of petroleum of economic value,L,L.OILF
+PEAT,peat cutting area,,,,,an area where peat is harvested,L,L.PEAT
+PRK,park,http://www.wikidata.org/entity/Q22698,park,http://vocab.getty.edu/aat/300008187,parks (public recreation areas),"an area, often of forested land, maintained as a place of beauty, or for recreation",L,L.PRK
+PRT,port,http://www.wikidata.org/entity/Q44782,port,,,"a place provided with terminal and transfer facilities for loading and discharging waterborne cargo or passengers, usually located in a harbor",L,L.PRT
+QCKS,quicksand,http://www.wikidata.org/entity/Q224090,quicksand,,,"an area where loose sand with water moving through it may become unstable when heavy objects are placed at the surface, causing them to sink",L,L.QCKS
+RES,reserve,http://www.wikidata.org/entity/Q473972,protected area,http://vocab.getty.edu/aat/300386975,protected areas,a tract of public land reserved for future use or restricted as to use,L,L.RES
+RESA,agricultural reserve,,,,,a tract of land reserved for agricultural reclamation and/or development,L,L.RESA
+RESF,forest reserve,http://www.wikidata.org/entity/Q7315273,forest reserve,http://vocab.getty.edu/aat/300008865,forest reserves,a forested area set aside for preservation or controlled use,L,L.RESF
+RESH,hunting reserve,http://www.wikidata.org/entity/Q1714375,game reserve,,,a tract of land used primarily for hunting,L,L.RESH
+RESN,nature reserve,http://www.wikidata.org/entity/Q179049,nature reserve,http://vocab.getty.edu/aat/300008178,nature reserves,an area reserved for the maintenance of a natural habitat,L,L.RESN
+RESP,palm tree reserve,,,,,an area of palm trees where use is controlled,L,L.RESP
+RESV,reservation,http://www.wikidata.org/entity/Q20203616,reservation,,,"a tract of land set aside for aboriginal, tribal, or native populations",L,L.RESV
+RESW,wildlife reserve,http://www.wikidata.org/entity/Q46169,wildlife reserve,http://vocab.getty.edu/aat/300008189,national parks,a tract of public land reserved for the preservation of wildlife,L,L.RESW
+RGN,region,http://www.wikidata.org/entity/Q82794,geographic region,http://vocab.getty.edu/aat/300182722,regions (geographic),an area distinguished by one or more observable physical or cultural characteristics,L,L.RGN
+RGNE,economic region,http://www.wikidata.org/entity/Q1973901,economic region,,,a region of a country established for economic development or for statistical purposes,L,L.RGNE
+RGNH,historical region,http://www.wikidata.org/entity/Q1620908,historical region,http://vocab.getty.edu/aat/300387178,historical regions,a former historic area distinguished by one or more observable physical or cultural characteristics,L,L.RGNH
+RGNL,lake region,http://www.wikidata.org/entity/Q1742059,lake area,,,a tract of land distinguished by numerous lakes,L,L.RGNL
+RNGA,artillery range,http://www.wikidata.org/entity/Q61977851,artillery range,,,a tract of land used for artillery firing practice,L,L.RNGA
+SALT,salt area,http://www.wikidata.org/entity/Q55392224,salt area,http://vocab.getty.edu/aat/300386871,salt areas,a shallow basin or flat where salt accumulates after periodic inundation,L,L.SALT
+SNOW,snowfield,http://www.wikidata.org/entity/Q1365419,snow field,,,an area of permanent snow and ice forming the accumulation area of a glacier,L,L.SNOW
+TRB,tribal area,http://www.wikidata.org/entity/Q55463514,tribal area,http://vocab.getty.edu/aat/300387323,tribal areas,a tract of land used by nomadic or other tribes,L,L.TRB
+PPL,populated place,http://www.wikidata.org/entity/Q486972,human settlement,http://vocab.getty.edu/aat/300008347,inhabited places,"a city, town, village, or other agglomeration of buildings where people live and work",P,P.PPL
+PPLA,seat of a first-order administrative division,,,,,seat of a first-order administrative division (PPLC takes precedence over PPLA),P,P.PPLA
+PPLA2,seat of a second-order administrative division,,,,,,P,P.PPLA2
+PPLA3,seat of a third-order administrative division,,,,,,P,P.PPLA3
+PPLA4,seat of a fourth-order administrative division,,,,,,P,P.PPLA4
+PPLA5,seat of a fifth-order administrative division,,,,,,P,P.PPLA5
+PPLC,capital of a political entity,http://www.wikidata.org/entity/Q5119,capital,,,,P,P.PPLC
+PPLCH,historical capital of a political entity,,,,,a former capital of a political entity,P,P.PPLCH
+PPLF,farm village,,,,,a populated place where the population is largely engaged in agricultural activities,P,P.PPLF
+PPLG,seat of government of a political entity,,,,,,P,P.PPLG
+PPLH,historical populated place,http://www.wikidata.org/entity/Q22674925,historic village,,,a populated place that no longer exists,P,P.PPLH
+PPLL,populated locality,http://www.wikidata.org/entity/Q3257686,locality,http://vocab.getty.edu/aat/300387200,locales (settlements),an area similar to a locality but with a small group of dwellings or other buildings,P,P.PPLL
+PPLQ,abandoned populated place,http://www.wikidata.org/entity/Q74047,ghost town,http://vocab.getty.edu/aat/300008547,ghost towns,,P,P.PPLQ
+PPLR,religious populated place,,,,,a populated place whose population is largely engaged in religious occupations,P,P.PPLR
+PPLS,populated places,http://www.wikidata.org/entity/Q25964111,group of settlements,,,"cities, towns, villages, or other agglomerations of buildings where people live and work",P,P.PPLS
+PPLW,destroyed populated place,http://www.wikidata.org/entity/Q22674930,destroyed settlement,,,"a village, town or city destroyed by a natural disaster, or by war",P,P.PPLW
+PPLX,section of populated place,http://www.wikidata.org/entity/Q123705,suburb,http://vocab.getty.edu/aat/300000745,neighborhoods,,P,P.PPLX
+STLMT,israeli settlement,http://www.wikidata.org/entity/Q582706,Israeli settlement,,,,P,P.STLMT
+CSWY,causeway,http://www.wikidata.org/entity/Q892168,causeway,,,a raised roadway across wet ground or shallow water,R,R.CSWY
+OILP,oil pipeline,http://www.wikidata.org/entity/Q1262090,oil pipeline,http://vocab.getty.edu/aat/300387351,oil pipelines,a pipeline used for transporting oil,R,R.OILP
+PRMN,promenade,http://www.wikidata.org/entity/Q88372,esplanade,,,"a place for public walking, usually along a beach front",R,R.PRMN
+PTGE,portage,http://www.wikidata.org/entity/Q1522907,portage,http://vocab.getty.edu/aat/300386981,portages (routes),"a place where boats, goods, etc., are carried overland between navigable waters",R,R.PTGE
+RD,road,http://www.wikidata.org/entity/Q34442,road,,,"an open way with improved surface for transportation of animals, people and vehicles",R,R.RD
+RDA,ancient road,http://www.wikidata.org/entity/Q445741,historic road,,,the remains of a road used by ancient cultures,R,R.RDA
+RDB,road bend,http://www.wikidata.org/entity/Q18390604,road curve,,,a conspicuously curved or bent section of a road,R,R.RDB
+RDCUT,road cut,http://www.wikidata.org/entity/Q1308978,cut,,,an excavation cut through a hill or ridge for a road,R,R.RDCUT
+RDJCT,road junction,http://www.wikidata.org/entity/Q1788454,road junction,,,a place where two or more roads join,R,R.RDJCT
+RJCT,railroad junction,http://www.wikidata.org/entity/Q836550,Railroad junction,,,a place where two or more railroad tracks join,R,R.RJCT
+RR,railroad,http://www.wikidata.org/entity/Q22667,railway,,,a permanent twin steel-rail track on which freight and passenger cars move long distances,R,R.RR
+RRQ,abandoned railroad,http://www.wikidata.org/entity/Q357685,abandoned railway,,,,R,R.RRQ
+RTE,caravan route,http://www.wikidata.org/entity/Q405155,trade route,http://vocab.getty.edu/aat/300265366,trade routes,the route taken by caravans,R,R.RTE
+RYD,railroad yard,http://www.wikidata.org/entity/Q19563580,rail yard,http://vocab.getty.edu/aat/300000690,railroad yards,"a system of tracks used for the making up of trains, and switching and storing freight cars",R,R.RYD
+ST,street,http://www.wikidata.org/entity/Q79007,street,http://vocab.getty.edu/aat/300008247,streets,a paved urban thoroughfare,R,R.ST
+STKR,stock route,http://www.wikidata.org/entity/Q7617917,stock route,,,a route taken by livestock herds,R,R.STKR
+TNL,tunnel,http://www.wikidata.org/entity/Q44377,tunnel,,,a subterranean passageway for transportation,R,R.TNL
+TNLN,natural tunnel,,,,,a cave that is open at both ends,R,R.TNLN
+TNLRD,road tunnel,http://www.wikidata.org/entity/Q2354973,road tunnel,,,a tunnel through which a road passes,R,R.TNLRD
+TNLRR,railroad tunnel,http://www.wikidata.org/entity/Q1311958,railway tunnel,,,a tunnel through which a railroad passes,R,R.TNLRR
+TNLS,tunnels,,,,,subterranean passageways for transportation,R,R.TNLS
+TRL,trail,http://www.wikidata.org/entity/Q628179,trail,,,"a path, track, or route used by pedestrians, animals, or off-road vehicles",R,R.TRL
+ADMF,administrative facility,,,,,a government building,S,S.ADMF
+AGRF,agricultural facility,,,,,a building and/or tract of land used for improving agriculture,S,S.AGRF
+AIRB,airbase,http://www.wikidata.org/entity/Q695850,airbase,http://vocab.getty.edu/aat/300000456,air bases,"an area used to store supplies, provide barracks for air force personnel, hangars and runways for aircraft, and from which operations are initiated",S,S.AIRB
+AIRF,airfield,http://www.wikidata.org/entity/Q62447,aerodrome,http://vocab.getty.edu/aat/300000679,airfields,a place on land where aircraft land and take off; no facilities provided for the commercial handling of passengers and cargo,S,S.AIRF
+AIRH,heliport,http://www.wikidata.org/entity/Q502074,heliport,http://vocab.getty.edu/aat/300000686,heliports (airports),a place where helicopters land and take off,S,S.AIRH
+AIRP,airport,http://www.wikidata.org/entity/Q1248784,airport,http://vocab.getty.edu/aat/300000681,airports,"a place where aircraft regularly land and take off, with runways, navigational aids, and major facilities for the commercial handling of passengers and cargo",S,S.AIRP
+AIRQ,abandoned airfield,http://www.wikidata.org/entity/Q7171590,abandoned airport,,,,S,S.AIRQ
+AIRT,terminal,,,,,airport facilities for the handling of freight and passengers,S,S.AIRT
+AMTH,amphitheater,http://www.wikidata.org/entity/Q54831,amphitheatre,http://vocab.getty.edu/aat/300007128,amphitheaters (built works),an oval or circular structure with rising tiers of seats about a stage or open space,S,S.AMTH
+ANS,archaeological/prehistoric site,http://www.wikidata.org/entity/Q839954,archaeological site,http://vocab.getty.edu/aat/300000810,archaeological sites,"a place where archeological remains, old structures, or cultural artifacts are located",S,S.ANS
+AQC,aquaculture facility,http://www.wikidata.org/entity/Q188989,aquaculture,,,"facility or area for the cultivation of aquatic animals and plants, especially fish, shellfish, and seaweed, in natural or controlled marine or freshwater environments; underwater agriculture",S,S.AQC
+ARCH,arch,http://www.wikidata.org/entity/Q12277,arch,http://vocab.getty.edu/aat/300000994,arches,a natural or man-made structure in the form of an arch,S,S.ARCH
+ARCHV,archive,http://www.wikidata.org/entity/Q166118,archive,http://vocab.getty.edu/aat/300312242,archives (institutions),a place or institution where documents are preserved,S,S.ARCHV
+ART,piece of art,,,,,"a piece of art, like a sculpture, painting. In contrast to monument (MNMT) it is not commemorative.",S,S.ART
+ASTR,astronomical station,,,,,a point on the earth whose position has been determined by observations of celestial bodies,S,S.ASTR
+ASYL,asylum,http://www.wikidata.org/entity/Q210999,psychiatric hospital,http://vocab.getty.edu/aat/300006733,psychiatric hospitals,a facility where the insane are cared for and protected,S,S.ASYL
+ATHF,athletic field,http://www.wikidata.org/entity/Q1076486,sports venue,http://vocab.getty.edu/aat/300007250,sports buildings,"a tract of land used for playing team sports, and athletic track and field events",S,S.ATHF
+ATM,automatic teller machine,http://www.wikidata.org/entity/Q81235,automated teller machine,http://vocab.getty.edu/aat/300228482,automated teller machines,"An unattended electronic machine in a public place, connected to a data system and related equipment and activated by a bank customer to obtain cash withdrawals and other banking services. ",S,S.ATM
+BANK,bank,http://www.wikidata.org/entity/Q22687,bank,,,"A business establishment in which money is kept for saving or commercial purposes or is invested, supplied for loans, or exchanged. ",S,S.BANK
+BCN,beacon,http://www.wikidata.org/entity/Q17484395,beacon,,,a fixed artificial navigation mark,S,S.BCN
+BDG,bridge,http://www.wikidata.org/entity/Q12280,bridge,http://vocab.getty.edu/aat/300007836,bridges (built works),"a structure erected across an obstacle such as a stream, road, etc., in order to carry roads, railroads, and pedestrians across",S,S.BDG
+BDGQ,ruined bridge,,,,,a destroyed or decayed bridge which is no longer functional,S,S.BDGQ
+BLDA,apartment building,,,,,a building containing several individual apartments,S,S.BLDA
+BLDG,building(s),http://www.wikidata.org/entity/Q41176,building,http://vocab.getty.edu/aat/300004792,buildings (structures),"a structure built for permanent use, as a house, factory, etc.",S,S.BLDG
+BLDO,office building,http://www.wikidata.org/entity/Q1021645,office building,http://vocab.getty.edu/aat/300007043,office buildings,commercial building where business and/or services are conducted,S,S.BLDO
+BP,boundary marker,http://www.wikidata.org/entity/Q921099,boundary marker,,,a fixture marking a point along a boundary,S,S.BP
+BRKS,barracks,http://www.wikidata.org/entity/Q131263,barracks,http://vocab.getty.edu/aat/300005665,barracks,a building for lodging military personnel,S,S.BRKS
+BRKW,breakwater,http://www.wikidata.org/entity/Q153084,groyne,,,a structure erected to break the force of waves at the entrance to a harbor or port,S,S.BRKW
+BSTN,baling station,,,,,a facility for baling agricultural products,S,S.BSTN
+BTYD,boatyard,http://www.wikidata.org/entity/Q190928,shipyard,http://vocab.getty.edu/aat/300000403,shipyards,"a waterside facility for servicing, repairing, and building small vessels",S,S.BTYD
+BUR,burial cave(s),,,,,a cave used for human burials,S,S.BUR
+BUSTN,bus station,http://www.wikidata.org/entity/Q494829,bus station,http://vocab.getty.edu/aat/300007805,bus stations,"a facility comprising ticket office, platforms, etc. for loading and unloading passengers ",S,S.BUSTN
+BUSTP,bus stop,http://www.wikidata.org/entity/Q953806,bus stop,http://vocab.getty.edu/aat/300003837,bus stops,a place lacking station facilities,S,S.BUSTP
+CARN,cairn,http://www.wikidata.org/entity/Q7321974,cairn,http://vocab.getty.edu/aat/300006960,cairns,a heap of stones erected as a landmark or for other purposes,S,S.CARN
+CAVE,cave(s),http://www.wikidata.org/entity/Q35509,cave,http://vocab.getty.edu/aat/300008746,caves,"an underground passageway or chamber, or cavity on the side of a cliff",S,S.CAVE
+CH,church,http://www.wikidata.org/entity/Q16970,church building,http://vocab.getty.edu/aat/300007466,churches (buildings),a building for public Christian worship,S,S.CH
+CMP,camp(s),,,,,"a site occupied by tents, huts, or other shelters for temporary use",S,S.CMP
+CMPL,logging camp,,,,,a camp used by loggers,S,S.CMPL
+CMPLA,labor camp,http://www.wikidata.org/entity/Q628505,labor camp,,,a camp used by migrant or temporary laborers,S,S.CMPLA
+CMPMN,mining camp,http://www.wikidata.org/entity/Q820254,mining community,http://vocab.getty.edu/aat/300008464,mining towns,a camp used by miners,S,S.CMPMN
+CMPO,oil camp,,,,,a camp used by oilfield workers,S,S.CMPO
+CMPQ,abandoned camp,,,,,,S,S.CMPQ
+CMPRF,refugee camp,http://www.wikidata.org/entity/Q622499,refugee camp,,,a camp used by refugees,S,S.CMPRF
+CMTY,cemetery,http://www.wikidata.org/entity/Q39614,cemetery,http://vocab.getty.edu/aat/300266755,cemeteries,a burial place or ground,S,S.CMTY
+COMC,communication center,http://www.wikidata.org/entity/Q5154193,communications center,,,"a facility, including buildings, antennae, towers and electronic equipment for receiving and transmitting information",S,S.COMC
+CRRL,corral(s),http://www.wikidata.org/entity/Q858177,pen,http://vocab.getty.edu/aat/300004983,corrals (animal housing),a pen or enclosure for confining or capturing animals,S,S.CRRL
+CSNO,casino,http://www.wikidata.org/entity/Q133215,casino,http://vocab.getty.edu/aat/300007227,casinos,"a building used for entertainment, especially gambling",S,S.CSNO
+CSTL,castle,http://www.wikidata.org/entity/Q23413,château,http://vocab.getty.edu/aat/300006891,castles (fortifications),a large fortified building or set of buildings,S,S.CSTL
+CSTM,customs house,http://www.wikidata.org/entity/Q218653,custom house,,,"a building in a port where customs and duties are paid, and where vessels are entered and cleared",S,S.CSTM
+CTHSE,courthouse,http://www.wikidata.org/entity/Q1137809,courthouse,http://vocab.getty.edu/aat/300005969,courthouses,a building in which courts of law are held,S,S.CTHSE
+CTRA,atomic center,,,,,a facility where atomic research is carried out,S,S.CTRA
+CTRCM,community center,http://www.wikidata.org/entity/Q77115,community center,http://vocab.getty.edu/aat/300005120,community centers,a facility for community recreation and other activities,S,S.CTRCM
+CTRF,facility center,,,,,a place where more than one facility is situated,S,S.CTRF
+CTRM,medical center,http://www.wikidata.org/entity/Q4260475,medical facility,http://vocab.getty.edu/aat/300006653,health facilities,"a complex of health care buildings including two or more of the following: hospital, medical school, clinic, pharmacy, doctor's offices, etc.",S,S.CTRM
+CTRR,religious center,,,,,"a facility where more than one religious activity is carried out, e.g., retreat, school, monastery, worship",S,S.CTRR
+CTRS,space center,http://www.wikidata.org/entity/Q1192221,space center,,,"a facility for launching, tracking, or controlling satellites and space vehicles",S,S.CTRS
+CVNT,convent,http://www.wikidata.org/entity/Q1128397,convent,http://vocab.getty.edu/aat/300312089,convents (groups),a building where a community of nuns lives in seclusion,S,S.CVNT
+DAM,dam,http://www.wikidata.org/entity/Q12323,dam,http://vocab.getty.edu/aat/300006084,dams (hydraulic structures),a barrier constructed across a stream to impound water,S,S.DAM
+DAMQ,ruined dam,,,,,a destroyed or decayed dam which is no longer functional,S,S.DAMQ
+DAMSB,sub-surface dam,,,,,a dam put down to bedrock in a sand river,S,S.DAMSB
+DARY,dairy,http://www.wikidata.org/entity/Q637776,dairy,http://vocab.getty.edu/aat/300083012,dairies (non-mechanized),"a facility for the processing, sale and distribution of milk or milk products",S,S.DARY
+DCKD,dry dock,http://www.wikidata.org/entity/Q811177,dry dock,http://vocab.getty.edu/aat/300120748,dry docks,"a dock providing support for a vessel, and means for removing the water so that the bottom of the vessel can be exposed",S,S.DCKD
+DCKY,dockyard,http://www.wikidata.org/entity/Q190928,shipyard,http://vocab.getty.edu/aat/300000403,shipyards,"a facility for servicing, building, or repairing ships",S,S.DCKY
+DIKE,dike,http://www.wikidata.org/entity/Q105190,levee,http://vocab.getty.edu/aat/300006156,levees,an earth or stone embankment usually constructed for flood or stream control,S,S.DIKE
+DIP,diplomatic facility,,,,,"office, residence, or facility of a foreign government, which may include an embassy, consulate, chancery, office of charge d'affaires, or other diplomatic, economic, military, or cultural mission",S,S.DIP
+DPOF,fuel depot,http://www.wikidata.org/entity/Q57208328,fuel depot,,,an area where fuel is stored,S,S.DPOF
+EST,estate(s),http://www.wikidata.org/entity/Q12292478,estate,,,a large commercialized agricultural landholding with associated buildings and other facilities,S,S.EST
+ESTO,oil palm plantation,,,,,an estate specializing in the cultivation of oil palm trees,S,S.ESTO
+ESTR,rubber plantation,,,,,an estate which specializes in growing and tapping rubber trees,S,S.ESTR
+ESTSG,sugar plantation,http://www.wikidata.org/entity/Q14419427,sugarcane plantation,,,an estate that specializes in growing sugar cane,S,S.ESTSG
+ESTT,tea plantation,,,,,an estate which specializes in growing tea bushes,S,S.ESTT
+ESTX,section of estate,,,,,,S,S.ESTX
+FCL,facility,http://www.wikidata.org/entity/Q13226383,facility,,,"a building or buildings housing a center, institute, foundation, hospital, prison, mission, courthouse, etc.",S,S.FCL
+FNDY,foundry,http://www.wikidata.org/entity/Q13883136,foundry,http://vocab.getty.edu/aat/300266773,foundries,a building or works where metal casting is carried out,S,S.FNDY
+FRM,farm,http://www.wikidata.org/entity/Q131596,farm,http://vocab.getty.edu/aat/300000206,farms,a tract of land with associated buildings devoted to agriculture,S,S.FRM
+FRMQ,abandoned farm,http://www.wikidata.org/entity/Q16423630,abandoned farm,http://vocab.getty.edu/aat/300008633,abandoned farms,,S,S.FRMQ
+FRMS,farms,http://www.wikidata.org/entity/Q131596,farm,http://vocab.getty.edu/aat/300000206,farms,tracts of land with associated buildings devoted to agriculture,S,S.FRMS
+FRMT,farmstead,http://www.wikidata.org/entity/Q131596,farm,http://vocab.getty.edu/aat/300000206,farms,the buildings and adjacent service areas of a farm,S,S.FRMT
+FT,fort,http://www.wikidata.org/entity/Q57821,fortification,,,a defensive structure or earthworks,S,S.FT
+FY,ferry,http://www.wikidata.org/entity/Q25653,ferry,http://vocab.getty.edu/aat/300178870,ferries (vessels),a boat or other floating conveyance and terminal facilities regularly used to transport people and vehicles across a waterbody,S,S.FY
+FYT,ferry terminal,http://www.wikidata.org/entity/Q4303352,passenger ship terminal,,,"a place where ferries pick-up and discharge passengers, vehicles and or cargo",S,S.FYT
+GATE,gate,http://www.wikidata.org/entity/Q53060,gate,http://vocab.getty.edu/aat/300002916,gates,a controlled access entrance or exit,S,S.GATE
+GDN,garden(s),http://www.wikidata.org/entity/Q1107656,garden,http://vocab.getty.edu/aat/300008090,gardens (open spaces),an enclosure for displaying selected plant or animal life,S,S.GDN
+GHAT,ghat,http://www.wikidata.org/entity/Q1010155,ghat,http://vocab.getty.edu/aat/300005904,ghats,"a set of steps leading to a river, which are of religious significance, and at their base is usually a platform for bathing",S,S.GHAT
+GHSE,guest house,http://www.wikidata.org/entity/Q2460422,guest house,http://vocab.getty.edu/aat/300005626,guesthouses (dwellings),a house used to provide lodging for paying guests,S,S.GHSE
+GOSP,gas-oil separator plant,http://www.wikidata.org/entity/Q3011536,separator,,,a facility for separating gas from oil,S,S.GOSP
+GOVL,local government office,,,,,"a facility housing local governmental offices, usually a city, town, or village hall",S,S.GOVL
+GRVE,grave,http://www.wikidata.org/entity/Q173387,grave,http://vocab.getty.edu/aat/300005907,graves,a burial site,S,S.GRVE
+HERM,hermitage,http://www.wikidata.org/entity/Q513550,hermitage,http://vocab.getty.edu/aat/300000640,hermitages (religious communities),"a secluded residence, usually for religious sects",S,S.HERM
+HLT,halting place,,,,,a place where caravans stop for rest,S,S.HLT
+HMSD,homestead,,,,,"a residence, owner's or manager's, on a sheep or cattle station, woolshed, outcamp, or Aboriginal outstation, specific to Australia and New Zealand ",S,S.HMSD
+HSE,house(s),,,,,a building used as a human habitation,S,S.HSE
+HSEC,country house,http://www.wikidata.org/entity/Q16884952,country house,http://vocab.getty.edu/aat/300005567,country houses,"a large house, mansion, or chateau, on a large estate",S,S.HSEC
+HSP,hospital,http://www.wikidata.org/entity/Q16917,hospital,http://vocab.getty.edu/aat/300006676,hospitals (buildings for health facility),"a building in which sick or injured, especially those confined to bed, are medically treated",S,S.HSP
+HSPC,clinic,,,,,a medical facility associated with a hospital for outpatients,S,S.HSPC
+HSPD,dispensary,http://www.wikidata.org/entity/Q688829,dispensary,http://vocab.getty.edu/aat/300006667,dispensaries (health facilities),a building where medical or dental aid is dispensed,S,S.HSPD
+HSPL,leprosarium,http://www.wikidata.org/entity/Q1406569,leper colony,http://vocab.getty.edu/aat/300008507,leprosaria,an asylum or hospital for lepers,S,S.HSPL
+HSTS,historical site,,,,,a place of historical importance,S,S.HSTS
+HTL,hotel,http://www.wikidata.org/entity/Q27686,hotel,http://vocab.getty.edu/aat/300007166,hotels (public accommodations),a building providing lodging and/or meals for the public,S,S.HTL
+HUT,hut,http://www.wikidata.org/entity/Q5784097,hut,http://vocab.getty.edu/aat/300004824,huts (houses),a small primitive house,S,S.HUT
+HUTS,huts,,,,,small primitive houses,S,S.HUTS
+INSM,military installation,http://www.wikidata.org/entity/Q245016,military base,http://vocab.getty.edu/aat/300000455,military bases,a facility for use of and control by armed forces,S,S.INSM
+ITTR,research institute,http://www.wikidata.org/entity/Q31855,research institute,,,a facility where research is carried out,S,S.ITTR
+JTY,jetty,http://www.wikidata.org/entity/Q3082251,jetty,http://vocab.getty.edu/aat/300006155,jetties (erosion protection works),a structure built out into the water at a river mouth or harbor entrance to regulate currents and silting,S,S.JTY
+LDNG,landing,http://www.wikidata.org/entity/Q16938673,landing,,,"a place where boats receive or discharge passengers and freight, but lacking most port facilities",S,S.LDNG
+LEPC,leper colony,http://www.wikidata.org/entity/Q1406569,leper colony,http://vocab.getty.edu/aat/300008507,leprosaria,a settled area inhabited by lepers in relative isolation,S,S.LEPC
+LIBR,library,http://www.wikidata.org/entity/Q7075,library,http://vocab.getty.edu/aat/300343389,public libraries (institutions),"A place in which information resources such as books are kept for reading, reference, or lending.",S,S.LIBR
+LNDF,landfill,http://www.wikidata.org/entity/Q152810,landfill,http://vocab.getty.edu/aat/300000830,landfills,a place for trash and garbage disposal in which the waste is buried between layers of earth to build up low-lying land,S,S.LNDF
+LOCK,lock(s),http://www.wikidata.org/entity/Q105731,lock,http://vocab.getty.edu/aat/300235059,locks (hydraulic structures),a basin in a waterway with gates at each end by means of which vessels are passed from one water level to another,S,S.LOCK
+LTHSE,lighthouse,http://www.wikidata.org/entity/Q39715,lighthouse,http://vocab.getty.edu/aat/300007741,lighthouses,a distinctive structure exhibiting a major navigation light,S,S.LTHSE
+MALL,mall,http://www.wikidata.org/entity/Q11315,shopping mall,http://vocab.getty.edu/aat/300005261,shopping arcades,"A large, often enclosed shopping complex containing various stores, businesses, and restaurants usually accessible by common passageways.",S,S.MALL
+MAR,marina,http://www.wikidata.org/entity/Q721207,marina,http://vocab.getty.edu/aat/300120824,marinas (water transportation complexes),"a harbor facility for small boats, yachts, etc.",S,S.MAR
+MFG,factory,http://www.wikidata.org/entity/Q83405,factory,http://vocab.getty.edu/aat/300006232,factories (structures),"one or more buildings where goods are manufactured, processed or fabricated",S,S.MFG
+MFGB,brewery,http://www.wikidata.org/entity/Q131734,brewery,,,one or more buildings where beer is brewed,S,S.MFGB
+MFGC,cannery,http://www.wikidata.org/entity/Q1922209,cannery,,,a building where food items are canned,S,S.MFGC
+MFGCU,copper works,,,,,a facility for processing copper ore,S,S.MFGCU
+MFGLM,limekiln,http://www.wikidata.org/entity/Q59772,lime kiln,http://vocab.getty.edu/aat/300006404,lime kilns,a furnace in which limestone is reduced to lime,S,S.MFGLM
+MFGM,munitions plant,http://www.wikidata.org/entity/Q2940673,munitions plant,,,a factory where ammunition is made,S,S.MFGM
+MFGPH,phosphate works,,,,,a facility for producing fertilizer,S,S.MFGPH
+MFGQ,abandoned factory,,,,,,S,S.MFGQ
+MFGSG,sugar refinery,http://www.wikidata.org/entity/Q227857,sugar refinery,http://vocab.getty.edu/aat/300006358,sugar refineries,a facility for converting raw sugar into refined sugar,S,S.MFGSG
+MKT,market,http://www.wikidata.org/entity/Q330284,marketplace,,,a place where goods are bought and sold at regular intervals,S,S.MKT
+ML,mill(s),,,,,"a building housing machines for transforming, shaping, finishing, grinding, or extracting products",S,S.ML
+MLM,ore treatment plant,,,,,a facility for improving the metal content of ore by concentration,S,S.MLM
+MLO,olive oil mill,http://www.wikidata.org/entity/Q61978174,olive oil mill,,,a mill where oil is extracted from olives,S,S.MLO
+MLSG,sugar mill,http://www.wikidata.org/entity/Q1820305,sugarcane mill,,,a facility where sugar cane is processed into raw sugar,S,S.MLSG
+MLSGQ,former sugar mill,,,,,a sugar mill no longer used as a sugar mill,S,S.MLSGQ
+MLSW,sawmill,http://www.wikidata.org/entity/Q505213,sawmill,http://vocab.getty.edu/aat/300006306,sawmills (factories),a mill where logs or lumber are sawn to specified shapes and sizes,S,S.MLSW
+MLWND,windmill,http://www.wikidata.org/entity/Q38720,windmill,http://vocab.getty.edu/aat/300006273,windmills,a mill or water pump powered by wind,S,S.MLWND
+MLWTR,water mill,http://www.wikidata.org/entity/Q185187,watermill,http://vocab.getty.edu/aat/300006270,water mills,a mill powered by running water,S,S.MLWTR
+MN,mine(s),http://www.wikidata.org/entity/Q820477,mine,http://vocab.getty.edu/aat/300000390,mines (extracting complexes),a site where mineral ores are extracted from the ground by excavating surface pits and subterranean passages,S,S.MN
+MNAU,gold mine(s),http://www.wikidata.org/entity/Q16659538,gold mine,http://vocab.getty.edu/aat/300132656,gold mines,"a mine where gold ore, or alluvial gold is extracted",S,S.MNAU
+MNC,coal mine(s),http://www.wikidata.org/entity/Q959309,coal mine,http://vocab.getty.edu/aat/300000396,coal mines,a mine where coal is extracted,S,S.MNC
+MNCR,chrome mine(s),http://www.wikidata.org/entity/Q55711069,chromium mine,,,a mine where chrome ore is extracted,S,S.MNCR
+MNCU,copper mine(s),http://www.wikidata.org/entity/Q10564300,copper mine,http://vocab.getty.edu/aat/300000398,copper mines,a mine where copper ore is extracted,S,S.MNCU
+MNFE,iron mine(s),http://www.wikidata.org/entity/Q16659620,iron mine,http://vocab.getty.edu/aat/300000399,iron mines,a mine where iron ore is extracted,S,S.MNFE
+MNMT,monument,http://www.wikidata.org/entity/Q4989906,monument,http://vocab.getty.edu/aat/300006958,monuments,a commemorative structure or statue,S,S.MNMT
+MNN,salt mine(s),http://www.wikidata.org/entity/Q40551,salt mine,http://vocab.getty.edu/aat/300266385,salt mines,a mine from which salt is extracted,S,S.MNN
+MNQ,abandoned mine,http://www.wikidata.org/entity/Q42412840,abandoned mine,,,,S,S.MNQ
+MNQR,quarry(-ies),http://www.wikidata.org/entity/Q188040,quarry,http://vocab.getty.edu/aat/300000402,quarries (extracting complexes),"a surface mine where building stone or gravel and sand, etc. are extracted",S,S.MNQR
+MOLE,mole,,,,,a massive structure of masonry or large stones serving as a pier or breakwater,S,S.MOLE
+MSQE,mosque,http://www.wikidata.org/entity/Q32815,mosque,http://vocab.getty.edu/aat/300007544,mosques (buildings),a building for public Islamic worship,S,S.MSQE
+MSSN,mission,http://www.wikidata.org/entity/Q1564373,mission complex,,,"a place characterized by dwellings, school, church, hospital and other facilities operated by a religious group for the purpose of providing charitable services and to propagate religion",S,S.MSSN
+MSSNQ,abandoned mission,,,,,,S,S.MSSNQ
+MSTY,monastery,http://www.wikidata.org/entity/Q44613,monastery,http://vocab.getty.edu/aat/300000650,charterhouses,a building and grounds where a community of monks lives in seclusion,S,S.MSTY
+MTRO,metro station,http://www.wikidata.org/entity/Q928830,metro station,,,"metro station (Underground, Tube, or Metro) ",S,S.MTRO
+MUS,museum,http://www.wikidata.org/entity/Q33506,museum,http://vocab.getty.edu/aat/300312281,museums (institutions),a building where objects of permanent interest in one or more of the arts and sciences are preserved and exhibited,S,S.MUS
+NOV,novitiate,http://www.wikidata.org/entity/Q837999,novitiate,,,a religious house or school where novices are trained,S,S.NOV
+NSY,nursery(-ies),,,,,a place where plants are propagated for transplanting or grafting,S,S.NSY
+OBPT,observation point,http://www.wikidata.org/entity/Q6017969,scenic viewpoint,http://vocab.getty.edu/aat/300008186,overlooks,a wildlife or scenic observation point,S,S.OBPT
+OBS,observatory,http://www.wikidata.org/entity/Q62832,observatory,http://vocab.getty.edu/aat/300007680,observatories,a facility equipped for observation of atmospheric or space phenomena,S,S.OBS
+OBSR,radio observatory,http://www.wikidata.org/entity/Q184356,radio telescope,http://vocab.getty.edu/aat/300386744,radio telescopes,a facility equipped with an array of antennae for receiving radio waves from space,S,S.OBSR
+OILJ,oil pipeline junction,,,,,a section of an oil pipeline where two or more pipes join together,S,S.OILJ
+OILQ,abandoned oil well,,,,,,S,S.OILQ
+OILR,oil refinery,http://www.wikidata.org/entity/Q12353044,oil refinery,,,a facility for converting crude oil into refined petroleum products,S,S.OILR
+OILT,tank farm,http://www.wikidata.org/entity/Q592856,oil depot,,,"a tract of land occupied by large, cylindrical, metal tanks in which oil or liquid petrochemicals are stored",S,S.OILT
+OILW,oil well,http://www.wikidata.org/entity/Q587682,oil well,http://vocab.getty.edu/aat/300152319,oil wells,a well from which oil may be pumped,S,S.OILW
+OPRA,opera house,http://www.wikidata.org/entity/Q153562,opera house,http://vocab.getty.edu/aat/300007104,opera houses,A theater designed chiefly for the performance of operas.,S,S.OPRA
+PAL,palace,http://www.wikidata.org/entity/Q16560,palace,http://vocab.getty.edu/aat/300005734,palaces,"a large stately house, often a royal or presidential residence",S,S.PAL
+PGDA,pagoda,http://www.wikidata.org/entity/Q199451,pagoda,http://vocab.getty.edu/aat/300004829,pagodas (buildings),"a tower-like storied structure, usually a Buddhist shrine",S,S.PGDA
+PIER,pier,http://www.wikidata.org/entity/Q863454,pier,,,a structure built out into navigable water on piles providing berthing for ships and recreation,S,S.PIER
+PKLT,parking lot,http://www.wikidata.org/entity/Q6501349,parking lot,http://vocab.getty.edu/aat/300007826,parking lots,an area used for parking vehicles,S,S.PKLT
+PMPO,oil pumping station,,,,,a facility for pumping oil through a pipeline,S,S.PMPO
+PMPW,water pumping station,,,,,a facility for pumping water from a major well or through a pipeline,S,S.PMPW
+PO,post office,http://www.wikidata.org/entity/Q35054,post office,http://vocab.getty.edu/aat/300006036,post offices,"a public building in which mail is received, sorted and distributed",S,S.PO
+PP,police post,http://www.wikidata.org/entity/Q861951,police station,http://vocab.getty.edu/aat/300006049,police stations,a building in which police are stationed,S,S.PP
+PPQ,abandoned police post,,,,,,S,S.PPQ
+PRKGT,park gate,,,,,a controlled access to a park,S,S.PRKGT
+PRKHQ,park headquarters,,,,,a park administrative facility,S,S.PRKHQ
+PRN,prison,http://www.wikidata.org/entity/Q40357,prison,http://vocab.getty.edu/aat/300169222,gaols,a facility for confining prisoners,S,S.PRN
+PRNJ,reformatory,http://www.wikidata.org/entity/Q7307453,reformatory,http://vocab.getty.edu/aat/300006483,reformatories (buildings),"a facility for confining, training, and reforming young law offenders",S,S.PRNJ
+PRNQ,abandoned prison,,,,,,S,S.PRNQ
+PS,power station,http://www.wikidata.org/entity/Q159719,power station,,,a facility for generating electric power,S,S.PS
+PSH,hydroelectric power station,http://www.wikidata.org/entity/Q15911738,hydroelectric power station,,,a building where electricity is generated from water power,S,S.PSH
+PSN,nuclear power station,http://www.wikidata.org/entity/Q134447,nuclear power station,http://vocab.getty.edu/aat/300000439,nuclear power plants,nuclear power station,S,S.PSN
+PSTB,border post,http://www.wikidata.org/entity/Q757292,border checkpoint,,,a post or station at an international boundary for the regulation of movement of people and goods,S,S.PSTB
+PSTC,customs post,,,,,a building at an international boundary where customs and duties are paid on goods,S,S.PSTC
+PSTP,patrol post,,,,,a post from which patrols are sent out,S,S.PSTP
+PYR,pyramid,http://www.wikidata.org/entity/Q12516,pyramid,http://vocab.getty.edu/aat/300004838,pyramids (tombs or platforms),an ancient massive structure of square ground plan with four triangular faces meeting at a point and used for enclosing tombs,S,S.PYR
+PYRS,pyramids,http://www.wikidata.org/entity/Q12516,pyramid,http://vocab.getty.edu/aat/300004838,pyramids (tombs or platforms),ancient massive structures of square ground plan with four triangular faces meeting at a point and used for enclosing tombs,S,S.PYRS
+QUAY,quay,http://www.wikidata.org/entity/Q828909,wharf,http://vocab.getty.edu/aat/300120786,wharves,a structure of solid construction along a shore or bank which provides berthing for ships and which generally provides cargo handling facilities,S,S.QUAY
+RDCR,traffic circle,http://www.wikidata.org/entity/Q1529,traffic circle,http://vocab.getty.edu/aat/300003880,traffic circles,a road junction formed around a central circle about which traffic moves in one direction only,S,S.RDCR
+RDIN,intersection,http://www.wikidata.org/entity/Q285783,intersection,,,a junction of two or more highways by a system of separate levels that permit traffic to pass from one to another without the crossing of traffic streams,S,S.RDIN
+RECG,golf course,http://www.wikidata.org/entity/Q1048525,golf course,http://vocab.getty.edu/aat/300000586,golf courses,a recreation field where golf is played,S,S.RECG
+RECR,racetrack,http://www.wikidata.org/entity/Q1777138,race track,http://vocab.getty.edu/aat/300000593,racetracks (complexes),a track where races are held,S,S.RECR
+REST,restaurant,http://www.wikidata.org/entity/Q11707,restaurant,http://vocab.getty.edu/aat/300005182,restaurants,A place where meals are served to the public,S,S.REST
+RET,store,http://www.wikidata.org/entity/Q213441,shop,http://vocab.getty.edu/aat/300005238,markets (structures),a building where goods and/or services are offered for sale,S,S.RET
+RHSE,resthouse,http://www.wikidata.org/entity/Q55713852,resthouse,,,a structure maintained for the rest and shelter of travelers,S,S.RHSE
+RKRY,rookery,http://www.wikidata.org/entity/Q2640507,rookery,,,a breeding place of a colony of birds or seals,S,S.RKRY
+RLG,religious site,,,,,an ancient site of significant religious importance,S,S.RLG
+RLGR,retreat,,,,,"a place of temporary seclusion, especially for religious groups",S,S.RLGR
+RNCH,ranch(es),http://www.wikidata.org/entity/Q509028,ranch,http://vocab.getty.edu/aat/300000241,ranches (agricultural complexes),a large farm specializing in extensive grazing of livestock,S,S.RNCH
+RSD,railroad siding,http://www.wikidata.org/entity/Q21683257,siding,http://vocab.getty.edu/aat/300007924,sidings (transit system component),a short track parallel to and joining the main track,S,S.RSD
+RSGNL,railroad signal,http://www.wikidata.org/entity/Q862562,railway signal,,,a signal at the entrance of a particular section of track governing the movement of trains,S,S.RSGNL
+RSRT,resort,http://www.wikidata.org/entity/Q875157,resort,http://vocab.getty.edu/aat/300000547,resorts,"a specialized facility for vacation, health, or participation sports activities",S,S.RSRT
+RSTN,railroad station,http://www.wikidata.org/entity/Q55488,railway station,http://vocab.getty.edu/aat/300007783,railroad stations,"a facility comprising ticket office, platforms, etc. for loading and unloading train passengers and freight",S,S.RSTN
+RSTNQ,abandoned railroad station,http://www.wikidata.org/entity/Q4663385,former railway station,,,,S,S.RSTNQ
+RSTP,railroad stop,http://www.wikidata.org/entity/Q55678,railway halt,,,a place lacking station facilities where trains stop to pick up and unload passengers and freight,S,S.RSTP
+RSTPQ,abandoned railroad stop,,,,,,S,S.RSTPQ
+RUIN,ruin(s),,,,,a destroyed or decayed structure which is no longer functional,S,S.RUIN
+SCH,school,http://www.wikidata.org/entity/Q3914,public educational institution,,,building(s) where instruction in one or more branches of knowledge takes place,S,S.SCH
+SCHA,agricultural school,http://www.wikidata.org/entity/Q3345348,agricultural education,,,a school with a curriculum focused on agriculture,S,S.SCHA
+SCHC,college,http://www.wikidata.org/entity/Q189004,college,http://vocab.getty.edu/aat/300312285,colleges (institutions),the grounds and buildings of an institution of higher learning,S,S.SCHC
+SCHL,language school,http://www.wikidata.org/entity/Q897403,language school,,,Language Schools & Institutions,S,S.SCHL
+SCHM,military school,http://www.wikidata.org/entity/Q1935049,military school,,,a school at which military science forms the core of the curriculum,S,S.SCHM
+SCHN,maritime school,http://www.wikidata.org/entity/Q25505858,maritime school,,,a school at which maritime sciences form the core of the curriculum,S,S.SCHN
+SCHT,technical school,http://www.wikidata.org/entity/Q845392,polytechnic,,,post-secondary school with a specifically technical or vocational curriculum,S,S.SCHT
+SECP,State Exam Prep Centre,,,,,state exam preparation centres,S,S.SECP
+SHPF,sheepfold,http://www.wikidata.org/entity/Q1871110,sheepfold,http://vocab.getty.edu/aat/300045477,sheepfolds (animal housing),a fence or wall enclosure for sheep and other small herd animals,S,S.SHPF
+SHRN,shrine,http://www.wikidata.org/entity/Q697295,shrine,http://vocab.getty.edu/aat/300007558,shrines (structures),a structure or place memorializing a person or religious concept,S,S.SHRN
+SHSE,storehouse,http://www.wikidata.org/entity/Q181623,warehouse,http://vocab.getty.edu/aat/300007719,godowns,"a building for storing goods, especially provisions",S,S.SHSE
+SLCE,sluice,http://www.wikidata.org/entity/Q610559,sluice,http://vocab.getty.edu/aat/300006082,sluices,"a conduit or passage for carrying off surplus water from a waterbody, usually regulated by means of a sluice gate",S,S.SLCE
+SNTR,sanatorium,http://www.wikidata.org/entity/Q46124,sanatorium,http://vocab.getty.edu/aat/300006720,sanatoriums,a facility where victims of physical or mental disorders are treated,S,S.SNTR
+SPA,spa,http://www.wikidata.org/entity/Q1341387,spa,,,a resort area usually developed around a medicinal spring,S,S.SPA
+SPLY,spillway,http://www.wikidata.org/entity/Q911379,spillway,http://vocab.getty.edu/aat/300003685,spillways,"a passage or outlet through which surplus water flows over, around or through a dam",S,S.SPLY
+SQR,square,http://www.wikidata.org/entity/Q174782,square,http://vocab.getty.edu/aat/300164841,piazzas (squares),"a broad, open, public area near the center of a town or city",S,S.SQR
+STBL,stable,http://www.wikidata.org/entity/Q214252,stable,http://vocab.getty.edu/aat/300004908,horse barns,"a building for the shelter and feeding of farm animals, especially horses",S,S.STBL
+STDM,stadium,http://www.wikidata.org/entity/Q483110,stadium,http://vocab.getty.edu/aat/300007271,stadiums,a structure with an enclosure for athletic games with tiers of seats for spectators,S,S.STDM
+STNB,scientific research base,http://www.wikidata.org/entity/Q195339,research station,http://vocab.getty.edu/aat/300007676,research stations,a scientific facility used as a base from which research is carried out or monitored,S,S.STNB
+STNC,coast guard station,http://www.wikidata.org/entity/Q31407679,coast guard station,,,a facility from which the coast is guarded by armed vessels,S,S.STNC
+STNE,experiment station,,,,,a facility for carrying out experiments,S,S.STNE
+STNF,forest station,,,,,a collection of buildings and facilities for carrying out forest management,S,S.STNF
+STNI,inspection station,,,,,"a station at which vehicles, goods, and people are inspected",S,S.STNI
+STNM,meteorological station,http://www.wikidata.org/entity/Q190107,weather station,http://vocab.getty.edu/aat/300007677,meteorological stations,a station at which weather elements are recorded,S,S.STNM
+STNR,radio station,http://www.wikidata.org/entity/Q14350,radio station,http://vocab.getty.edu/aat/300005402,radio stations,a facility for producing and transmitting information by radio waves,S,S.STNR
+STNS,satellite station,http://www.wikidata.org/entity/Q357742,broadcast relay station,,,a facility for tracking and communicating with orbiting satellites,S,S.STNS
+STNW,whaling station,http://www.wikidata.org/entity/Q3497366,whaling station,http://vocab.getty.edu/aat/300257640,whaling stations,a facility for butchering whales and processing train oil,S,S.STNW
+STPS,steps,http://www.wikidata.org/entity/Q12511,stairs,http://vocab.getty.edu/aat/300003228,stairs,stones or slabs placed for ease in ascending or descending a steep slope,S,S.STPS
+SWT,sewage treatment plant,http://www.wikidata.org/entity/Q15242449,wastewater treatment plant,http://vocab.getty.edu/aat/300006218,sewage treatment plants,facility for the processing of sewage and/or wastewater,S,S.SWT
+SYG,synagogue,http://www.wikidata.org/entity/Q34627,synagogue,http://vocab.getty.edu/aat/300007590,synagogues (buildings),a place for Jewish worship and religious instruction,S,S.SYG
+THTR,theater,http://www.wikidata.org/entity/Q24354,theatre,http://vocab.getty.edu/aat/300007117,theaters (buildings),"A building, room, or outdoor structure for the presentation of plays, films, or other dramatic performances",S,S.THTR
+TMB,tomb(s),http://www.wikidata.org/entity/Q381885,tomb,http://vocab.getty.edu/aat/300005926,tombs,a structure for interring bodies,S,S.TMB
+TMPL,temple(s),,,,,an edifice dedicated to religious worship,S,S.TMPL
+TNKD,cattle dipping tank,,,,,a small artificial pond used for immersing cattle in chemically treated water for disease control,S,S.TNKD
+TOLL,toll gate/barrier,http://www.wikidata.org/entity/Q1364150,toll booth,,,highway toll collection station,S,S.TOLL
+TOWR,tower,http://www.wikidata.org/entity/Q12518,tower,http://vocab.getty.edu/aat/300004847,towers (single built works),"a high conspicuous structure, typically much higher than its diameter",S,S.TOWR
+TRAM,tram,,,,,rail vehicle along urban streets (also known as streetcar or trolley),S,S.TRAM
+TRANT,transit terminal,,,,,facilities for the handling of vehicular freight and passengers,S,S.TRANT
+TRIG,triangulation station,http://www.wikidata.org/entity/Q131862,triangulation station,http://vocab.getty.edu/aat/300387033,triangulation stations,a point on the earth whose position has been determined by triangulation,S,S.TRIG
+TRMO,oil pipeline terminal,,,,,a tank farm or loading facility at the end of an oil pipeline,S,S.TRMO
+TWO,temp work office,,,,,Temporary Work Offices,S,S.TWO
+UNIP,university prep school,http://www.wikidata.org/entity/Q428602,university-preparatory school,http://vocab.getty.edu/aat/300006581,preparatory schools (buildings),University Preparation Schools & Institutions,S,S.UNIP
+UNIV,university,http://www.wikidata.org/entity/Q3918,university,http://vocab.getty.edu/aat/300006617,universities (buildings),An institution for higher learning with teaching and research facilities constituting a graduate school and professional schools that award master's degrees and doctorates and an undergraduate division that awards bachelor's degrees.,S,S.UNIV
+USGE,united states government establishment,,,,,a facility operated by the United States Government in Panama,S,S.USGE
+VETF,veterinary facility,,,,,a building or camp at which veterinary services are available,S,S.VETF
+WALL,wall,http://www.wikidata.org/entity/Q42948,wall,http://vocab.getty.edu/aat/300002469,walls,"a thick masonry structure, usually enclosing a field or building, or forming the side of a structure",S,S.WALL
+WALLA,ancient wall,,,,,the remains of a linear defensive stone structure,S,S.WALLA
+WEIR,weir(s),,,,,"a small dam in a stream, designed to raise the water level or to divert stream flow through a desired channel",S,S.WEIR
+WHRF,wharf(-ves),http://www.wikidata.org/entity/Q828909,wharf,http://vocab.getty.edu/aat/300120786,wharves,a structure of open rather than solid construction along a shore or a bank which provides berthing for ships and cargo-handling facilities,S,S.WHRF
+WRCK,wreck,http://www.wikidata.org/entity/Q852190,shipwreck,http://vocab.getty.edu/aat/300188746,shipwrecks,the site of the remains of a wrecked vessel,S,S.WRCK
+WTRW,waterworks,http://www.wikidata.org/entity/Q11849395,waterworks,,,a facility for supplying potable water through a water source and a system of pumps and filtration beds,S,S.WTRW
+ZNF,free trade zone,http://www.wikidata.org/entity/Q496341,free economic zone,,,"an area, usually a section of a port, where goods may be received and shipped free of customs duty and of most customs regulations",S,S.ZNF
+ZOO,zoo,http://www.wikidata.org/entity/Q43501,zoo,http://vocab.getty.edu/aat/300000348,zoos (built complexes),a zoological garden or park where wild animals are kept for exhibition,S,S.ZOO
+ASPH,asphalt lake,http://www.wikidata.org/entity/Q2091807,tar pit,,,a small basin containing naturally occurring asphalt,T,T.ASPH
+ATOL,atoll(s),http://www.wikidata.org/entity/Q42523,atoll,http://vocab.getty.edu/aat/300008793,atolls,a ring-shaped coral reef which has closely spaced islands on it encircling a lagoon,T,T.ATOL
+BAR,bar,http://www.wikidata.org/entity/Q478251,bar,http://vocab.getty.edu/aat/300386885,bars (landforms),"a shallow ridge or mound of coarse unconsolidated material in a stream channel, at the mouth of a stream, estuary, or lagoon and in the wave-break zone along coasts",T,T.BAR
+BCH,beach,http://www.wikidata.org/entity/Q40080,beach,http://vocab.getty.edu/aat/300008816,beaches,a shore zone of coarse unconsolidated sediment that extends from the low-water line to the highest reach of storm waves,T,T.BCH
+BCHS,beaches,http://www.wikidata.org/entity/Q40080,beach,http://vocab.getty.edu/aat/300008816,beaches,a shore zone of coarse unconsolidated sediment that extends from the low-water line to the highest reach of storm waves,T,T.BCHS
+BDLD,badlands,http://www.wikidata.org/entity/Q272921,badlands,http://vocab.getty.edu/aat/300387013,badlands,"an area characterized by a maze of very closely spaced, deep, narrow, steep-sided ravines, and sharp crests and pinnacles",T,T.BDLD
+BLDR,boulder field,http://www.wikidata.org/entity/Q1709247,blockfield,,,"a high altitude or high latitude bare, flat area covered with large angular rocks",T,T.BLDR
+BLHL,blowhole(s),http://www.wikidata.org/entity/Q885499,blowhole,,,a hole in coastal rock through which sea water is forced by a rising tide or waves and spurted through an outlet into the air,T,T.BLHL
+BLOW,blowout(s),http://www.wikidata.org/entity/Q1182724,blowout,,,"a small depression in sandy terrain, caused by wind erosion",T,T.BLOW
+BNCH,bench,http://www.wikidata.org/entity/Q4478339,bench,,,"a long, narrow bedrock platform bounded by steeper slopes above and below, usually overlooking a waterbody",T,T.BNCH
+BUTE,butte(s),http://www.wikidata.org/entity/Q6554910,butte,http://vocab.getty.edu/aat/300008744,buttes,"a small, isolated, usually flat-topped hill with steep sides",T,T.BUTE
+CAPE,cape,http://www.wikidata.org/entity/Q185113,cape,http://vocab.getty.edu/aat/300008850,capes (landforms),"a land area, more prominent than a point, projecting into the sea and marking a notable change in coastal direction",T,T.CAPE
+CFT,cleft(s),http://www.wikidata.org/entity/Q55674403,cleft,http://vocab.getty.edu/aat/300386988,clefts,"a deep narrow slot, notch, or groove in a coastal cliff",T,T.CFT
+CLDA,caldera,http://www.wikidata.org/entity/Q159954,caldera,,,a depression measuring kilometers across formed by the collapse of a volcanic mountain,T,T.CLDA
+CLF,cliff(s),http://www.wikidata.org/entity/Q107679,cliff,http://vocab.getty.edu/aat/300008749,cliffs,"a high, steep to perpendicular slope overlooking a waterbody or lower area",T,T.CLF
+CNYN,canyon,http://www.wikidata.org/entity/Q150784,canyon,http://vocab.getty.edu/aat/300008763,canyons,"a deep, narrow valley with steep sides cutting into a plateau or mountainous area",T,T.CNYN
+CONE,cone(s),http://www.wikidata.org/entity/Q1368970,volcanic cone,,,a conical landform composed of mud or volcanic material,T,T.CONE
+CRDR,corridor,http://www.wikidata.org/entity/Q7834916,transport corridor,,,a strip or area of land having significance as an access way,T,T.CRDR
+CRQ,cirque,http://www.wikidata.org/entity/Q388227,cirque,,,a bowl-like hollow partially surrounded by cliffs or steep slopes at the head of a glaciated valley,T,T.CRQ
+CRQS,cirques,http://www.wikidata.org/entity/Q184368,cirque,http://vocab.getty.edu/aat/300386859,cirques,bowl-like hollows partially surrounded by cliffs or steep slopes at the head of a glaciated valley,T,T.CRQS
+CRTR,crater(s),http://www.wikidata.org/entity/Q537876,crater,http://vocab.getty.edu/aat/300386991,craters (landforms),a generally circular saucer or bowl-shaped depression caused by volcanic or meteorite explosive action,T,T.CRTR
+CUET,cuesta(s),http://www.wikidata.org/entity/Q873398,cuesta,http://vocab.getty.edu/aat/300386863,cuestas,an asymmetric ridge formed on tilted strata,T,T.CUET
+DLTA,delta,http://www.wikidata.org/entity/Q43197,river delta,http://vocab.getty.edu/aat/300008760,deltas,a flat plain formed by alluvial deposits at the mouth of a stream,T,T.DLTA
+DPR,depression(s),http://www.wikidata.org/entity/Q190429,depression,http://vocab.getty.edu/aat/300386860,depressions (landforms),a low area surrounded by higher land and usually characterized by interior drainage,T,T.DPR
+DSRT,desert,http://www.wikidata.org/entity/Q8514,desert,http://vocab.getty.edu/aat/300008916,deserts,a large area with little or no vegetation due to extreme environmental conditions,T,T.DSRT
+DUNE,dune(s),http://www.wikidata.org/entity/Q25391,dune,http://vocab.getty.edu/aat/300008750,dunes,"a wave form, ridge or star shape feature composed of sand",T,T.DUNE
+DVD,divide,http://www.wikidata.org/entity/Q152005,drainage divide,,,a line separating adjacent drainage basins,T,T.DVD
+ERG,sandy desert,http://www.wikidata.org/entity/Q319120,erg,http://vocab.getty.edu/aat/300387015,sandy deserts,an extensive tract of shifting sand and sand dunes,T,T.ERG
+FAN,fan(s),,,,,a fan-shaped wedge of coarse alluvium with apex merging with a mountain stream bed and the fan spreading out at a low angle slope onto an adjacent plain,T,T.FAN
+FORD,ford,http://www.wikidata.org/entity/Q12743,ford,,,a shallow part of a stream which can be crossed on foot or by land vehicle,T,T.FORD
+FSR,fissure,http://www.wikidata.org/entity/Q28843416,fissure,,,a crack associated with volcanism,T,T.FSR
+GAP,gap,http://www.wikidata.org/entity/Q16887036,gap,http://vocab.getty.edu/aat/300386834,gaps,"a low place in a ridge, not used for transportation",T,T.GAP
+GRGE,gorge(s),http://www.wikidata.org/entity/Q55462851,gorge,http://vocab.getty.edu/aat/300008767,gorges (landforms),"a short, narrow, steep-sided section of a stream valley",T,T.GRGE
+HDLD,headland,http://www.wikidata.org/entity/Q191992,headland,http://vocab.getty.edu/aat/300387499,headlands,a high projection of land extending into a large body of water beyond the line of the coast,T,T.HDLD
+HLL,hill,http://www.wikidata.org/entity/Q54050,hill,http://vocab.getty.edu/aat/300008777,hills,a rounded elevation of limited extent rising above the surrounding land with local relief of less than 300m,T,T.HLL
+HLLS,hills,http://www.wikidata.org/entity/Q19850234,hill group,,,rounded elevations of limited extent rising above the surrounding land with local relief of less than 300m,T,T.HLLS
+HMCK,hammock(s),,,,,"a patch of ground, distinct from and slightly above the surrounding plain or wetland. Often occurs in groups",T,T.HMCK
+HMDA,rock desert,,,,,"a relatively sand-free, high bedrock plateau in a hot desert, with or without a gravel veneer",T,T.HMDA
+INTF,interfluve,http://www.wikidata.org/entity/Q23228,interfluve,http://vocab.getty.edu/aat/300386842,interfluves,a relatively undissected upland between adjacent stream valleys,T,T.INTF
+ISL,island,http://www.wikidata.org/entity/Q23442,island,http://vocab.getty.edu/aat/300008791,islands (landforms),"a tract of land, smaller than a continent, surrounded by water at high water",T,T.ISL
+ISLET,islet,http://www.wikidata.org/entity/Q207524,islet,,,"small island, bigger than rock, smaller than island.",T,T.ISLET
+ISLF,artificial island,http://www.wikidata.org/entity/Q13691,artificial island,http://vocab.getty.edu/aat/300386969,artificial islands,"an island created by landfill or diking and filling in a wetland, bay, or lagoon",T,T.ISLF
+ISLM,mangrove island,,,,,a mangrove swamp surrounded by a waterbody,T,T.ISLM
+ISLS,islands,http://www.wikidata.org/entity/Q33837,archipelago,http://vocab.getty.edu/aat/300386854,archipelagos,"tracts of land, smaller than a continent, surrounded by water at high water",T,T.ISLS
+ISLT,land-tied island,http://www.wikidata.org/entity/Q1226252,tied island,http://vocab.getty.edu/aat/300386881,land-tied islands,"a coastal island connected to the mainland by barrier beaches, levees or dikes",T,T.ISLT
+ISLX,section of island,http://www.wikidata.org/entity/Q57208193,section of an island,,,,T,T.ISLX
+ISTH,isthmus,http://www.wikidata.org/entity/Q93267,isthmus,http://vocab.getty.edu/aat/300008794,isthmuses,a narrow strip of land connecting two larger land masses and bordered by water,T,T.ISTH
+KRST,karst area,http://www.wikidata.org/entity/Q16817,300387344,,,"a distinctive landscape developed on soluble rock such as limestone characterized by sinkholes, caves, disappearing streams, and underground drainage",T,T.KRST
+LAVA,lava area,,,,,an area of solidified lava,T,T.LAVA
+LEV,levee,http://www.wikidata.org/entity/Q105190,levee,http://vocab.getty.edu/aat/300006156,levees,a natural low embankment bordering a distributary or meandering stream; often built up artificially to control floods,T,T.LEV
+MESA,mesa(s),http://www.wikidata.org/entity/Q623319,mesa,http://vocab.getty.edu/aat/300008811,mesas (landforms),"a flat-topped, isolated elevation with steep slopes on all sides, less extensive than a plateau",T,T.MESA
+MND,mound(s),http://www.wikidata.org/entity/Q1584134,mound,,,"a low, isolated, rounded hill",T,T.MND
+MRN,moraine,http://www.wikidata.org/entity/Q2610088,moraine,http://vocab.getty.edu/aat/300008836,moraines,"a mound, ridge, or other accumulation of glacial till",T,T.MRN
+MT,mountain,http://www.wikidata.org/entity/Q8502,mountain,http://vocab.getty.edu/aat/300008795,mountains,"an elevation standing high above the surrounding area with small summit area, steep slopes and local relief of 300m or more",T,T.MT
+MTS,mountains,http://www.wikidata.org/entity/Q46831,mountain range,http://vocab.getty.edu/aat/300386831,mountain ranges,a mountain range or a group of mountains or high ridges,T,T.MTS
+NKM,meander neck,,,,,a narrow strip of land between the two limbs of a meander loop at its narrowest point,T,T.NKM
+NTK,nunatak,http://www.wikidata.org/entity/Q194408,nunatak,http://vocab.getty.edu/aat/300386858,nunataks,a rock or mountain peak protruding through glacial ice,T,T.NTK
+NTKS,nunataks,http://www.wikidata.org/entity/Q194408,nunatak,http://vocab.getty.edu/aat/300386858,nunataks,rocks or mountain peaks protruding through glacial ice,T,T.NTKS
+PAN,pan,http://www.wikidata.org/entity/Q55710865,pan,http://vocab.getty.edu/aat/300386883,pans (landforms),"a near-level shallow, natural depression or basin, usually containing an intermittent lake, pond, or pool",T,T.PAN
+PANS,pans,,,,,"a near-level shallow, natural depression or basin, usually containing an intermittent lake, pond, or pool",T,T.PANS
+PASS,pass,http://www.wikidata.org/entity/Q133056,300259572,,,"a break in a mountain range or other high obstruction, used for transportation from one side to the other [See also gap]",T,T.PASS
+PEN,peninsula,http://www.wikidata.org/entity/Q34763,peninsula,http://vocab.getty.edu/aat/300008804,peninsulas,an elongate area of land projecting into a body of water and nearly surrounded by water,T,T.PEN
+PENX,section of peninsula,http://www.wikidata.org/entity/Q57208199,section of a peninsula,,,,T,T.PENX
+PK,peak,http://www.wikidata.org/entity/Q207326,summit,http://vocab.getty.edu/aat/300008798,peaks (landforms),"a pointed elevation atop a mountain, ridge, or other hypsographic feature",T,T.PK
+PKS,peaks,,,,,"pointed elevations atop a mountain, ridge, or other hypsographic features",T,T.PKS
+PLAT,plateau,http://www.wikidata.org/entity/Q75520,plateau,http://vocab.getty.edu/aat/300132339,plateaus (landforms),"an elevated plain with steep slopes on one or more sides, and often with incised streams",T,T.PLAT
+PLATX,section of plateau,http://www.wikidata.org/entity/Q57208228,section of a plateau,,,,T,T.PLATX
+PLDR,polder,http://www.wikidata.org/entity/Q106259,polder,http://vocab.getty.edu/aat/300006163,polders,an area reclaimed from the sea by diking and draining,T,T.PLDR
+PLN,plain(s),http://www.wikidata.org/entity/Q160091,plain,http://vocab.getty.edu/aat/300008805,plains (landforms),"an extensive area of comparatively level to gently undulating land, lacking surface irregularities, and usually adjacent to a higher area",T,T.PLN
+PLNX,section of plain,http://www.wikidata.org/entity/Q57208241,section of a plain,,,,T,T.PLNX
+PROM,promontory(-ies),http://www.wikidata.org/entity/Q1245089,promontory,http://vocab.getty.edu/aat/300008853,promontories,a bluff or prominent hill overlooking or projecting into a lowland,T,T.PROM
+PT,point,http://www.wikidata.org/entity/Q24529780,point,http://vocab.getty.edu/aat/300386846,points (landforms),"a tapering piece of land projecting into a body of water, less prominent than a cape",T,T.PT
+PTS,points,,,,,"tapering pieces of land projecting into a body of water, less prominent than a cape",T,T.PTS
+RDGB,beach ridge,http://www.wikidata.org/entity/Q2532557,beach ridge,http://vocab.getty.edu/aat/300132329,beach ridges,"a ridge of sand just inland and parallel to the beach, usually in series",T,T.RDGB
+RDGE,ridge(s),http://www.wikidata.org/entity/Q740445,ridge,http://vocab.getty.edu/aat/300266640,ridges (landforms),"a long narrow elevation with steep sides, and a more or less continuous crest",T,T.RDGE
+REG,stony desert,,,,,a desert plain characterized by a surface veneer of gravel and stones,T,T.REG
+RK,rock,http://www.wikidata.org/entity/Q1404150,rock,http://vocab.getty.edu/aat/300404733,rocks (landforms),"a conspicuous, isolated rocky mass",T,T.RK
+RKFL,rockfall,http://www.wikidata.org/entity/Q5654036,rockfall,http://vocab.getty.edu/aat/300386869,rockfalls,an irregular mass of fallen rock at the base of a cliff or steep slope,T,T.RKFL
+RKS,rocks,http://www.wikidata.org/entity/Q24576816,group of rocks,,,"conspicuous, isolated rocky masses",T,T.RKS
+SAND,sand area,http://www.wikidata.org/entity/Q34379419,sand area,http://vocab.getty.edu/aat/300386870,sand areas,a tract of land covered with sand,T,T.SAND
+SBED,dry stream bed,http://www.wikidata.org/entity/Q57237852,dry stream bed,,,a channel formerly containing the water of a stream,T,T.SBED
+SCRP,escarpment,http://www.wikidata.org/entity/Q1174791,escarpment,,,a long line of cliffs or steep slopes separating level surfaces above and below,T,T.SCRP
+SDL,saddle,http://www.wikidata.org/entity/Q10862618,saddle,,,"a broad, open pass crossing a ridge or between hills or mountains",T,T.SDL
+SHOR,shore,http://www.wikidata.org/entity/Q468756,shore,,,"a narrow zone bordering a waterbody which covers and uncovers at high and low water, respectively",T,T.SHOR
+SINK,sinkhole,http://www.wikidata.org/entity/Q188734,ponor,http://vocab.getty.edu/aat/300343547,sinkholes,a small crater-shape depression in a karst area,T,T.SINK
+SLID,slide,http://www.wikidata.org/entity/Q7540307,slide,,,"a mound of earth material, at the base of a slope and the associated scoured area",T,T.SLID
+SLP,slope(s),,,,,a surface with a relatively uniform slope angle,T,T.SLP
+SPIT,spit,http://www.wikidata.org/entity/Q217101,spit,http://vocab.getty.edu/aat/300386848,spits (landforms),"a narrow, straight or curved continuation of a beach into a waterbody",T,T.SPIT
+SPUR,spur(s),http://www.wikidata.org/entity/Q1400565,spur,,,"a subordinate ridge projecting outward from a hill, mountain or other elevation",T,T.SPUR
+TAL,talus slope,,,,,a steep concave slope formed by an accumulation of loose rock fragments at the base of a cliff or steep slope,T,T.TAL
+TRGD,interdune trough(s),http://www.wikidata.org/entity/Q55711124,interdune trough,,,a long wind-swept trough between parallel longitudinal dunes,T,T.TRGD
+TRR,terrace,http://www.wikidata.org/entity/Q828581,terrace,,,"a long, narrow alluvial platform bounded by steeper slopes above and below, usually overlooking a waterbody",T,T.TRR
+UPLD,upland,http://www.wikidata.org/entity/Q55075651,upland,http://vocab.getty.edu/aat/300386856,uplands,an extensive interior region of high land with low to moderate surface relief,T,T.UPLD
+VAL,valley,http://www.wikidata.org/entity/Q39816,valley,http://vocab.getty.edu/aat/300008761,valleys (landforms),an elongated depression usually traversed by a stream,T,T.VAL
+VALG,hanging valley,http://www.wikidata.org/entity/Q1006357,hanging valley,http://vocab.getty.edu/aat/300386882,hanging valleys,a valley the floor of which is notably higher than the valley or shore to which it leads; most common in areas that have been glaciated,T,T.VALG
+VALS,valleys,http://www.wikidata.org/entity/Q39816,valley,http://vocab.getty.edu/aat/300008761,valleys (landforms),elongated depressions usually traversed by a stream,T,T.VALS
+VALX,section of valley,http://www.wikidata.org/entity/Q57208256,section of a valley,,,,T,T.VALX
+VLC,volcano,http://www.wikidata.org/entity/Q8072,volcano,http://vocab.getty.edu/aat/300132325,volcanoes,a conical elevation composed of volcanic materials with a crater at the top,T,T.VLC
+APNU,apron,,,,,"a gentle slope, with a generally smooth surface, particularly found around groups of islands and seamounts",U,U.APNU
+ARCU,arch,,,,,a low bulge around the southeastern end of the island of Hawaii,U,U.ARCU
+ARRU,arrugado,,,,,an area of subdued corrugations off Baja California,U,U.ARRU
+BDLU,borderland,,,,,"a region adjacent to a continent, normally occupied by or bordering a shelf, that is highly irregular with depths well in excess of those typical of a shelf",U,U.BDLU
+BKSU,banks,http://www.wikidata.org/entity/Q2897058,bank,http://vocab.getty.edu/aat/300008733,shores (landforms),"elevations, typically located on a shelf, over which the depth of water is relatively shallow but sufficient for safe surface navigation",U,U.BKSU
+BNKU,bank,http://www.wikidata.org/entity/Q2897058,bank,http://vocab.getty.edu/aat/300008733,shores (landforms),"an elevation, typically located on a shelf, over which the depth of water is relatively shallow but sufficient for safe surface navigation",U,U.BNKU
+BSNU,basin,http://www.wikidata.org/entity/Q813672,basin,,,a depression more or less equidimensional in plan and of variable extent,U,U.BSNU
+CDAU,cordillera,http://www.wikidata.org/entity/Q2751984,cordillera,,,"an entire mountain system including the subordinate ranges, interior plateaus, and basins",U,U.CDAU
+CNSU,canyons,http://www.wikidata.org/entity/Q150784,canyon,http://vocab.getty.edu/aat/300008763,canyons,"relatively narrow, deep depressions with steep sides, the bottom of which generally has a continuous slope",U,U.CNSU
+CNYU,canyon,http://www.wikidata.org/entity/Q963729,submarine canyon,http://vocab.getty.edu/aat/300386929,undersea canyons,"a relatively narrow, deep depression with steep sides, the bottom of which generally has a continuous slope",U,U.CNYU
+CRSU,continental rise,http://www.wikidata.org/entity/Q332602,continental rise,http://vocab.getty.edu/aat/300386893,continental rises,a gentle slope rising from oceanic depths towards the foot of a continental slope,U,U.CRSU
+DEPU,deep,,,,,"a localized deep area within the confines of a larger feature, such as a trough, basin or trench",U,U.DEPU
+EDGU,shelf edge,,,,,a line along which there is a marked increase of slope at the outer margin of a continental shelf or island shelf,U,U.EDGU
+ESCU,escarpment (or scarp),http://www.wikidata.org/entity/Q1174791,escarpment,,,an elongated and comparatively steep slope separating flat or gently sloping areas,U,U.ESCU
+FANU,fan,,,,,a relatively smooth feature normally sloping away from the lower termination of a canyon or canyon system,U,U.FANU
+FLTU,flat,http://www.wikidata.org/entity/Q18389975,flat,,,a small level or nearly level area,U,U.FLTU
+FRZU,fracture zone,http://www.wikidata.org/entity/Q5477586,fracture zone,,,"an extensive linear zone of irregular topography of the sea floor, characterized by steep-sided or asymmetrical ridges, troughs, or escarpments",U,U.FRZU
+FURU,furrow,http://www.wikidata.org/entity/Q1474839,furrow,,,"a closed, linear, narrow, shallow depression",U,U.FURU
+GAPU,gap,http://www.wikidata.org/entity/Q16887036,gap,http://vocab.getty.edu/aat/300386834,gaps,a narrow break in a ridge or rise,U,U.GAPU
+GLYU,gully,http://www.wikidata.org/entity/Q1361400,gully,http://vocab.getty.edu/aat/300008769,gullies,a small valley-like feature,U,U.GLYU
+HLLU,hill,http://www.wikidata.org/entity/Q47781632,undersea hill,http://vocab.getty.edu/aat/300386906,undersea hills,an elevation rising generally less than 500 meters,U,U.HLLU
+HLSU,hills,http://www.wikidata.org/entity/Q54050,hill,http://vocab.getty.edu/aat/300008777,hills,elevations rising generally less than 500 meters,U,U.HLSU
+HOLU,hole,http://www.wikidata.org/entity/Q55471289,undersea hole,http://vocab.getty.edu/aat/300386933,undersea holes,a small depression of the sea floor,U,U.HOLU
+KNLU,knoll,http://www.wikidata.org/entity/Q55182635,undersea knoll,http://vocab.getty.edu/aat/300386905,undersea knolls,"an elevation rising generally more than 500 meters and less than 1,000 meters and of limited extent across the summit",U,U.KNLU
+KNSU,knolls,http://www.wikidata.org/entity/Q3294251,hillock,http://vocab.getty.edu/aat/300008781,hillocks,"elevations rising generally more than 500 meters and less than 1,000 meters and of limited extent across the summits",U,U.KNSU
+LDGU,ledge,http://www.wikidata.org/entity/Q55670187,undersea ledge,http://vocab.getty.edu/aat/300386918,undersea ledges,"a rocky projection or outcrop, commonly linear and near shore",U,U.LDGU
+LEVU,levee,http://www.wikidata.org/entity/Q55670193,undersea levee,http://vocab.getty.edu/aat/300386936,undersea levees,"an embankment bordering a canyon, valley, or seachannel",U,U.LEVU
+MESU,mesa,http://www.wikidata.org/entity/Q623319,mesa,http://vocab.getty.edu/aat/300008811,mesas (landforms),"an isolated, extensive, flat-topped elevation on the shelf, with relatively steep sides",U,U.MESU
+MNDU,mound,http://www.wikidata.org/entity/Q1584134,mound,,,"a low, isolated, rounded hill",U,U.MNDU
+MOTU,moat,http://www.wikidata.org/entity/Q88480,moat,http://vocab.getty.edu/aat/300003716,moats,"an annular depression that may not be continuous, located at the base of many seamounts, islands, and other isolated elevations",U,U.MOTU
+MTU,mountain,http://www.wikidata.org/entity/Q8502,mountain,http://vocab.getty.edu/aat/300008795,mountains,a well-delineated subdivision of a large and complex positive feature,U,U.MTU
+PKSU,peaks,http://www.wikidata.org/entity/Q207326,summit,http://vocab.getty.edu/aat/300008798,peaks (landforms),"prominent elevations, part of a larger feature, either pointed or of very limited extent across the summit",U,U.PKSU
+PKU,peak,http://www.wikidata.org/entity/Q207326,summit,http://vocab.getty.edu/aat/300008798,peaks (landforms),"a prominent elevation, part of a larger feature, either pointed or of very limited extent across the summit",U,U.PKU
+PLNU,plain,http://www.wikidata.org/entity/Q160091,plain,http://vocab.getty.edu/aat/300008805,plains (landforms),"a flat, gently sloping or nearly level region",U,U.PLNU
+PLTU,plateau,http://www.wikidata.org/entity/Q75520,plateau,http://vocab.getty.edu/aat/300132339,plateaus (landforms),"a comparatively flat-topped feature of considerable extent, dropping off abruptly on one or more sides",U,U.PLTU
+PNLU,pinnacle,http://www.wikidata.org/entity/Q683031,Pinnacle,,,"a high tower or spire-shaped pillar of rock or coral, alone or cresting a summit",U,U.PNLU
+PRVU,province,http://www.wikidata.org/entity/Q2140450,geologic province,,,a region identifiable by a group of similar physiographic features whose characteristics are markedly in contrast with surrounding areas,U,U.PRVU
+RDGU,ridge,http://www.wikidata.org/entity/Q740445,undersea ridge,http://vocab.getty.edu/aat/300266640,ridges (landforms),a long narrow elevation with steep sides,U,U.RDGU
+RDSU,ridges,http://www.wikidata.org/entity/Q740445,ridge,http://vocab.getty.edu/aat/300266640,ridges (landforms),long narrow elevations with steep sides,U,U.RDSU
+RFSU,reefs,,,,,surface-navigation hazards composed of consolidated material,U,U.RFSU
+RFU,reef,http://www.wikidata.org/entity/Q184358,reef,http://vocab.getty.edu/aat/300008808,reefs,a surface-navigation hazard composed of consolidated material,U,U.RFU
+RISU,rise,,,,,"a broad elevation that rises gently, and generally smoothly, from the sea floor",U,U.RISU
+SCNU,seachannel,http://www.wikidata.org/entity/Q4054763,abyssal channel,http://vocab.getty.edu/aat/300386934,undersea channels,"a continuously sloping, elongated depression commonly found in fans or plains and customarily bordered by levees on one or two sides",U,U.SCNU
+SCSU,seachannels,,,,,"continuously sloping, elongated depressions commonly found in fans or plains and customarily bordered by levees on one or two sides",U,U.SCSU
+SDLU,saddle,http://www.wikidata.org/entity/Q10862618,saddle,,,"a low part, resembling in shape a saddle, in a ridge or between contiguous seamounts",U,U.SDLU
+SHFU,shelf,http://www.wikidata.org/entity/Q134851,continental shelf,http://vocab.getty.edu/aat/300387712,continental shelves,a zone adjacent to a continent (or around an island) that extends from the low water line to a depth at which there is usually a marked increase of slope towards oceanic depths,U,U.SHFU
+SHLU,shoal,http://www.wikidata.org/entity/Q28337,undersea shoal,http://vocab.getty.edu/aat/300387036,shoals (landforms),a surface-navigation hazard composed of unconsolidated material,U,U.SHLU
+SHSU,shoals,http://www.wikidata.org/entity/Q28337,shoal,http://vocab.getty.edu/aat/300387036,shoals (landforms),hazards to surface navigation composed of unconsolidated material,U,U.SHSU
+SHVU,shelf valley,,,,,"a valley on the shelf, generally the shoreward extension of a canyon",U,U.SHVU
+SILU,sill,http://www.wikidata.org/entity/Q830230,sill,,,the low part of a gap or saddle separating basins,U,U.SILU
+SLPU,slope,http://www.wikidata.org/entity/Q55471272,undersea slope,http://vocab.getty.edu/aat/300386897,undersea slopes,the slope seaward from the shelf edge to the beginning of a continental rise or the point where there is a general reduction in slope,U,U.SLPU
+SMSU,seamounts,http://www.wikidata.org/entity/Q503269,seamount,http://vocab.getty.edu/aat/300386899,seamounts,"elevations rising generally more than 1,000 meters and of limited extent across the summit",U,U.SMSU
+SMU,seamount,http://www.wikidata.org/entity/Q503269,seamount,http://vocab.getty.edu/aat/300386899,seamounts,"an elevation rising generally more than 1,000 meters and of limited extent across the summit",U,U.SMU
+SPRU,spur,http://www.wikidata.org/entity/Q1400565,300386909,,,"a subordinate elevation, ridge, or rise projecting outward from a larger feature",U,U.SPRU
+TERU,terrace,http://www.wikidata.org/entity/Q828581,terrace,,,"a relatively flat horizontal or gently inclined surface, sometimes long and narrow, which is bounded by a steeper ascending slope on one side and by a steep descending slope on the opposite side",U,U.TERU
+TMSU,tablemounts (or guyots),http://www.wikidata.org/entity/Q151957,guyot,,,"seamounts having a comparatively smooth, flat top",U,U.TMSU
+TMTU,tablemount (or guyot),http://www.wikidata.org/entity/Q151957,guyot,,,"a seamount having a comparatively smooth, flat top",U,U.TMTU
+TNGU,tongue,,,,,an elongate (tongue-like) extension of a flat sea floor into an adjacent higher feature,U,U.TNGU
+TRGU,trough,http://www.wikidata.org/entity/Q55193679,undersea trough,http://vocab.getty.edu/aat/300386938,undersea troughs,"a long depression of the sea floor characteristically flat bottomed and steep sided, and normally shallower than a trench",U,U.TRGU
+TRNU,trench,http://www.wikidata.org/entity/Q119253,oceanic trench,,,"a long, narrow, characteristically very deep and asymmetrical depression of the sea floor, with relatively steep sides",U,U.TRNU
+VALU,valley,http://www.wikidata.org/entity/Q39816,undersea valley,http://vocab.getty.edu/aat/300008761,valleys (landforms),"a relatively shallow, wide depression, the bottom of which usually has a continuous gradient",U,U.VALU
+VLSU,valleys,http://www.wikidata.org/entity/Q39816,valley,http://vocab.getty.edu/aat/300008761,valleys (landforms),"a relatively shallow, wide depression, the bottom of which usually has a continuous gradient",U,U.VLSU
+BUSH,bush(es),http://www.wikidata.org/entity/Q42295,shrub,http://vocab.getty.edu/aat/300132407,shrubs,a small clump of conspicuous bushes in an otherwise bare area,V,V.BUSH
+CULT,cultivated area,,,,,an area under cultivation,V,V.CULT
+FRST,forest(s),http://www.wikidata.org/entity/Q4421,forest,http://vocab.getty.edu/aat/300008863,forests (cultural landscapes),an area dominated by tree vegetation,V,V.FRST
+FRSTF,fossilized forest,http://www.wikidata.org/entity/Q837117,petrified wood,,,a forest fossilized by geologic processes and now exposed at the earth's surface,V,V.FRSTF
+GROVE,grove,,,,,"a small wooded area or collection of trees growing closely together, occurring naturally or deliberately planted",V,V.GROVE
+GRSLD,grassland,http://www.wikidata.org/entity/Q1006733,grassland,http://vocab.getty.edu/aat/300008874,grasslands,an area dominated by grass vegetation,V,V.GRSLD
+GRVC,coconut grove,http://www.wikidata.org/entity/Q16540674,Coconut plantations,,,a planting of coconut trees,V,V.GRVC
+GRVO,olive grove,http://www.wikidata.org/entity/Q3350685,olive grove,,,a planting of olive trees,V,V.GRVO
+GRVP,palm grove,,,,,a planting of palm trees,V,V.GRVP
+GRVPN,pine grove,,,,,a planting of pine trees,V,V.GRVPN
+HTH,heath,http://www.wikidata.org/entity/Q27590,heath,http://vocab.getty.edu/aat/300386887,heaths (landforms),an upland moor or sandy area dominated by low shrubby vegetation including heather,V,V.HTH
+MDW,meadow,http://www.wikidata.org/entity/Q7777019,meadow,http://vocab.getty.edu/aat/300008876,meadows,"a small, poorly drained area dominated by grassy vegetation",V,V.MDW
+OCH,orchard(s),http://www.wikidata.org/entity/Q236371,orchard,http://vocab.getty.edu/aat/300008890,orchards,a planting of fruit or nut trees,V,V.OCH
+SCRB,scrubland,http://www.wikidata.org/entity/Q879641,shrubland,http://vocab.getty.edu/aat/300386891,scrublands,"an area of low trees, bushes, and shrubs stunted by some environmental limitation",V,V.SCRB
+TREE,tree(s),http://www.wikidata.org/entity/Q10884,tree,,,a conspicuous tree used as a landmark,V,V.TREE
+TUND,tundra,http://www.wikidata.org/entity/Q43262,tundra,http://vocab.getty.edu/aat/300008921,tundras,"a marshy, treeless, high latitude plain, dominated by mosses, lichens, and low shrub vegetation under permafrost conditions",V,V.TUND
+VIN,vineyard,http://www.wikidata.org/entity/Q22715,vineyard,http://vocab.getty.edu/aat/300000248,vineyards,a planting of grapevines,V,V.VIN
+VINS,vineyards,http://www.wikidata.org/entity/Q22715,vineyard,http://vocab.getty.edu/aat/300000248,vineyards,plantings of grapevines,V,V.VINS
