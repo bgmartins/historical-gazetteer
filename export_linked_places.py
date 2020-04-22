@@ -12,7 +12,7 @@ def export_gazetteer_to_linked_places( database ):
   data = base_data
   if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
   conn = sqlite3.connect( database )
-  for feature in conn.cursor().execute("SELECT DISTINCT feature_id FROM g_feature WHERE collection_id in NOT NULL"):
+  for feature in conn.cursor().execute("SELECT DISTINCT feature_id FROM g_feature"):
     feature_obj = { "@id": "https://github.com/bgmartins/historical-gazetteer/" + os.path.basename(database) + "/" + repr(feature[0]), "type": "Feature", "properties":{},
                    "geometry": { "type": "GeometryCollection", "geometries": [] }, "when": {}, "names": [], "types": [], "relations": [], "links": [], "descriptions": [], "depictions": [] }
     for name in conn.cursor().execute("SELECT name, language_code FROM g_feature_name, l_language WHERE g_feature_name.language_id=l_language.language_id AND feature_id=" + repr(feature[0])):

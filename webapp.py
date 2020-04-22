@@ -183,8 +183,21 @@ class SqliteDataSet(DataSet):
 
 @app.route('/linked-places/', methods=['GET', 'POST'])
 def export_linked_places():
+    mimetype = 'text/javascript'
     data = export_gazetteer_to_linked_places(dataset.filename)
-    return jsonify(data)
+    filename="export_lfp.json"
+
+    file_obj = open(filename, 'w', encoding='utf8')
+    json.dump(data,file_obj)
+    response_data=file_obj
+    print(response_data, file=sys.stdout)
+    response = make_response(data)
+    response.headers['Content-Type'] = 'text'
+    response.headers['Content-Disposition'] = 'attachment; filename=%s' % (
+        "export_lfp.json")
+    response.headers['Expires'] = 0
+    response.headers['Pragma'] = 'public'
+    return response
 
 @app.route('/pip/', methods=['GET', 'POST'])
 def pip():
@@ -221,6 +234,7 @@ def gazetteer_id():
 
 @app.route('/gazetteer-search/', methods=['GET', 'POST'])
 def gazetteer_search():
+    flash("searching...")
     text = (get_request_data().get('text') or '').strip()
     if not text: return jsonify({})
     response = []
@@ -235,6 +249,7 @@ def gazetteer_search():
     
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+    flash("LOGIN")
     if request.method == 'POST':
         if request.form.get('password') == app.config['PASSWORD']:
             session['authorized'] = True
@@ -535,7 +550,6 @@ def table_query(table):
             return export(table, sql, 'json')
         elif 'export_csv' in request.form:
             return export(table, sql, 'csv')
-
         try:
             cursor = dataset.query(sql)
         except Exception as exc:
@@ -587,6 +601,7 @@ def export(table, sql, export_format):
         kwargs = {}
         filename = '%s-export.csv' % table
         mimetype = 'text/csv'
+        
 
     dataset.freeze(query, export_format, file_obj=buf, **kwargs)
 

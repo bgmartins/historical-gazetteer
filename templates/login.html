@@ -47,11 +47,10 @@
 </form>
 
 <div class="whereami-controls whereami-search">
-<form id="search">
-<input type="text" name="q" id="q" placeholder="search for a place" />
-<button id="find">search</button>
+<form action="{{ url_for('gazetteer_search') }}" class="form" method="post">
+<input type="text" name="q" id="q" placeholder="Search for a place" />
+<button id="find" type="submit">Search</button>
 </form>
-
 <button id="findme" title="find my location">⌖</button>
 </div>
 
