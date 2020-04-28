@@ -1192,7 +1192,7 @@ INSERT INTO l_scheme_term VALUES (53,12,'arches (natural formation)',NULL,NULL,N
 INSERT INTO l_scheme_term VALUES (54,12,'archipelagos',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (55,12,'archive buildings',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (56,12,'archives',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (57,12,'Arctic land',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (57,12,'arctic land',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (58,12,'arenas',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (59,12,'aretes',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (60,12,'arid regions',NULL,NULL,NULL);
@@ -1808,7 +1808,7 @@ INSERT INTO l_scheme_term VALUES (669,12,'memorials',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (670,12,'mesas',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (671,12,'meteorological stations',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (672,12,'metropolitan areas',NULL,NULL,NULL);
-INSERT INTO l_scheme_term VALUES (673,12,'Metropolitan Statistical Areas',NULL,NULL,NULL);
+INSERT INTO l_scheme_term VALUES (673,12,'metropolitan statistical areas',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (674,12,'metrorail stations',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (675,12,'milestones',NULL,NULL,NULL);
 INSERT INTO l_scheme_term VALUES (676,12,'military areas',NULL,NULL,NULL);
