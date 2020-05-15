@@ -208,6 +208,7 @@ def pip():
     latitude=get_request_data().get('latitude')
     longitude=get_request_data().get('longitude')
     placetype=get_request_data().get('placetype')
+    
     try:
         latitude = float(latitude.strip())
         longitude = float(longitude.strip())
@@ -234,12 +235,12 @@ def gazetteer_id():
 
 @app.route('/gazetteer-search/', methods=['GET', 'POST'])
 def gazetteer_search():
-    flash("searching...")
     text = (get_request_data().get('text') or '').strip()
     if not text: return jsonify({})
     response = []
     for r in dataset.query("SELECT DISTINCT feature_id FROM g_feature WHERE feature_id IN ( SELECT feature_id from g_feature_name WHERE name LIKE '%?%' )", text):
-        aux = aux = { "Id": r[0] }
+        aux = { "Id": r[0] }
+        flash(aux)
         response.append(aux)
     return jsonify(response)
 
@@ -249,7 +250,6 @@ def gazetteer_search():
     
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
-    flash("LOGIN")
     if request.method == 'POST':
         if request.form.get('password') == app.config['PASSWORD']:
             session['authorized'] = True

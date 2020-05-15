@@ -3,16 +3,16 @@ mapzen.whosonfirst = mapzen.whosonfirst || {};
 
 mapzen.whosonfirst.pelias = (function(){
 
-		var _endpoint = '/gazetteer-search/';
-		var _apikey = 'gazetteer-search';
+		var _endpoint = '/gazetteer-search';
+		//var _apikey = 'gazetteer-search';
 
 		var self = {
 
 			'search': function(q, on_success, on_error){
 
-				var apikey = mapzen.whosonfirst.pelias.apikey();
+				//var apikey = mapzen.whosonfirst.pelias.apikey();
 
-				var query = { 'text': q, 'api_key': apikey };
+				var query = { 'text': q};
 				query = mapzen.whosonfirst.net.encode_query(query);
 
 				var req = mapzen.whosonfirst.pelias.endpoint() + "?" + query;

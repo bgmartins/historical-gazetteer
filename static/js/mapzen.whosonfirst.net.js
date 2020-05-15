@@ -36,14 +36,11 @@ mapzen.whosonfirst.net = (function(){
 			}
 			
 			var req = new XMLHttpRequest();
-			//req.open('GET', url, true);
-			//req.send();
 			
 			req.onload  = function(){
 				
 				try {
-    				var geojson = JSON.parse(this.reponseText);
-    				//console.log(geojson);
+    				var geojson = JSON.parse(req.responseText);
 				}
 				
 				catch (e){
@@ -60,7 +57,10 @@ mapzen.whosonfirst.net = (function(){
 				if (on_success){
 					on_success(geojson);
 				}
-			};
+			}
+			
+			req.open("get", url, true);
+			req.send();
 			
 		},
 

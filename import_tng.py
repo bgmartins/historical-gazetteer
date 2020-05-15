@@ -225,7 +225,7 @@ def build_type_dictionary( target_scheme_code=12 , type_exceptions={} ):
         'agricultural center': 'agricultural facilities' }
     typedictionary = {}
     auxtypes = []
-    for line in open('tgn1.xml'):
+    for line in open('tgn1.xml',encoding='utf-8'):
         line = line.split("<Place_Type_ID>")
         if len(line) <= 1 : continue
         for i in range(1,len(line)):
@@ -303,9 +303,9 @@ if new_collection == "yes":
     c.execute("INSERT INTO {tbl} (collection_id, name, note) VALUES (:col_id , :nm, :nt);".format(tbl = "g_collection"), {'col_id': new_collection_id, 'nm': collection_name , 'nt': '\"collection of features from TGN\"'})
     conn.commit()
     print("collection " + collection_name + " added")
-elif new_collection == "no":
-    c.execute("SELECT collection_id from g_collection where name ==:nm",{'nm':collection_name})
-    collection_id = (c.fetchone()[0])
+# elif new_collection == "no":
+#     c.execute("SELECT collection_id from g_collection where name ==:nm",{'nm':collection_name})
+#     collection_id = (c.fetchone())
 
 
 ### Now we open the XML file to import to the gazeteer database

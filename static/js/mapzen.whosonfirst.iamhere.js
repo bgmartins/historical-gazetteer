@@ -15,7 +15,7 @@ mapzen.whosonfirst.iamhere = (function(){
 		var self = {
 			
 			'init': function(){
-				var s = mapzen.whosonfirst.iamhere.scenefile()
+				var s = mapzen.whosonfirst.iamhere.scenefile();
 				mapzen.whosonfirst.leaflet.tangram.scenefile(s);
 
 				// TO DO (20151214/this is a ar on land)
@@ -41,8 +41,6 @@ mapzen.whosonfirst.iamhere = (function(){
 				var tileUrl = 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=49a5b5dc29214864871852883a050425';
 				layer = new L.TileLayer(tileUrl, {maxZoom: 16});
 				map.addLayer(layer);		
-
-				console.log(map.layers);
 				
 				L.hash(map);
 
@@ -64,17 +62,17 @@ mapzen.whosonfirst.iamhere = (function(){
 
 				if (mapzen.whosonfirst.pelias.endpoint()){
 
-					if (mapzen.whosonfirst.pelias.apikey()){
+					//if (mapzen.whosonfirst.pelias.apikey()){
 						var find = document.getElementById("find");
 						find.onclick = self.search;
 
-						var search = document.getElementById("search");
-						search.style.cssText = "display:inline;";
-					}
+						//var search = document.getElementById("search");
+						//search.style.cssText = "display:inline;";
+					/*}
 
 					else {
 						mapzen.whosonfirst.feedback.warning("Search is disabled because no API key has been defined");
-					}
+					}*/
 				}
 
 				else {
