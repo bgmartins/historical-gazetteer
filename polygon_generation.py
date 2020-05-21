@@ -1,20 +1,20 @@
-from qgis.core import *
+# from qgis.core import *
 from osgeo import gdal
 import math
 import numpy as np
 import os
+import sys
 
 
 #Get the points vector layer
-pointsVector = QgsVectorLayer(sys.argv, 'points', 'ogr')
+# pointsVector = QgsVectorLayer(sys.argv, 'points', 'ogr')
 #Add the vector layer to the map layer registry
-QgsMapLayerRegistry.instance().addMapLayer(pointsVector)
-
-os.system('gdal_rasterize -a z -ts 1000 1000 -l points "'+sys.argv+'" "./rasterPoints"')
-
-
+# QgsMapLayerRegistry.instance().addMapLayer(pointsVector)
+shapefile="tester.shp"
+os.system('gdal_rasterize -a z -ts 1000 1000 -l points "'+ shapefile +'" "./rasterPoints"')
 #rasterPoints=QgsRasterLayer('./rasterPoints', 'rasterPoints')
 #QgsMapLayerRegistry.instance().addMapLayer(rasterPoints)
+
 
 dataset = gdal.Open('./rasterPoints')
 numpy_array = dataset.ReadAsArray()
@@ -23,11 +23,11 @@ width, height = numpy_array.shape
 points = []
 
 #get all the weighted points from the raster
-print ("get the points with their weights from raster")
+print("get the points with their weights from raster")
 for row in range(height):
 	for col in range(width):
 		if(numpy_array[row,col] != 0):
-			print numpy_array[row, col]
+			print(numpy_array[row, col])
 			points.append([row, col, numpy_array[row,col]])
 
 
@@ -59,6 +59,11 @@ output.SetGeoTransform(dataset.GetGeoTransform())
 output.SetProjection(dataset.GetProjection())
 #insert data to the resulting raster in band 1 from the weighted distance grid
 output.GetRasterBand(1).WriteArray(distanceGrid)
+
+print(output)
+print("DONEZO")
+
+'''
 #Call the raster output file
 rasterVoronoi = QgsRasterLayer('./rasterVoronoi.tiff', 'weighted Raster')
 #Add it to the map layer registry ( display it on the map)
@@ -71,3 +76,4 @@ weightedVoronoiVector = QgsVectorLayer('./WeightedVoronoi.shp', 'weighted vorono
 #load the vector weighted voronoi diagram
 QgsMapLayerRegistry.instance().addMapLayer(weightedVoronoiVector)
 # #print "all cells with a weighted value"
+'''
