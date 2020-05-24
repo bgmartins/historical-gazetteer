@@ -95,8 +95,9 @@ def get_identifier(table_name, column_name):
     res = conn.execute("SELECT CASE WHEN MAX(" + column_name + ") = COUNT(*) THEN MAX(" + column_name + ") + 1 WHEN MIN(" + column_name + ") > 1 THEN 1 WHEN MAX(" + column_name + ") <> COUNT(*) THEN (SELECT MIN(" + column_name + ")+1 FROM " + table_name + " WHERE (" + column_name + "+1) NOT IN (SELECT " + column_name + " FROM " + table_name + ")) ELSE 1 END FROM " + table_name)
     return res.fetchone()[0]      
 
-def import_features_from_tabular(collection_id,filename,placename,alt_names, feature_type, sheetname):
+def import_features_from_tabular(collection_id,filename,placename,alt_names, feature_type, sheetname, id_tag, related_tag):
     file=pd.ExcelFile(filename)
+    id_dict={}
     if (sheetname in file.sheet_names):
         df = read_excel(filename, sheetname)
     else:
@@ -118,6 +119,7 @@ def import_features_from_tabular(collection_id,filename,placename,alt_names, fea
         date_desc = 'undefined-historical'
         time_period_id = conn.execute("SELECT g_time_period_to_period_name.time_period_id FROM l_time_period_name, g_time_period_to_period_name WHERE l_time_period_name.time_period_name_id=g_time_period_to_period_name.time_period_name_id AND time_period_name=?",(date_desc,)).fetchone()[0]
         feature_id = get_identifier("g_feature","feature_id")
+        if(id_tag in df): id_dict[df[id_tag][row]]=feature_id
         feature_name_id = get_identifier("g_feature_name","feature_name_id")
         language_id  = conn.execute("SELECT language_id FROM l_language WHERE language_code LIKE 'SPA'").fetchone()[0]
         location_id = get_identifier("g_location","location_id")        
@@ -136,7 +138,15 @@ def import_features_from_tabular(collection_id,filename,placename,alt_names, fea
                 feature_alt_name_id = get_identifier("g_feature_name","feature_name_id")
                 conn.execute("INSERT INTO g_feature_name ( feature_name_id , feature_id , primary_display , language_id , transliteration_scheme_id , name ) VALUES (?,?,?,?,9,?)", ( feature_alt_name_id, feature_id, False, language_id, alt_name ) )
                 conn.execute("INSERT INTO s_feature_name ( feature_name_id, name, language_id, transliteration_scheme_id, confidence_note ) VALUES (?,?,?,9,?)", (feature_alt_name_id,entry_source_id,language_id,entry_source_id) )
-
+    print("creating relations...")
+    for row in range(df[placename].size):
+        if((related_tag in df) and (df[related_tag][row]!=0)):
+            if(df[related_tag][row] in id_dict):
+                new_id=get_identifier("g_related_feature","related_feature_id")
+                db_id=id_dict[df[id_tag][row]]
+                related_id=id_dict[df[related_tag][row]]
+                related_name=conn.execute("SELECT name from g_feature_name where feature_id = ? limit 1", (related_id,)).fetchone()[0]
+                conn.execute("INSERT INTO g_related_feature (related_feature_id, feature_id,related_name ,related_feature_feature_id, time_period_id, related_type_term_id,time_period_note) VALUES(?,?,?,?,2,1263,NULL)", (new_id,db_id,related_name,related_id))
 
 def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc,alt_names,related_tag, id_tag, hash_feature_id = False, dissolve = False): 
     id_dict={}
@@ -210,6 +220,7 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
                 related_id=id_dict[row[related_tag]]
                 related_name=conn.execute("SELECT name from g_feature_name where feature_id = ? limit 1", (related_id,)).fetchone()[0]
                 conn.execute("INSERT INTO g_related_feature (related_feature_id, feature_id,related_name ,related_feature_feature_id, time_period_id, related_type_term_id,time_period_note) VALUES(?,?,?,?,2,1263,NULL)", (new_id,db_id,related_name,related_id))
+
 collection_id = get_identifier("g_collection", "collection_id")
 # conn.execute("INSERT INTO g_collection VALUES (?, 'New DECM Data', '')", (collection_id,))
 #----------------------------------------------ACUÑA SOURCE-----------------------------------------------------------------
@@ -228,28 +239,28 @@ import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/Acuna_8_
 import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/Acuna_9_Michoacan.shp","Placename","Book Acuña","Acuña","Type",None,'Alt_names','FID_Relate','My_FID9')
 import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/Acuna_10_NuevaGalicia.shp","Placename","Book Acuña","Acuña","Type",None,'Alt_names','FID_Relate','My_FID10')
 
-#-----------------------------------------DLG SOURCE-----------------------------------------------------------------------------
+# #-----------------------------------------DLG SOURCE-----------------------------------------------------------------------------
 import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/DLG_Yucatan.shp","Placename","Book DLG","DLG","Type",None,'Alt_names','FID_Relate','My_FID_Yuc')
 import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/DPYT_Suma.shp","Placename","Book DLG","DLG","Type",None,'Alt_names','FID_Relate','My_FID_Sum')
 import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/DPYT_Suma_Text.shp","Placename","Book DLG","DLG","Type",None,'Alt_names','FID_Relate','My_FID_txt')
 
-#-----------------------------------------Secondary------------------------------------------------------------------------
+# #-----------------------------------------Secondary------------------------------------------------------------------------
 import_polygons_from_shapefile(collection_id,"decm-data/Secondary Sources/Gerhard_NewSpain.shp","Placename","Book DLG","DLG","Type",None,"Alt_names",'FID_Relate','My_FID_NS')
 import_polygons_from_shapefile(collection_id,"decm-data/Secondary Sources/Gerhard_SEFrontier.shp","Placename","Book DLG","DLG","Type",None,"Alt_names",'FID_Relate','My_FID_SE')
 import_polygons_from_shapefile(collection_id,"decm-data/Secondary Sources/Gerhard_SEFrontier_polygons.shp","Placename","Book DLG","DLG","Type",None,"Alt_names",'FID_Relate','My_FID_SE')
 import_polygons_from_shapefile(collection_id,"decm-data/Secondary Sources/MorenoToscano.shp","Placename","Book DLG","DLG","Type",None,"Alt_names",'FID_Relate','My_FID_MT')
 
 # #------------------------------------------Tabular Sources--------------------------------------------------------------------------------------
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/1_Acuña_Guatemala_Index.xlsx","name","alt_names",None,"NOT_FOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/2_Acuña_Antequera1.xlsx","PlaceName","Alt_names","Type","NOT_FOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/3_Acuña_Antequera2.xlsx","PlaceName","Alt_names","Type","NOT_FOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/4_Acuña_Tlaxcala1.xlsx","PlaceName","Alt_names","Type","NOT FOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/5_Acuna_Tlaxcala2.xlsx","Placename","Alt_names","Type","NOT FOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/6_Acuna_Mexico1.xlsx","PlaceName","Alt_names","Type","NOTFOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/7_Acuna_Mexico2.xlsx","PlaceName","Alt_names","Type","NOT FOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/8_Acuna_Mexico3.xlsx","Placename","Alt_names","Type","Not_Found")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/9_Acuna_Michoacan.xlsx","PlaceName","Alt_names","Type","NOT FOUND")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/10_Acuna_NuevaGalicia.xlsx","PlaceName","Alt_names","Type","NOT FOUND")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/1_Acuña_Guatemala_Index.xlsx","name","alt_names",None,"NOT_FOUND","My_FID1","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/2_Acuña_Antequera1.xlsx","PlaceName","Alt_names","Type","NOT_FOUND","My_FID2","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/3_Acuña_Antequera2.xlsx","PlaceName","Alt_names","Type","NOT_FOUND","My_FID3","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/4_Acuña_Tlaxcala1.xlsx","PlaceName","Alt_names","Type","NOT FOUND","My_FID4","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/5_Acuna_Tlaxcala2.xlsx","Placename","Alt_names","Type","NOT FOUND","My_FID5","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/6_Acuna_Mexico1.xlsx","PlaceName","Alt_names","Type","NOTFOUND","My_FID6","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/7_Acuna_Mexico2.xlsx","PlaceName","Alt_names","Type","NOT FOUND","My_FID7","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/8_Acuna_Mexico3.xlsx","Placename","Alt_names","Type","Not_Found","My_FID8","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/9_Acuna_Michoacan.xlsx","PlaceName","Alt_names","Type","NOT FOUND","My_FID9","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/10_Acuna_NuevaGalicia.xlsx","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
 
 
 # rows = conn.execute("SELECT DISTINCT l2.feature_id, g_feature_name.name, l1.feature_id, g1.time_period_id from g_location_geometry g1, g_location_geometry g2, g_location l1, g_location l2, g_feature_name WHERE within(g1.encoded_geometry,g2.encoded_geometry) AND g1.location_id=l1.location_id AND g2.location_id=l2.location_id AND g_feature_name.feature_id=l2.feature_id AND g_feature_name.primary_display=1 AND g1.time_period_id=g2.time_period_id").fetchall()
