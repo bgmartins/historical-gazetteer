@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<head>
+	<link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+    <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="//code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/sqlbrowse.css') }}" />
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/syntax-highlight.css') }}" />
+    
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/iamhere.deps.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/iamhere.app.min.css')}}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='js/iamhere.deps.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/tangram.debug.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/iamhere.app.min.js')}}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/leaflet.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/leaflet.label.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/mapzen.whosonfirst.iamhere.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/mapzen.whosonfirst.iamhere.mobile.css')}}" />
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/leaflet.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/leaflet.label.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/leaflet.hash.js')}}"></script>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.leaflet.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.leaflet.styles.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.leaflet.handlers.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.leaflet.tangram.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.geojson.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.php.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.data.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.net.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.log.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.enmapify.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.pip.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.pelias.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.iplookup.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.feedback.js')}}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.iamhere.js')}}"></script>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mapzen.whosonfirst.config.js')}}"></script>
+    
+</head>
+ 
+<body>
+
+<form action="{{ url_for('login') }}" class="form" method="post">
+	<div id="login_box">
+		<h4> Login for full access:</h4>
+		<input id="access_box" placeholder="Enter Password" name="password" type="password" value=""/>
+		<button class="login_button" type="submit">Login</button>
+	</div>
+</form>
+
+<div class="whereami-controls whereami-search">
+    <form action="{{ url_for('gazetteer_search') }}" class="form" method="GET" >
+    <input id="input_place" name="input_place" type="text" value=""/>
+    <button id="find" type="submit">Search</button>
+    <button id="findme" title="find my location">⌖</button>
+    </form>
+</div>
+
+<div id="map"><div id="crosshairs" style="background-color:#fff;"></div></div>
+
+<div class="whereami-controls">
+<ul id="whereami-info">
+    <li id="whereami-latlon"></li>
+    <li id="whereami-zoom"></li>
+    <li id="whereami-reversegeo"></li>
+</ul>
+
+<div id="ip-lookups">
+  <div id="ip-lookups-enabled">You have automatic map positioning (using IP lookups) enabled. <button class="ip-lookups-button" id="ip-lookups-off">Disable?</button></div>
+  <div id="ip-lookups-disabled">You have automatic map positioning (using IP lookups) disabled. <button class="ip-lookups-button" id="ip-lookups-on">Enable?</button></div>      
+</div>
+</div>
+
+<div id="whereami-feedback"></div>
+
+<div id="wof-log-container"><div id="wof-log"></div></div>
+
+<script type="text/javascript">
+$(function() {
+    $("#input_place").autocomplete({
+        source:function(request, response) {
+            console.log("infuction");
+            $.getJSON("{{url_for('autocomplete')}}",{
+                place: request.term,
+            }, function(data) {
+                console.log("MADE IT!!!!");
+                response(data.json_list); 
+            });
+        },
+        minLength: 2,
+        select: function(event, ui) {
+            console.log(ui.item.value); 
+        }
+    });
+})
+
+</script>
+
+<script type="text/javascript">
+
+window.onload = function(e){
+	mapzen.whosonfirst.config.init();
+	mapzen.whosonfirst.iamhere.init();
+}
+
+</script>
+
+</body>
+</html>

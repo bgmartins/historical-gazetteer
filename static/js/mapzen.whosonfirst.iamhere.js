@@ -172,7 +172,7 @@ mapzen.whosonfirst.iamhere = (function(){
 
 				mapzen.whosonfirst.feedback.info("you are in online mode");
 
-				var q = document.getElementById("q");
+				var q = document.getElementById("input_place");
 				q.setAttribute("placeholder", "search for a place");
 				q.removeAttribute("disabled");
 				q.value = "";

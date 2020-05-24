@@ -190,7 +190,7 @@ def export_linked_places():
     file_obj = open(filename, 'w', encoding='utf8')
     json.dump(data,file_obj)
     response_data=file_obj
-    print(response_data, file=sys.stdout)
+
     response = make_response(data)
     response.headers['Content-Type'] = 'text'
     response.headers['Content-Disposition'] = 'attachment; filename=%s' % (
@@ -213,7 +213,7 @@ def pip():
         latitude = float(latitude.strip())
         longitude = float(longitude.strip())
         response = []
-        for r in dataset.query("SELECT g_feature.feature_id, g_feature_name.name,g_feature_code.code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND g_feature_name.primary_display=1"):
+        for r in dataset.query("SELECT g_feature.feature_id, g_feature_name.name,g_feature_code.code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND g_feature_name.primary_display=1 Limit 10"):
             aux = { "Id": r[0], "Name": r[1], "Placetype": r[2] }
             response.append(aux)
         
@@ -233,16 +233,38 @@ def gazetteer_id():
     data = export_gazetteer_to_linked_places(dataset.filename)
     return jsonify(data)
 
+@app.route('/autocomplete/', methods=['GET', 'POST'])
+def autocomplete():
+    text= get_request_data().get('place')
+    response = []
+    queryString="SELECT DISTINCT name FROM g_feature_name WHERE name LIKE '" + text+ "%' LIMIT 5"
+    for r in dataset.query(queryString):
+        aux = r[0] 
+        response.append(aux)
+    return jsonify(json_list=response)
+
 @app.route('/gazetteer-search/', methods=['GET', 'POST'])
 def gazetteer_search():
-    text = (get_request_data().get('text') or '').strip()
-    if not text: return jsonify({})
-    response = []
-    for r in dataset.query("SELECT DISTINCT feature_id FROM g_feature WHERE feature_id IN ( SELECT feature_id from g_feature_name WHERE name LIKE '%?%' )", text):
-        aux = { "Id": r[0] }
-        flash(aux)
-        response.append(aux)
-    return jsonify(response)
+    text = (get_request_data().get('input_place') or '').strip()
+    if not text:
+        return  render_template('login.html', results_visible='none')
+    id_query="SELECT feature_id from g_feature_name WHERE primary_display=1 and name LIKE '%"+text+"%' LIMIT 1"
+    r_id = dataset.query(id_query).fetchone()[0]
+    r_name = dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1", (r_id,)).fetchone()[0]
+    r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
+    r_geometry = dataset.query("SELECT encoded_geometry FROM g_location_geometry WHERE primary_geometry=1 and location_id IN (SELECT location_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
+    r_alt_names = []
+    for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
+        r_alt_names.append(alt[0])
+    
+    return render_template('login.html', 
+                           results_visible='visible',
+                           feature_id=r_id,
+                           feature_name=r_name,
+                           feature_type=r_type,
+                           feature_geometry=r_geometry,
+                           alt_names=r_alt_names                           
+                           )
 
 #
 # Flask views associated to SQL browser.
@@ -250,12 +272,11 @@ def gazetteer_search():
     
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
+    session['authorized'] = True
     if request.method == 'POST':
         if request.form.get('password') == app.config['PASSWORD']:
-            session['authorized'] = True
             return redirect(url_for('index'))
-        flash('The password you entered is incorrect.', 'danger')
-    return render_template('login.html')
+    return render_template('login.html', results_visible='none')
 
 @app.route('/logout/', methods=['GET'])
 def logout():
@@ -265,15 +286,14 @@ def logout():
 def install_auth_handler(password):
     app.config['PASSWORD'] = password
 
-    @app.before_request
-    def check_password():
-        if not session.get('authorized') and request.path != '/login/' and \
-           not request.path.startswith(('/static/', '/favicon')):
-            # flash('You must log-in to view the database browser.', 'danger')
-            session['next_url'] = request.base_url
-            return redirect(url_for('login'))
+@app.before_request
+def check_password():
+    if not session.get('authorized') and request.path != '/login/' and \
+       not request.path.startswith(('/static/', '/favicon')):
+        session['next_url'] = request.base_url
+        return redirect(url_for('login'))
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def index():
     return render_template('index.html')
 
@@ -846,7 +866,6 @@ def main():
     parser = get_option_parser()
     options, args = parser.parse_args()
     if not args: args = [ "gazetteer.db" ]
-    print(options)
     password = None
     if options.prompt_password:
         if os.environ.get('SQLITE_WEB_PASSWORD'):
@@ -862,6 +881,7 @@ def main():
     db_file = args[0]
     app = myapp(db_file, options.read_only, password,  options.url_prefix)
     if options.browser: open_browser_tab(options.host, options.port)
+    print(app.url_map)
     app.run(host=options.host, port=options.port, debug=options.debug)
 
 if __name__ == '__main__':
