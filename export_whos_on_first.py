@@ -16,36 +16,41 @@ base_data = {
         "features": []
         }
 
-def export_to_whos_on_first( database ):
+def export_to_whos_on_first(database, features,names):
     data = base_data
     flag=True
     if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
     conn = sqlite3.connect(database)
-    for feature in conn.cursor().execute("SELECT DISTINCT feature_id FROM g_feature WHERE collection_id is NOT NULL"):
-        feature_obj = { "@id": "https://github.com/bgmartins/historical-gazetteer/" + os.path.basename(database) + "/" + repr(feature[0]), "type": "Feature", "properties":{},
-                   "bbox": [],
-                   "geometry": { "coordinates":[],"type":[]}
-                   }
+    for feature,name in zip(features,names):
+        print(name)
+        print(feature)
+        feature_obj = { "type": "Feature", 
+                       "properties":{
+                           "name": name,
+                           "amenity": name,
+                           "popupContent": name},
+                       "geometry": { "coordinates":None,"type":None}
+                       }
+            
+        for shape in conn.cursor().execute("SELECT encoded_geometry FROM g_location LEFT JOIN g_location_geometry ON g_location.location_id=g_location_geometry.location_id WHERE g_location.feature_id=" + repr(feature)):
+            if(shape[0]==None):
+                feature_obj["geometry"]["coordinates"]=None
+                feature_obj["geometry"]["type"]=None
+            else:
+                geo_string=shape[0].replace("(","").replace(")","")
+                geo_string=geo_string.split(" ",1)
+                geo_type=geo_string[0]
+                coordinates_string=geo_string[1].split(",")
+                coordinates_int=[]
+                
+                for position in coordinates_string:
+                    position=list(filter(None,position.split(" ")))
+                    coordinates_int=[float(position[1]),float(position[0])]
+                    # coordinates_int=(list(map(float, position)))
         
-        for geo in conn.cursor().execute("SELECT west_coordinate, east_coordinate, south_coordinate, north_coordinate FROM g_location LEFT JOIN g_location_geometry ON g_location.location_id=g_location_geometry.location_id WHERE g_location.feature_id=" + repr(feature[0])):
-            points = [geo[0],geo[1],geo[2],geo[3]]
-            feature_obj["bbox"].append(points)
-            
-        for shape in conn.cursor().execute("SELECT encoded_geometry FROM g_location LEFT JOIN g_location_geometry ON g_location.location_id=g_location_geometry.location_id WHERE g_location.feature_id=" + repr(feature[0])):
-            geo_string=shape[0].replace("(","").replace(")","")
-            geo_string=geo_string.split(" ",1)
-            geo_type=geo_string[0]
-            coordinates_string=geo_string[1].split(",")
-            coordinates_int=[]
-            
-            for position in coordinates_string:
-                position=list(filter(None,position.split(" ")))
-                coordinates_int.append(list(map(float, position)))
-    
-            points = []
-            feature_obj["geometry"]["coordinates"].append(coordinates_int)
-            feature_obj["geometry"]["type"].append(geo_type)
-            
+                points = []
+                feature_obj["geometry"]["coordinates"]=coordinates_int
+                feature_obj["geometry"]["type"]=geo_type
         data["features"].append(feature_obj)
     return data
 

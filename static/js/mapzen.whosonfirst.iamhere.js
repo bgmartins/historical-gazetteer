@@ -40,7 +40,7 @@ mapzen.whosonfirst.iamhere = (function(){
 				
 				var tileUrl = 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=49a5b5dc29214864871852883a050425';
 				layer = new L.TileLayer(tileUrl, {maxZoom: 16});
-				map.addLayer(layer);		
+				map.addLayer(layer);
 				
 				L.hash(map);
 

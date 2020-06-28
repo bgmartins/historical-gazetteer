@@ -42,8 +42,6 @@ mapzen.whosonfirst.net = (function(){
 				try {
     				var geojson = JSON.parse(req.responseText);
     				this.responseText = geojson;
-    				console.log("GEOSON");
-    				console.log(geojson);
 				}
 				
 				catch (e){

@@ -9,6 +9,7 @@ base_data = {
 }
 
 def export_gazetteer_to_linked_places( database ):
+  os.remove("export_lfp_data.json") 
   data = base_data
   if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
   conn = sqlite3.connect( database )
@@ -30,5 +31,5 @@ def export_gazetteer_to_linked_places( database ):
 
 if __name__ == '__main__':
   data = export_gazetteer_to_linked_places('gazetteer.db')
-  with open('data.json', 'w', encoding='utf-8') as f:
+  with open('export_lfp_data.json', 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)

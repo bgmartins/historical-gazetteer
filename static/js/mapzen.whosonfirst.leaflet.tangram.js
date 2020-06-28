@@ -36,7 +36,7 @@ mapzen.whosonfirst.leaflet.tangram = (function(){
 
 			if (! _cache[id]){
 				var map = L.map(id);
-				map.scrollWheelZoom.disable();
+				map.scrollWheelZoom.enable();
 				
 				var tangram = self.tangram();
 				tangram.addTo(map);

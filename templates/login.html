@@ -66,12 +66,28 @@
 </section>
 
 <div id="results_section" style="display: {{results_visible}};">
-<p> Feature ID: {{feature_id}} </p>
-<p> Feature Name: {{feature_name}} </p>
-<p> Feature Type: {{feature_type}} </p>
-<p> Geometry: {{feature_geometry}} </p>
-<p> Alternative Names: {{alt_names}} </p>
-<!--<p> Related Features: {{related}} </p>-->
+<table id="resultsTable">
+<thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th> 
+      <th>Type</th>
+      <th>Geometry</th>
+      <th>Alternative Names</th>
+      <th>Related Features</th>
+    </tr>
+</thead>
+{% for r in results %}
+<tr>
+  <td>{{ r[0] }}</td>
+  <td>{{ r[1] }}</td> 
+  <td>{{ r[2] }}</td>
+  <td>{{ r[3] }}</td>
+  <td>{{ r[4] }}</td>
+  <td>{{ r[5] }}</td>
+</tr>
+{% endfor %}
+</table>
 </div>
 
 <div id="map"><div id="crosshairs" style="background-color:#fff;"></div></div>
@@ -105,17 +121,58 @@ $(function() {
         },
         minLength: 2,
         select: function(event, ui) {
-            console.log(ui.item.value); 
         }
     });
-})
-</script>
+});
 
-<script type="text/javascript">
+let myStyle = {
+	"color": "#2424da",
+	"weight": 1,
+	"opacity": 0.9
+};
+
+let geojsonMarkerOptions = {
+    radius: 6,
+    fillColor: "#2424da",
+    color: "#fffff",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.9
+};
+
+let currentLayers=[];
+
+function map_painter(geoResults) {
+	let map_obj = mapzen.whosonfirst.leaflet.tangram.map('map');
+	let jsonResults = JSON.parse(geoResults);
+	for(const layer of currentLayers){
+		map.removeLayer(layer);
+	}
+	currentLayers=[];
+	for(const feature of jsonResults["features"]){
+		if(feature["geometry"]["coordinates"]){
+			var geojsonFeature = {
+				"type": "Feature",
+				"properties": {
+					"name": feature['properties']['name'],
+					"amenity": feature['properties']['name'],
+					"popupContent": feature['properties']['popupContent']
+				},
+				"geometry": {
+					"type": "Point",
+					"coordinates": feature["geometry"]["coordinates"]
+				}
+			};
+			let new_layer = mapzen.whosonfirst.leaflet.draw_point(map_obj,geojsonFeature,myStyle,geojsonMarkerOptions);
+			currentLayers.push(new_layer);
+		}
+	}
+}
 
 window.onload = function(e){
 	mapzen.whosonfirst.config.init();
 	mapzen.whosonfirst.iamhere.init();
+	map_painter('{{geoResults|tojson|safe }}');
 }
 
 </script>

@@ -51,6 +51,33 @@ body {
 	height: 90%;
 }
 
+#results_section {
+    margin-left: 5%;
+}
+
+#resultsTable {
+  width: 95%;
+  background-color: #D1D1D1;
+  border-collapse: collapse;
+  border-width: 2px;
+  border-color: #7EA8F8;
+  border-style: outset;
+  color: #4019FF;
+}
+
+#resultsTable td, #resultsTable th {
+  border-width: 2px;
+  border-color: #7EA8F8;
+  border-style: outset;
+  padding: 10px;
+}
+
+#resultsTable thead {
+  background-color: #4F9E91;
+}
+
+
+
 #wof-log-container {
 	 display:none;
 }

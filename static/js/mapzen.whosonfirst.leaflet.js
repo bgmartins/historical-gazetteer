@@ -2,15 +2,19 @@ var mapzen = mapzen || {};
 mapzen.whosonfirst = mapzen.whosonfirst || {};
 
 mapzen.whosonfirst.leaflet = (function(){
-
 	var self = {
 		'draw_point': function(map, geojson, style, handler){
-						
+			var center = geojson['geometry']['coordinates'];
+			var icon = L.circleMarker(center, handler);
 			var layer = L.geoJson(geojson, {
 				'style': style,
-				'pointToLayer': handler,
+				'pointToLayer': function () {
+					return icon;
+					}
 			});
-			
+			layer.bindPopup(geojson['properties']['popupContent'],{closeButton: false});
+			layer.on('mouseover', function() { layer.openPopup(); });
+			layer.on('mouseout', function() { layer.closePopup(); });
 			layer.addTo(map);
 			return layer;
 		},

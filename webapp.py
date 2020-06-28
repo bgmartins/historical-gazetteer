@@ -183,14 +183,14 @@ class SqliteDataSet(DataSet):
 
 @app.route('/linked-places/', methods=['GET', 'POST'])
 def export_linked_places():
+    flash("Please wait. The processing may take a while...")
     mimetype = 'text/javascript'
     data = export_gazetteer_to_linked_places(dataset.filename)
     filename="export_lfp.json"
-
+    os.remove(filename)
     file_obj = open(filename, 'w', encoding='utf8')
     json.dump(data,file_obj)
     response_data=file_obj
-
     response = make_response(data)
     response.headers['Content-Type'] = 'text'
     response.headers['Content-Disposition'] = 'attachment; filename=%s' % (
@@ -247,23 +247,42 @@ def autocomplete():
 def gazetteer_search():
     text = (get_request_data().get('input_place') or '').strip()
     if not text:
-        return  render_template('login.html', results_visible='none')
-    id_query="SELECT feature_id from g_feature_name WHERE primary_display=1 and name LIKE '%"+text+"%' LIMIT 1"
-    r_id = dataset.query(id_query).fetchone()[0]
-    r_name = dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1", (r_id,)).fetchone()[0]
-    r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
-    r_geometry = dataset.query("SELECT encoded_geometry FROM g_location_geometry WHERE primary_geometry=1 and location_id IN (SELECT location_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
-    r_alt_names = []
-    for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
-        r_alt_names.append(alt[0])
+        return  render_template('login.html', results_visible='none', results=[], geoResults=[])
+    id_query="SELECT feature_id from g_feature_name WHERE primary_display=1 and name LIKE '%"+text+"%' LIMIT 8"
+    record_list=dataset.query(id_query).fetchall()
+    id_list=[]
+    pop_up_list=[]
+    for fid in record_list:
+        id_list.append(fid[0])
+    results=[]
+    for r_id in id_list:
+        place_info=[]
+        place_info.append(r_id)
+        r_name = dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1", (r_id,)).fetchone()[0]
+        pop_up_list.append(r_name)
+        place_info.append(r_name)
+        r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
+        place_info.append(r_type)
+        r_geometry = dataset.query("SELECT encoded_geometry FROM g_location LEFT JOIN g_location_geometry ON g_location.location_id=g_location_geometry.location_id WHERE g_location.feature_id=?", (r_id,)).fetchone()[0]
+        place_info.append(r_geometry)
+        r_alt_names = []
+        r_related_features=[]
+        for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
+            r_alt_names.append(alt[0])
+        for related in dataset.query("SELECT related_feature_feature_id, related_name from g_related_feature where feature_id = ?", (r_id,)).fetchall():
+            r_related_features.append([related[0],related[1]])
+        if(len(r_alt_names)==0):r_alt_names=None
+        if(len(r_related_features)==0):r_related_features=None
+        place_info.append(r_alt_names)
+        place_info.append(r_related_features)
+        results.append(place_info)
+        
+    geoResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
     
     return render_template('login.html', 
                            results_visible='visible',
-                           feature_id=r_id,
-                           feature_name=r_name,
-                           feature_type=r_type,
-                           feature_geometry=r_geometry,
-                           alt_names=r_alt_names                           
+                           results=results,
+                           geoResults=geoResults
                            )
 
 #
@@ -276,7 +295,7 @@ def login():
     if request.method == 'POST':
         if request.form.get('password') == app.config['PASSWORD']:
             return redirect(url_for('index'))
-    return render_template('login.html', results_visible='none')
+    return render_template('login.html', results_visible='none', results=[],geoResults=[])
 
 @app.route('/logout/', methods=['GET'])
 def logout():
