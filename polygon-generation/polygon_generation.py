@@ -1,5 +1,5 @@
 # from qgis.core import *
-from osgeo import gdal, osr
+from osgeo import gdal, osr, ogr
 import math
 import numpy as np
 import os
@@ -11,11 +11,12 @@ conn = sqlite3.connect("../gazetteer.db")
 c = conn.cursor()
 raw_points=[]
 
-for row in c.execute("SELECT west_coordinate,north_coordinate from g_location where feature_id IN  \
-                     (SELECT DISTINCT feature_id FROM g_classification WHERE classification_term_id=1164) limit 50"):
+for row in c.execute("SELECT west_coordinate,north_coordinate,south_coordinate,east_coordinate,feature_id from g_location where feature_id IN (SELECT DISTINCT feature_id FROM g_classification WHERE classification_term_id=740)"):
+                     #location_id NOT IN (SELECT DISTINCT location_id FROM g_location_geometry)"):
     aux=[]
     aux.append(row[0])
     aux.append(row[1])
+    aux.append(row[2])
     raw_points.append(aux)
 
 w = shapefile.Writer('shape_tester')
@@ -27,15 +28,16 @@ for point in raw_points:
 
 w.close()
 
+print(len(raw_points))
+
 sf = shapefile.Reader('shape_tester.shp')
-print(sf)
 
 #Get the points vector layer
 # pointsVector = QgsVectorLayer(sys.argv, 'points', 'ogr')
 #Add the vector layer to the map layer registry
     
 # QgsMapLayerRegistry.instance().addMapLayer(pointsVector)
-os.system('gdal_rasterize -tr 0.01 0.01 -burn 255 shape_tester.shp ./rasterPoints.tif')
+os.system('gdal_rasterize -tr 0.0001 0.0001 -burn 255 shape_tester.shp ./rasterPoints.tif')
 #rasterPoints=QgsRasterLayer('./rasterPoints', 'rasterPoints')
 #QgsMapLayerRegistry.instance().addMapLayer(rasterPoints)
 
@@ -44,8 +46,6 @@ numpy_array = dataset.ReadAsArray()
 width, height = numpy_array.shape
 points = []
 
-print(width)
-print(height)
 
 #get all the weighted points from the raster
 print("get the points with their weights from raster")
@@ -56,7 +56,6 @@ for row in range(width):
 
 print("compute the weighted distance grid for each point")
 
-print(points)
 distanceGrid = np.zeros(shape = (width, height))
 for row in range(width):
     for col in range(height):
@@ -69,7 +68,6 @@ for row in range(width):
                 index = i
         distanceGrid[row, col] = index
         
-print(distanceGrid)
 
 geotransform = dataset.GetGeoTransform()
 wkt = dataset.GetProjection()
@@ -97,10 +95,36 @@ srs = osr.SpatialReference()
 srs.ImportFromWkt(wkt)
 output.SetProjection( srs.ExportToWkt() )
 
-# #polygonize the result raster
-# os.system('gdal_polygonize.py "./rasterVoronoi.tiff" -f "ESRI Shapefile" "./WeightedVoronoi.shp" WeightedVoronoi')
+sr_proj=output.GetProjection()
+raster_proj = osr.SpatialReference()
+raster_proj.ImportFromWkt(sr_proj)
+band = output.GetRasterBand(1) 
+print(band)
+bandArray = band.ReadAsArray()
+outShapefile = "POLYGON"
+driver = ogr.GetDriverByName("ESRI Shapefile")
+outDatasource = driver.CreateDataSource(outShapefile+ ".shp")
+outLayer = outDatasource.CreateLayer('polygonized', srs=raster_proj)
+newField = ogr.FieldDefn(str(1), ogr.OFTInteger)
+outLayer.CreateField(newField)
 
-os.system('gdal_polygonize.py rasterVoronoi.tiff -f "ESRI Shapefile" vectorized_result.shp')
+gdal.Polygonize( band, None, outLayer, -1, [], callback=None )
+outDatasource.Destroy()
+sourceRaster = None
+
+
+sf = shapefile.Reader("./POLYGON.shp")
+shapes=sf.shapes()
+for shape in shapes:
+    geo_poly = "POLYGON (("
+    print("|||||||||||||||||||||||||||||||||||||||BBOX||||||||||||||||||||||||||||||||||||")
+    for shape_point in shape.points:
+        geo_poly+=str(shape_point[0]) + " " + str(shape_point[1]) + ","
+    geo_poly = geo_poly[:-1]
+    geo_poly+="))"
+    print(shape.bbox)
+    print(geo_poly)
+
 
 print("DONEZO")
 

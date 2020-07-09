@@ -1,26 +1,31 @@
 var mapzen = mapzen || {};
 mapzen.whosonfirst = mapzen.whosonfirst || {};
 
-mapzen.whosonfirst.leaflet = (function(){
-	var self = {
+mapzen.whosonfirst.leaflet = (function(map){
+	var self = {		
 		'draw_point': function(map, geojson, style, handler){
 			var center = geojson['geometry']['coordinates'];
 			var icon = L.circleMarker(center, handler);
 			var layer = L.geoJson(geojson, {
-				'style': style,
+				//'style': style,
 				'pointToLayer': function () {
 					return icon;
 					}
 			});
 			layer.bindPopup(geojson['properties']['popupContent'],{closeButton: false});
-			layer.on('mouseover', function() { layer.openPopup(); });
-			layer.on('mouseout', function() { layer.closePopup(); });
+			/*layer.on('mouseover', function() { 
+				this.setStyle({'fillColor': '#f21b0d'});
+				layer.openPopup(); 
+			});
+			layer.on('mouseout', function () {
+				this.setStyle({'fillColor': '#2424da'});
+			});*/
 			layer.addTo(map);
 			return layer;
 		},
 		
 		'draw_poly': function(map, geojson, style){
-			
+			console.log(geojson);
 			var layer = L.geoJson(geojson, {
 				'style': style				
 			});
@@ -39,7 +44,14 @@ mapzen.whosonfirst.leaflet = (function(){
 			catch (e){
 				mapzen.whosonfirst.log.error("failed to bind label because " + e);
 			}
-			
+			layer.bindPopup(geojson['properties']['popupContent'],{closeButton: false});
+			/*layer.on('mouseover', function() { 
+				this.setStyle({'fillColor': '#f21b0d'});
+				layer.openPopup(); 
+			});
+			layer.on('mouseout', function () {
+				this.setStyle({'fillColor': '#2424da'});
+			});*/
 			layer.addTo(map);
 			return layer;
 		},

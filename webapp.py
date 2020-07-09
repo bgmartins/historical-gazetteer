@@ -216,16 +216,12 @@ def pip():
         for r in dataset.query("SELECT g_feature.feature_id, g_feature_name.name,g_feature_code.code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND g_feature_name.primary_display=1 Limit 10"):
             aux = { "Id": r[0], "Name": r[1], "Placetype": r[2] }
             response.append(aux)
-        
         return jsonify(response)
     except Exception as e: return jsonify({ "error": repr(e) })
     
 @app.route('/gazetteer-data/', methods=['GET', 'POST'])
 def gazetteer_data():
-    data = export_to_whos_on_first(dataset.filename)
-    with open('data.json', 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
-    # check data here : https://raw.githubusercontent.com/whosonfirst-data/whosonfirst-data/master/data/101/711/873/101711873.geojson
+    data = {}#export_to_whos_on_first(dataset.filename)
     return jsonify(data)
 
 @app.route('/gazetteer-id/', methods=['GET', 'POST'])
@@ -263,8 +259,17 @@ def gazetteer_search():
         place_info.append(r_name)
         r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
         place_info.append(r_type)
-        r_geometry = dataset.query("SELECT encoded_geometry FROM g_location LEFT JOIN g_location_geometry ON g_location.location_id=g_location_geometry.location_id WHERE g_location.feature_id=?", (r_id,)).fetchone()[0]
+        
+        raw_local_id= dataset.query("select location_id from g_location where feature_id=?", (r_id,)).fetchone()
+        raw_geometry=None
+        r_geometry=None
+        if(raw_local_id!=None):
+            local_id=raw_local_id[0]
+            raw_geometry = dataset.query("select encoded_geometry from g_location_geometry where location_id=?",(local_id,)).fetchone()
+        if(raw_geometry!=None):
+            r_geometry=raw_geometry[0].split(" ")[0]
         place_info.append(r_geometry)
+        
         r_alt_names = []
         r_related_features=[]
         for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():

@@ -5,3 +5,7 @@ tgn1.xml
 points.xlsx
 tester.py
 shape_tester*
+polygon-generation/shapefile_reader.py
+polygon-generation/POLYGON*
+polygon-generation/raster*
+polygon-generation/shape_tester*

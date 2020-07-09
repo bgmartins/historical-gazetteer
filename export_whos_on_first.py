@@ -9,6 +9,7 @@ import os
 import numpy as np
 import json
 import sqlite3
+import shapely.wkt
 
 base_data = {
         "type" : "FeatureCollection",
@@ -22,8 +23,6 @@ def export_to_whos_on_first(database, features,names):
     if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
     conn = sqlite3.connect(database)
     for feature,name in zip(features,names):
-        print(name)
-        print(feature)
         feature_obj = { "type": "Feature", 
                        "properties":{
                            "name": name,
@@ -32,7 +31,7 @@ def export_to_whos_on_first(database, features,names):
                        "geometry": { "coordinates":None,"type":None}
                        }
             
-        for shape in conn.cursor().execute("SELECT encoded_geometry FROM g_location LEFT JOIN g_location_geometry ON g_location.location_id=g_location_geometry.location_id WHERE g_location.feature_id=" + repr(feature)):
+        for shape in conn.cursor().execute("select encoded_geometry from g_location_geometry where location_id in (select location_id from g_location where feature_id=?)" , (int(feature),)):
             if(shape[0]==None):
                 feature_obj["geometry"]["coordinates"]=None
                 feature_obj["geometry"]["type"]=None
@@ -40,17 +39,19 @@ def export_to_whos_on_first(database, features,names):
                 geo_string=shape[0].replace("(","").replace(")","")
                 geo_string=geo_string.split(" ",1)
                 geo_type=geo_string[0]
-                coordinates_string=geo_string[1].split(",")
-                coordinates_int=[]
-                
-                for position in coordinates_string:
-                    position=list(filter(None,position.split(" ")))
-                    coordinates_int=[float(position[1]),float(position[0])]
-                    # coordinates_int=(list(map(float, position)))
-        
-                points = []
-                feature_obj["geometry"]["coordinates"]=coordinates_int
-                feature_obj["geometry"]["type"]=geo_type
+                if geo_type=="MULTIPOLYGON" or geo_type=="POLYGON":
+                    P = shapely.wkt.loads(shape[0])
+                    MP=shapely.geometry.mapping(P)
+                    feature_obj["geometry"]=MP
+                else:
+                    coordinates_string=geo_string[1].split(",")
+                    coordinates_int=[]
+                    for position in coordinates_string:
+                        position=list(filter(None,position.split(" ")))
+                        coordinates_int=[float(position[1]),float(position[0])]
+                        # coordinates_int=(list(map(float, position)))
+                    feature_obj["geometry"]["coordinates"]=coordinates_int
+                    feature_obj["geometry"]["type"]=geo_type.title()
         data["features"].append(feature_obj)
     return data
 

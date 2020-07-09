@@ -127,28 +127,23 @@ $(function() {
 
 let myStyle = {
 	"color": "#2424da",
-	"weight": 1,
+	"weight": 2,
 	"opacity": 0.9
 };
 
 let geojsonMarkerOptions = {
     radius: 6,
-    fillColor: "#2424da",
+    fillColor: "#e515a9",
     color: "#fffff",
     weight: 1,
     opacity: 1,
     fillOpacity: 0.9
 };
 
-let currentLayers=[];
-
 function map_painter(geoResults) {
+	//mapzen.whosonfirst.leaflet.tangram.clear_map(layers);
 	let map_obj = mapzen.whosonfirst.leaflet.tangram.map('map');
 	let jsonResults = JSON.parse(geoResults);
-	for(const layer of currentLayers){
-		map.removeLayer(layer);
-	}
-	currentLayers=[];
 	for(const feature of jsonResults["features"]){
 		if(feature["geometry"]["coordinates"]){
 			var geojsonFeature = {
@@ -159,12 +154,17 @@ function map_painter(geoResults) {
 					"popupContent": feature['properties']['popupContent']
 				},
 				"geometry": {
-					"type": "Point",
+					"type": feature["geometry"]["type"],
 					"coordinates": feature["geometry"]["coordinates"]
 				}
 			};
-			let new_layer = mapzen.whosonfirst.leaflet.draw_point(map_obj,geojsonFeature,myStyle,geojsonMarkerOptions);
-			currentLayers.push(new_layer);
+			if(geojsonFeature["geometry"]["type"]==="Point"){
+				let new_layer = mapzen.whosonfirst.leaflet.draw_point(map_obj,geojsonFeature,myStyle,geojsonMarkerOptions);
+			}
+			else if(geojsonFeature["geometry"]["type"]==="Polygon" || geojsonFeature["geometry"]["type"]==="MultiPolygon"){
+				console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+				let new_layer = mapzen.whosonfirst.leaflet.draw_poly(map_obj,geojsonFeature,myStyle);
+			}
 		}
 	}
 }

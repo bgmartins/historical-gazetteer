@@ -3,7 +3,7 @@ mapzen.whosonfirst = mapzen.whosonfirst || {};
 
 mapzen.whosonfirst.data = (function(){
 
-	var _endpoint = "/gazetteer-data/";
+	var _endpoint = "/gazetteer-data";
 
 	var self = {
 
@@ -20,7 +20,7 @@ mapzen.whosonfirst.data = (function(){
 		'id2abspath': function (id){
 
 			var rel_path = self.id2relpath(id);
-			var abs_path = self.endpoint() + rel_path;
+			var abs_path = self.endpoint() + "/" + id;
 	
 			return abs_path;
 		},
@@ -51,7 +51,7 @@ mapzen.whosonfirst.data = (function(){
 		},
 
 		'id2fname': function(id){
-			return id + ".geojson";
+			return id;
 		}
 	};
 

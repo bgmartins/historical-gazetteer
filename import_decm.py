@@ -83,6 +83,13 @@ type_dict={
      'Stream': 'streams'
     }
 
+relations_dict = {
+    'Depends on': 1263,
+    'Estancia': 1263,
+    'Near': 1265,
+    'Within': 1268
+    }
+
 
 # rows=conn.execute('SELECT * FROM g_collection')
 
@@ -93,7 +100,7 @@ type_dict={
 
 def get_identifier(table_name, column_name):
     res = conn.execute("SELECT CASE WHEN MAX(" + column_name + ") = COUNT(*) THEN MAX(" + column_name + ") + 1 WHEN MIN(" + column_name + ") > 1 THEN 1 WHEN MAX(" + column_name + ") <> COUNT(*) THEN (SELECT MIN(" + column_name + ")+1 FROM " + table_name + " WHERE (" + column_name + "+1) NOT IN (SELECT " + column_name + " FROM " + table_name + ")) ELSE 1 END FROM " + table_name)
-    return res.fetchone()[0]      
+    return res.fetchone()[0]    
 
 def import_features_from_tabular(collection_id,filename,placename,alt_names, feature_type, sheetname, id_tag, related_tag):
     file=pd.ExcelFile(filename)
@@ -148,7 +155,7 @@ def import_features_from_tabular(collection_id,filename,placename,alt_names, fea
                 related_name=conn.execute("SELECT name from g_feature_name where feature_id = ? limit 1", (related_id,)).fetchone()[0]
                 conn.execute("INSERT INTO g_related_feature (related_feature_id, feature_id,related_name ,related_feature_feature_id, time_period_id, related_type_term_id,time_period_note) VALUES(?,?,?,?,2,1263,NULL)", (new_id,db_id,related_name,related_id))
 
-def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc,alt_names,related_tag, id_tag, hash_feature_id = False, dissolve = False): 
+def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, source_desc, source_mnemonic, feature_type, date_desc, alt_names, related_tag, id_tag, hash_feature_id = False, dissolve = False): 
     id_dict={}
     source_id = get_identifier("g_source","source_id")
     source_reference_id = get_identifier("l_source_reference","source_reference_id")
@@ -163,10 +170,13 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
         data = data[[attribute_name, 'geometry']]
         data = data.dissolve(by=attribute_name).reset_index()
     for index, row in data.iterrows():
-        # print(dir(row))
         name = ftfy.fix_text(str(row[attribute_name]).strip())
         geo = str(row["geometry"])
-        bbox = row["geometry"].bounds
+        # print(geo)
+        if(geo!="None"):
+            bbox = row["geometry"].bounds
+        else:
+            bbox=[0,0,0,0]
       
         if( (feature_type not in row) or (row[feature_type]==None)):
             type_name="populated places"
@@ -176,7 +186,6 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
             type_name=type_dict[type_name]
         type_id_db = conn.execute("SELECT scheme_term_id FROM l_scheme_term where term=?",(type_name,)).fetchone()
         if(type_id_db==None):
-            #type_name=type_associtation(type_name)
             new_id=get_identifier("l_scheme_term","scheme_term_id")
             conn.execute("INSERT INTO l_scheme_term (scheme_term_id,scheme_id,term,external_scheme_term_id,term_order_number,term_rank_number) VALUES(?,?,?,NULL,NULL,NULL)", (new_id,12,type_name))
         classification_term_id = conn.execute("SELECT scheme_term_id FROM l_scheme_term WHERE term=? ORDER BY term_order_number, term_rank_number",(type_name,)).fetchone()[0]
@@ -215,14 +224,47 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
     for index, row in data.iterrows():
         if((related_tag in row) and (row[related_tag]!=0)):
             if(row[related_tag] in id_dict):
+                # relation_type=row[relation_tag]
                 new_id=get_identifier("g_related_feature","related_feature_id")
                 db_id=id_dict[row[id_tag]]
                 related_id=id_dict[row[related_tag]]
                 related_name=conn.execute("SELECT name from g_feature_name where feature_id = ? limit 1", (related_id,)).fetchone()[0]
                 conn.execute("INSERT INTO g_related_feature (related_feature_id, feature_id,related_name ,related_feature_feature_id, time_period_id, related_type_term_id,time_period_note) VALUES(?,?,?,?,2,1263,NULL)", (new_id,db_id,related_name,related_id))
 
+def show_info(collection_id,shp_path):  
+    data = geopandas.read_file(shp_path, encoding='utf8')
+    print("importing: ")
+    print(shp_path)
+    for index, row in data.iterrows():
+        print(dir(row))
+        print(row['geometry'])
 collection_id = get_identifier("g_collection", "collection_id")
 # conn.execute("INSERT INTO g_collection VALUES (?, 'New DECM Data', '')", (collection_id,))
+
+#----------------------------------------------ADDITIONAL DATA--------------------------------------------------------------
+# show_info(collection_id, "decm-data/Additional Data/72_H_II_2_inset.shp")
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/2_Gobiernos.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/6_Audiencias.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/7_Dioceses.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/10_ethnohistorical_regions.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/12_provincias_1570.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/58_gerhard_dioceses.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/63_roys_yucatan_provincias.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/66_H_III_I_A_provincias.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/67_H_III_1_B_audiencias.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/68_H_II_3_senorios.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/69_H_II_2_entidades_politicas.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/70_H_III_1_C_eclesiastica.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/72_H_II_2_inset.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/73_texcoco_lago.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/76_se_frontier_subdelegacion.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/77_se_frontier_intendancy.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/78_se_frontier_gobierno.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/79_se_frontier_audiencia.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/80_se_frontier_control_limits.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/87_civil_divisions_1580.shp","Placename","Cline 1972","Cline","Type",None,'Alt_names','FID_Relate','My_FID2')
+
+#--------------------------------------------PRIMARY SOURCES----------------------------------------------------------------
 #----------------------------------------------ACUÑA SOURCE-----------------------------------------------------------------
 import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/Acuna_2_Antequera1.shp","Placename","Book Acuña","Acuña","Type",None,'Alt_names','FID_Relate','My_FID2')
 import_polygons_from_shapefile(collection_id,"decm-data/Primary Sources/Acuna_3_Antequera2.shp","Placename","Book Acuña","Acuña","Type",None,'Alt_names','FID_Relate','My_FID3')

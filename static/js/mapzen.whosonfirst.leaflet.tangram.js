@@ -11,7 +11,13 @@ mapzen.whosonfirst.leaflet.tangram = (function(){
 	var _key=""
 
 	var self = {
-
+		'clear_map': function(layers){
+			console.log(layers);
+			for(const layer of layers){
+				self.map('map').removeLayer(layer);
+			}
+		},
+		
 		'map_with_bbox': function(id, swlat, swlon, nelat, nelon){
 
 			if ((swlat == nelat) && (swlon == nelon)){
