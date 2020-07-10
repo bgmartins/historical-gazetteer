@@ -7,9 +7,8 @@ mapzen.whosonfirst.pip = (function(){
 
 		var self = {
 
-			'get_by_latlon': function(lat, lon, placetype, on_success, on_error){
-
-				var q = { 'latitude': lat, 'longitude': lon };
+			'get_by_latlon': function(id_string, placetype, on_success, on_error){
+				var q = { 'id_string': id_string};
 
 				q['v1'] = 1;	// PLEASE MAKE THIS A FLAG OR BETTER YET UPDATE THE CODE TO HANDLE SPR RESPONSES
 

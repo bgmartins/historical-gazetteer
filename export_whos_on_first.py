@@ -11,19 +11,18 @@ import json
 import sqlite3
 import shapely.wkt
 
-base_data = {
+def export_to_whos_on_first(database, features,names):
+    data = {
         "type" : "FeatureCollection",
         "@context@" : "https://raw.githubusercontent.com/whosonfirst-data/whosonfirst-data/master/data/101/711/873/101711873.geojson",
         "features": []
         }
-
-def export_to_whos_on_first(database, features,names):
-    data = base_data
     flag=True
     if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
     conn = sqlite3.connect(database)
     for feature,name in zip(features,names):
         feature_obj = { "type": "Feature", 
+                       "feature_id":int(feature),
                        "properties":{
                            "name": name,
                            "amenity": name,

@@ -25,7 +25,6 @@ mapzen.whosonfirst.leaflet = (function(map){
 		},
 		
 		'draw_poly': function(map, geojson, style){
-			console.log(geojson);
 			var layer = L.geoJson(geojson, {
 				'style': style				
 			});
@@ -115,13 +114,6 @@ mapzen.whosonfirst.leaflet = (function(map){
 			if (! force){
 
 				var redraw = false;
-
-				/*
-				  console.log("south bbox: " + bounds.getSouth() + " current: " + current.getSouth().toFixed(6));
-				  console.log("west bbox: " + bounds.getWest() + " current: " + current.getWest().toFixed(6));
-				  console.log("north bbox: " + bounds.getNorth() + " current: " + current.getNorth().toFixed(6));
-				  console.log("east bbox: " + bounds.getEast() + " current: " + current.getEast().toFixed(6));
-				*/
 				
 				if (bounds.getSouth() <= current.getSouth().toFixed(6)){
 					redraw = true;

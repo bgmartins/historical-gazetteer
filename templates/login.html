@@ -141,9 +141,16 @@ let geojsonMarkerOptions = {
 };
 
 function map_painter(geoResults) {
-	//mapzen.whosonfirst.leaflet.tangram.clear_map(layers);
+	console.log("-------------------GEORES------------------");
 	let map_obj = mapzen.whosonfirst.leaflet.tangram.map('map');
 	let jsonResults = JSON.parse(geoResults);
+	if(Array.isArray(jsonResults)){
+		mapzen.whosonfirst.iamhere.reverse_geocode("1##2##3##4##5##6##7##8");
+		return;
+	}
+	console.log(jsonResults.length);
+	console.log(jsonResults);
+	let id_string="";
 	for(const feature of jsonResults["features"]){
 		if(feature["geometry"]["coordinates"]){
 			var geojsonFeature = {
@@ -158,13 +165,14 @@ function map_painter(geoResults) {
 					"coordinates": feature["geometry"]["coordinates"]
 				}
 			};
+			id_string+=feature['feature_id']+"##";
 			if(geojsonFeature["geometry"]["type"]==="Point"){
 				let new_layer = mapzen.whosonfirst.leaflet.draw_point(map_obj,geojsonFeature,myStyle,geojsonMarkerOptions);
 			}
 			else if(geojsonFeature["geometry"]["type"]==="Polygon" || geojsonFeature["geometry"]["type"]==="MultiPolygon"){
-				console.log("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 				let new_layer = mapzen.whosonfirst.leaflet.draw_poly(map_obj,geojsonFeature,myStyle);
 			}
+			mapzen.whosonfirst.iamhere.reverse_geocode(id_string.substring(0, id_string.length - 2));
 		}
 	}
 }

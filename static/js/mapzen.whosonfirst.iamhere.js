@@ -39,9 +39,10 @@ mapzen.whosonfirst.iamhere = (function(){
 				map = mapzen.whosonfirst.leaflet.tangram.map_with_bbox('map', swlat, swlon, nelat, nelon);
 				
 				var tileUrl = 'https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=49a5b5dc29214864871852883a050425';
-				layer = new L.TileLayer(tileUrl, {maxZoom: 16});
+				layer = new L.TileLayer(tileUrl);
 				map.addLayer(layer);
-				
+				map.options.minZoom = 2;
+				map.options.maxZoom = 15;
 				L.hash(map);
 
 				map.on('load', function(e){
@@ -56,11 +57,11 @@ mapzen.whosonfirst.iamhere = (function(){
 						self.update_location();
 					});
 				
-				map.on('dragend', function(e){
+				/*map.on('dragend', function(e){
 						self.reverse_geocode();
-					});
+					});*/
 
-				if (mapzen.whosonfirst.pelias.endpoint()){
+				/*if (mapzen.whosonfirst.pelias.endpoint()){
 
 					//if (mapzen.whosonfirst.pelias.apikey()){
 						var find = document.getElementById("find");
@@ -72,12 +73,12 @@ mapzen.whosonfirst.iamhere = (function(){
 
 					else {
 						mapzen.whosonfirst.feedback.warning("Search is disabled because no API key has been defined");
-					}*/
+					}
 				}
 
 				else {
 					mapzen.whosonfirst.feedback.warning("Search is disabled because no API endpoint has been defined");
-				}
+				}*/
 
 				if (mapzen.whosonfirst.pip.endpoint()){
 					var findme = document.getElementById("findme");
@@ -164,8 +165,12 @@ mapzen.whosonfirst.iamhere = (function(){
 				self.draw_crosshairs();
 				self.update_location();
 
-				self.reverse_geocode(lat, lon);
+				//self.reverse_geocode("1##2##3##4##5##6##7##8");
 				
+			},
+			
+			'add_layer': function(id,layer){
+				current_layers[id]=layer;
 			},
 
 			'on_online': function(){
@@ -524,7 +529,7 @@ mapzen.whosonfirst.iamhere = (function(){
 				*/
 			},
 
-			'reverse_geocode': function(lat, lon){
+			'reverse_geocode': function(id_string){
 				
 				var e = mapzen.whosonfirst.pip.endpoint();
 
@@ -533,11 +538,11 @@ mapzen.whosonfirst.iamhere = (function(){
 					return false;
 				}
 
-				if ((! lat) || (! lon)){
+				/*if ((! lat) || (! lon)){
 					var ll = map.getCenter();
 					lat = ll.lat;
 					lon = ll.lng;
-				}
+				}*/
 
 				var on_success = function(rsp){
 					self.on_reverse_geocode(rsp);
@@ -556,7 +561,7 @@ mapzen.whosonfirst.iamhere = (function(){
 				// https://github.com/whosonfirst/go-whosonfirst-pip/issues/22
 
 				if (count == 0){
-					mapzen.whosonfirst.pip.get_by_latlon(lat, lon, null, on_success, on_fail);
+					mapzen.whosonfirst.pip.get_by_latlon(id_string, null, on_success, on_fail);
 				}
 
 				// this is a BAD BAD DUMB way to do it and fraught with weirdness.
@@ -565,12 +570,12 @@ mapzen.whosonfirst.iamhere = (function(){
 				// caution to the wind...
 				// (20160217/thisisaaronland)
 
-				else {
-					for (var i=0; i < count; i++){
-						var pt = placetypes[i];
-						mapzen.whosonfirst.pip.get_by_latlon(lat, lon, pt, on_success, on_fail);
-					}
-				}
+				// else {
+					// for (var i=0; i < count; i++){
+						// var pt = placetypes[i];
+						// mapzen.whosonfirst.pip.get_by_latlon(lat, lon, pt, on_success, on_fail);
+					// }
+				// }
 
 				var el = document.getElementById("whereami-reversegeo");
 				el.style.cssText = "display:none !important;";
@@ -578,7 +583,6 @@ mapzen.whosonfirst.iamhere = (function(){
 			},
 
 			'on_reverse_geocode': function(possible){
-
 				var count_possible = possible.length;
 				var count_current = current_layers.length;
 
@@ -597,7 +601,6 @@ mapzen.whosonfirst.iamhere = (function(){
 				}
 
 				for (var wofid in current_layers){
-					
 					if (to_keep[wofid]){
 						continue;
 					}
@@ -606,7 +609,6 @@ mapzen.whosonfirst.iamhere = (function(){
 
 					var layer = current_layers[wofid];
 					delete(current_layers[wofid]);
-
 					map.removeLayer(layer);
 				}
 				
@@ -630,8 +632,8 @@ mapzen.whosonfirst.iamhere = (function(){
 					var enc_id  = encodeURIComponent(wofid);
 					var enc_name = mapzen.whosonfirst.php.htmlspecialchars(name);
 
-					var link = '<a href="/~gazetteer/index.wsgi/gazetteer-id/' + enc_id + '/">';
-					link += enc_name
+					var link = '<a href="/place-info/?input_place=' + enc_id +'">';
+					link += enc_name + "(id:" + enc_id + ")";
 					link += '</a>';
 
 					where.push(link);

@@ -18,6 +18,7 @@ from functools import wraps
 from flask import jsonify
 from export_linked_places import export_gazetteer_to_linked_places
 from export_whos_on_first import export_to_whos_on_first
+from tester import printer
 from getpass import getpass
 
 # Py3k compat.
@@ -201,21 +202,14 @@ def export_linked_places():
 
 @app.route('/pip/', methods=['GET', 'POST'])
 def pip():
-    def distance(p1_lat,p1_long,p2_lat,p2_long):
-        multiplier = 6371
-        return ( multiplier * acos( cos( radians(p1_lat) ) * cos( radians(p2_lat) ) * cos( radians(p2_long) - radians(p1_long) ) + sin( radians(p1_lat) ) * sin( radians(p2_lat) ) ) )
-    # dataset.create_function("distance", 4, distance)
-    latitude=get_request_data().get('latitude')
-    longitude=get_request_data().get('longitude')
-    placetype=get_request_data().get('placetype')
-    
+    id_string=get_request_data().get('id_string')
+    id_list = id_string.split("##")
     try:
-        latitude = float(latitude.strip())
-        longitude = float(longitude.strip())
         response = []
-        for r in dataset.query("SELECT g_feature.feature_id, g_feature_name.name,g_feature_code.code FROM g_feature, g_feature_name, g_feature_code WHERE g_feature_code.feature_id=g_feature.feature_id AND g_feature.feature_id=g_feature_name.feature_id AND g_feature_name.primary_display=1 Limit 10"):
-            aux = { "Id": r[0], "Name": r[1], "Placetype": r[2] }
-            response.append(aux)
+        for feature_id in id_list:
+            for r in dataset.query("SELECT DISTINCT name FROM g_feature_name WHERE feature_id=? and primary_display=1", (int(feature_id),)):
+                aux = { "Id": int(feature_id), "Name": r[0], "Placetype": None }
+                response.append(aux)
         return jsonify(response)
     except Exception as e: return jsonify({ "error": repr(e) })
     
@@ -239,6 +233,52 @@ def autocomplete():
         response.append(aux)
     return jsonify(json_list=response)
 
+@app.route('/place-info/', methods=['GET', 'POST'])
+def place_info():
+    r_id = (get_request_data().get('input_place') or '').strip()
+    if not r_id:
+        return  render_template('login.html', results_visible='none', results=[], geoResults=[])
+    id_list=[r_id]
+    pop_up_list=[]
+    results=[]
+    place_info=[]
+    place_info.append(r_id)
+    r_name = dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1", (r_id,)).fetchone()[0]
+    pop_up_list.append(r_name)
+    place_info.append(r_name)
+    r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
+    place_info.append(r_type)
+    
+    raw_local_id= dataset.query("select location_id from g_location where feature_id=?", (r_id,)).fetchone()
+    raw_geometry=None
+    r_geometry=None
+    if(raw_local_id!=None):
+        local_id=raw_local_id[0]
+        raw_geometry = dataset.query("select encoded_geometry from g_location_geometry where location_id=?",(local_id,)).fetchone()
+    if(raw_geometry!=None):
+        r_geometry=raw_geometry[0].split(" ")[0]
+    place_info.append(r_geometry)
+    
+    r_alt_names = []
+    r_related_features=[]
+    for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
+        r_alt_names.append(alt[0])
+    for related in dataset.query("SELECT related_feature_feature_id, related_name from g_related_feature where feature_id = ?", (r_id,)).fetchall():
+        r_related_features.append([related[0],related[1]])
+    if(len(r_alt_names)==0):r_alt_names=None
+    if(len(r_related_features)==0):r_related_features=None
+    place_info.append(r_alt_names)
+    place_info.append(r_related_features)
+    results.append(place_info)
+    
+    geoFlaskResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
+    
+    return render_template('login.html', 
+                           results_visible='visible',
+                           results=results,
+                           geoResults=geoFlaskResults
+                           )
+
 @app.route('/gazetteer-search/', methods=['GET', 'POST'])
 def gazetteer_search():
     text = (get_request_data().get('input_place') or '').strip()
@@ -257,37 +297,14 @@ def gazetteer_search():
         r_name = dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1", (r_id,)).fetchone()[0]
         pop_up_list.append(r_name)
         place_info.append(r_name)
-        r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
-        place_info.append(r_type)
-        
-        raw_local_id= dataset.query("select location_id from g_location where feature_id=?", (r_id,)).fetchone()
-        raw_geometry=None
-        r_geometry=None
-        if(raw_local_id!=None):
-            local_id=raw_local_id[0]
-            raw_geometry = dataset.query("select encoded_geometry from g_location_geometry where location_id=?",(local_id,)).fetchone()
-        if(raw_geometry!=None):
-            r_geometry=raw_geometry[0].split(" ")[0]
-        place_info.append(r_geometry)
-        
-        r_alt_names = []
-        r_related_features=[]
-        for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
-            r_alt_names.append(alt[0])
-        for related in dataset.query("SELECT related_feature_feature_id, related_name from g_related_feature where feature_id = ?", (r_id,)).fetchall():
-            r_related_features.append([related[0],related[1]])
-        if(len(r_alt_names)==0):r_alt_names=None
-        if(len(r_related_features)==0):r_related_features=None
-        place_info.append(r_alt_names)
-        place_info.append(r_related_features)
-        results.append(place_info)
-        
-    geoResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
+    
+  
+    geoFlaskResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
     
     return render_template('login.html', 
-                           results_visible='visible',
-                           results=results,
-                           geoResults=geoResults
+                           results_visible='none',
+                           results=id_list,
+                           geoResults=geoFlaskResults
                            )
 
 #
