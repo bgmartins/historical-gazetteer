@@ -6,12 +6,11 @@ import os
 import sys
 import sqlite3
 import shapefile
-
 conn = sqlite3.connect("../gazetteer.db")
 c = conn.cursor()
 raw_points=[]
 
-for row in c.execute("SELECT west_coordinate,north_coordinate,south_coordinate,east_coordinate,feature_id from g_location where feature_id IN (SELECT DISTINCT feature_id FROM g_classification WHERE classification_term_id=740)"):
+for row in c.execute("SELECT west_coordinate,north_coordinate,south_coordinate,east_coordinate,feature_id from g_location where feature_id IN (SELECT DISTINCT feature_id FROM g_classification WHERE classification_term_id=1202)"):
                      #location_id NOT IN (SELECT DISTINCT location_id FROM g_location_geometry)"):
     aux=[]
     aux.append(row[0])
@@ -37,7 +36,7 @@ sf = shapefile.Reader('shape_tester.shp')
 #Add the vector layer to the map layer registry
     
 # QgsMapLayerRegistry.instance().addMapLayer(pointsVector)
-os.system('gdal_rasterize -tr 0.0001 0.0001 -burn 255 shape_tester.shp ./rasterPoints.tif')
+os.system('gdal_rasterize -tr 0.001 0.001 -burn 255 shape_tester.shp ./rasterPoints.tif')
 #rasterPoints=QgsRasterLayer('./rasterPoints', 'rasterPoints')
 #QgsMapLayerRegistry.instance().addMapLayer(rasterPoints)
 
@@ -78,7 +77,7 @@ outFileName = './rasterVoronoi.tiff'
 #call the driver for the chosen format from GDAL
 driver = gdal.GetDriverByName('GTiff')
 #Create the file with dimensions of the input raster ( rasterized points )
-output = driver.Create(outFileName, height, width, 1, gdal.GDT_Byte)
+output = driver.Create(outFileName, height*10, width*10, 1, gdal.GDT_Byte)
 #set the Raster transformation of the resulting raster
 output.SetGeoTransform(dataset.GetGeoTransform())
 #set the projection of the resulting raster
@@ -99,7 +98,6 @@ sr_proj=output.GetProjection()
 raster_proj = osr.SpatialReference()
 raster_proj.ImportFromWkt(sr_proj)
 band = output.GetRasterBand(1) 
-print(band)
 bandArray = band.ReadAsArray()
 outShapefile = "POLYGON"
 driver = ogr.GetDriverByName("ESRI Shapefile")
@@ -113,17 +111,17 @@ outDatasource.Destroy()
 sourceRaster = None
 
 
-sf = shapefile.Reader("./POLYGON.shp")
-shapes=sf.shapes()
-for shape in shapes:
-    geo_poly = "POLYGON (("
-    print("|||||||||||||||||||||||||||||||||||||||BBOX||||||||||||||||||||||||||||||||||||")
-    for shape_point in shape.points:
-        geo_poly+=str(shape_point[0]) + " " + str(shape_point[1]) + ","
-    geo_poly = geo_poly[:-1]
-    geo_poly+="))"
-    print(shape.bbox)
-    print(geo_poly)
+# sf = shapefile.Reader("./POLYGON.shp")
+# shapes=sf.shapes()
+# for shape in shapes:
+#     geo_poly = "POLYGON (("
+#     print("|||||||||||||||||||||||||||||||||||||||BBOX||||||||||||||||||||||||||||||||||||")
+#     for shape_point in shape.points:
+#         geo_poly+=str(shape_point[0]) + " " + str(shape_point[1]) + ","
+#     geo_poly = geo_poly[:-1]
+#     geo_poly+="))"
+#     print(shape.bbox)
+#     print(geo_poly)
 
 
 print("DONEZO")

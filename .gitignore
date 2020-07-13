@@ -9,3 +9,4 @@ polygon-generation/shapefile_reader.py
 polygon-generation/POLYGON*
 polygon-generation/raster*
 polygon-generation/shape_tester*
+gazetteer.db-journal
