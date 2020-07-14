@@ -15,6 +15,8 @@ if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file_
 conn = sqlite3.connect( database )
 conn.enable_load_extension(True)
 type_dict={
+    'Default': 'populated places',
+    'Admin Regions':'administrative divisions',
     'Estancia': 'resorts',
      'Sujeto': 'populated places',#????????????????
      'Pueblo': 'towns',
@@ -80,7 +82,11 @@ type_dict={
      'MIning Camp': 'mining camps',
      'Political area': 'political areas',
      'Hacienda': 'estates',
-     'Stream': 'streams'
+     'Stream': 'streams',
+     'Municipal Capital': 'state capitals',
+     'Diocese':'religious populated places',
+     'State':'states',
+     'Region':'regions'
     }
 
 relation_dict = {
@@ -120,13 +126,15 @@ def import_features_from_tabular(collection_id,filename,source_desc,source_mnemo
     print(filename)
     for row in range(df[placename].size):
         name=df[placename][row]
+        if(isinstance(name, float)):
+            continue
         type_name="populated places"
         if(feature_type in df):
             type_name=df[feature_type][row]
         if type_name in type_dict:
             type_name=type_dict[type_name]
         else:
-            type_name="populated places"
+            type_name=type_dict[feature_type]
         type_id_db = conn.execute("SELECT scheme_term_id FROM l_scheme_term where term=?",(type_name,)).fetchone()
         entry_source_id = get_identifier("g_entry_source","entry_source_id")
         classification_term_id = conn.execute("SELECT scheme_term_id FROM l_scheme_term WHERE term=? ORDER BY term_order_number, term_rank_number",(type_name,)).fetchone()[0]
@@ -253,14 +261,13 @@ def show_shp_info(shp_path):
 def show_excel_info(filename):  
     file=pd.ExcelFile(filename)
     df = read_excel(filename)
-    print(dir(df))
+    print(df.keys())
         
 collection_id = get_identifier("g_collection", "collection_id")
 # conn.execute("INSERT INTO g_collection VALUES (?, 'New DECM Data', '')", (collection_id,))
 
-# show_shp_info("decm-data/Primary Sources/Acuna_2_Antequera1.shp")
 
-#----------------------------------------------ADDITIONAL DATA--------------------------------------------------------------
+# ----------------------------------------------ADDITIONAL DATA--------------------------------------------------------------
 import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/2_Gobiernos.shp","Placename","Cline 1972 - 2_Gobiernos","Cline","Type",None,'Alt_names','FID_Relate',"Relation",'My_FID2')
 import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/6_Audiencias.shp","Placename","Cline 1972 - 6_Audiencias","Cline","Type",None,'Alt_names','FID_Relate',"Relation",'My_FID2')
 import_polygons_from_shapefile(collection_id,"decm-data/Additional Data/7_Dioceses.shp","Placename","Cline 1972 - 7_Dioceses","Cline","Type",None,'Alt_names','FID_Relate',"Relation",'My_FID2')
@@ -311,44 +318,47 @@ import_polygons_from_shapefile(collection_id,"decm-data/Secondary Sources/Gerhar
 import_polygons_from_shapefile(collection_id,"decm-data/Secondary Sources/MorenoToscano.shp","Placename","Moreno Toscano 1968","Toscano","Type",None,"Alt_names",'FID_Relate',"Relation",'My_FID_MT')
 
 #------------------------------------------Tabular Sources--------------------------------------------------------------------------------------
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/1_Acuña_Guatemala_Index.xlsx","1_Acuña_Guatemala_Index","Acuña","name","alt_names",None,"NOT_FOUND","My_FID1","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/2_Acuña_Antequera1.xlsx","2_Acuña_Antequera1","Acuña","PlaceName","Alt_names","Type","NOT_FOUND","My_FID2","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/3_Acuña_Antequera2.xlsx","3_Acuña_Antequera2","Acuña","PlaceName","Alt_names","Type","NOT_FOUND","My_FID3","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/4_Acuña_Tlaxcala1.xlsx","4_Acuña_Tlaxcala1","Acuña","PlaceName","Alt_names","Type","NOT FOUND","My_FID4","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/5_Acuna_Tlaxcala2.xlsx","5_Acuna_Tlaxcala2","Acuña","Placename","Alt_names","Type","NOT FOUND","My_FID5","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/6_Acuna_Mexico1.xlsx","6_Acuna_Mexico1","Acuña","PlaceName","Alt_names","Type","NOTFOUND","My_FID6","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/7_Acuna_Mexico2.xlsx","7_Acuna_Mexico2","Acuña","PlaceName","Alt_names","Type","NOT FOUND","My_FID7","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/8_Acuna_Mexico3.xlsx","8_Acuna_Mexico3","Acuña","Placename","Alt_names","Type","Not_Found","My_FID8","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/9_Acuna_Michoacan.xlsx","9_Acuna_Michoacan","Acuña","PlaceName","Alt_names","Type","NOT FOUND","My_FID9","Related_Feature_ID")
-import_features_from_tabular(collection_id,"decm-data/Tabular Sources/10_Acuna_NuevaGalicia.xlsx","10_Acuna_NuevaGalicia","Acuña","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/1_Acuña_Guatemala_Index.xlsx","1_Acuña_Guatemala_Index","Acuña","name","alt_names","Default","NOT_FOUND","My_FID1","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/2_Acuña_Antequera1.xlsx","2_Acuña_Antequera1","Acuña","PlaceName","Alt_names","Default","NOT_FOUND","My_FID2","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/3_Acuña_Antequera2.xlsx","3_Acuña_Antequera2","Acuña","PlaceName","Alt_names","Default","NOT_FOUND","My_FID3","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/4_Acuña_Tlaxcala1.xlsx","4_Acuña_Tlaxcala1","Acuña","PlaceName","Alt_names","Default","NOT FOUND","My_FID4","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/5_Acuna_Tlaxcala2.xlsx","5_Acuna_Tlaxcala2","Acuña","Placename","Alt_names","Default","NOT FOUND","My_FID5","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/6_Acuna_Mexico1.xlsx","6_Acuna_Mexico1","Acuña","PlaceName","Alt_names","Default","NOTFOUND","My_FID6","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/7_Acuna_Mexico2.xlsx","7_Acuna_Mexico2","Acuña","PlaceName","Alt_names","Default","NOT FOUND","My_FID7","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/8_Acuna_Mexico3.xlsx","8_Acuna_Mexico3","Acuña","Placename","Alt_names","Default","Not_Found","My_FID8","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/9_Acuna_Michoacan.xlsx","9_Acuna_Michoacan","Acuña","PlaceName","Alt_names","Default","NOT FOUND","My_FID9","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/10_Acuna_NuevaGalicia.xlsx","10_Acuna_NuevaGalicia","Acuña","PlaceName","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1964_1972_relaciones_status.xlsx","Cline 1964 - Relaciones Status","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_archdioceses.xlsx","Cline 1972 - Archdioceses","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_colonial_jurisdictions.xlsx","Cline 1972 - Colonial Jurisdictions","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_ethnohistorical_regions.xlsx","Cline 1972 - Ethnohistorical Regions","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_rg_repositories.xlsx","Cline 1972 - Rg Repositories","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1964_1972_relaciones_status.xlsx","Cline 1964 - Relaciones Status","Cline","Principal Cabecera","Alt_names","Cabecera","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_archdioceses.xlsx","Cline 1972 - Archdioceses","Cline","(arch)diocese","Alt_names","Diocese","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_colonial_jurisdictions.xlsx","Cline 1972 - Colonial Jurisdictions","Cline","modern_unit","Alt_names","Admin Regions","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_ethnohistorical_regions.xlsx","Cline 1972 - Ethnohistorical Regions","Cline","state","Alt_names","State","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/cline_1972_rg_repositories.xlsx","Cline 1972 - Rg Repositories","Cline","principal_cabecera","Alt_names","Cabecera","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Count_municip-states.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Count_municip-states.xlsx","Count_municip-states","municip-states","States","Alt_names","State","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DeLa_Garza_Yucatan_Index2.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DeLa_Garza_Yucatán_RG_status.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DeLaGarza_Index_Yucatan.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DelPasoYTroncoso_Suma_Index.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DeLa_Garza_Yucatan_Index2.xlsx","DeLa_Garza - Yucatan","DeLa_Garza","placename","alternative_placename","Default","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DeLa_Garza_Yucatán_RG_status.xlsx","DeLa_Garza - YucatanRG","DeLa_Garza","Relación","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Echenique_pictogramas_codices.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Echenique_relaciones.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DelPasoYTroncoso_Suma_Index.xlsx","DelPaso - SumaIndex","DelPaso","name","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/garcia_cubas_diccionario_historico.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Echenique_pictogramas_codices.xlsx","Echenique_pictogramas_codices","Echenique","region","Alt_names","Region","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Echenique_relaciones.xlsx","Echenique_relaciones","Echenique","location","location_addtional","Pueblo","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Gerhard1972_AGuide_Index.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Gerhard1972_SE_Frontier_Index.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/garcia_cubas_diccionario_historico.xlsx","Garcia Cubas - Diccionario Historico","Garcia Cubas","Name/Entity/Event/Placename","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/harvey_language_index.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/harvey_language_index_census.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/harvey_language_index_RG.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Gerhard1972_AGuide_Index.xlsx","Gerhard 1972 - A Guide","Gerhard","Name","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/Gerhard1972_SE_Frontier_Index.xlsx","Gerhard 1972 - SE Frontier","Gerhard","Name","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
 
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/MorenoToscano1968_Index.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
-# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/starr_aztec_place-names.xlsx","cline_1964_1972_relaciones_status.xlsx","Cline","PlaceName","Alt_names","Type","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/harvey_language_index.xlsx","Harvey Language - Index","Harvey","communities_propercase","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/harvey_language_index_census.xlsx","Harvey Language - Index Census","Harvey","Communities","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
+
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/MorenoToscano1968_Index.xlsx","Moreno Toscano 1968 - Index","Toscano","name","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
+import_features_from_tabular(collection_id,"decm-data/Tabular Sources/starr_aztec_place-names.xlsx","Starr Aztec Placenames","StarrAztec","placename","alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
+
+#--------------------------------UNKNONW--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# import_features_from_tabular(collection_id,"decm-data/Tabular Sources/DeLaGarza_Index_Yucatan.xlsx","DeLa_Garza - IndexYucatan","DeLa_Garza","PlaceName","Alt_names","Default","NOT FOUND","My_FID10","Related_Feature_ID")
+
 
 # rows = conn.execute("SELECT DISTINCT l2.feature_id, g_feature_name.name, l1.feature_id, g1.time_period_id from g_location_geometry g1, g_location_geometry g2, g_location l1, g_location l2, g_feature_name WHERE within(g1.encoded_geometry,g2.encoded_geometry) AND g1.location_id=l1.location_id AND g2.location_id=l2.location_id AND g_feature_name.feature_id=l2.feature_id AND g_feature_name.primary_display=1 AND g1.time_period_id=g2.time_period_id").fetchall()
 # for row in rows:
