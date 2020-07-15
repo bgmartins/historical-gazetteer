@@ -237,17 +237,12 @@ def autocomplete():
 def place_info():
     r_id = (get_request_data().get('input_place') or '').strip()
     if not r_id:
-        return  render_template('login.html', results_visible='none', results=[], geoResults=[])
+        return  render_template('login.html', results_visible='none', results={}, geoResults=[])
     id_list=[r_id]
     pop_up_list=[]
-    results=[]
-    place_info=[]
-    place_info.append(r_id)
     r_name = dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1", (r_id,)).fetchone()[0]
     pop_up_list.append(r_name)
-    place_info.append(r_name)
     r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
-    place_info.append(r_type)
     
     raw_local_id= dataset.query("select location_id from g_location where feature_id=?", (r_id,)).fetchone()
     raw_geometry=None
@@ -257,19 +252,25 @@ def place_info():
         raw_geometry = dataset.query("select encoded_geometry from g_location_geometry where location_id=?",(local_id,)).fetchone()
     if(raw_geometry!=None):
         r_geometry=raw_geometry[0].split(" ")[0]
-    place_info.append(r_geometry)
     
-    r_alt_names = []
+    r_alt_names = ""
     r_related_features=[]
     for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
-        r_alt_names.append(alt[0])
+        r_alt_names = r_alt_names + alt[0] + ", "
     for related in dataset.query("SELECT related_feature_feature_id, related_name from g_related_feature where feature_id = ?", (r_id,)).fetchall():
         r_related_features.append([related[0],related[1]])
     if(len(r_alt_names)==0):r_alt_names=None
-    if(len(r_related_features)==0):r_related_features=None
-    place_info.append(r_alt_names)
-    place_info.append(r_related_features)
-    results.append(place_info)
+    if(len(r_related_features)==0):r_related_features=None   
+    
+    results={}
+    results['primary_name']=r_name
+    results['alt_names']=r_alt_names
+    results['type']=r_type
+    results['geometry']=r_geometry
+    results['source']="full source"
+    results['mnemonic']="shorter one"
+    results['related_features']=r_related_features
+    results['bbox']=[1,2,3,4] 
     
     geoFlaskResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
     
@@ -283,14 +284,13 @@ def place_info():
 def gazetteer_search():
     text = (get_request_data().get('input_place') or '').strip()
     if not text:
-        return  render_template('login.html', results_visible='none', results=[], geoResults=[])
-    id_query="SELECT feature_id from g_feature_name WHERE primary_display=1 and name LIKE '%"+text+"%' LIMIT 8"
+        return  render_template('login.html', results_visible='none', results={}, geoResults=[])
+    id_query="SELECT feature_id from g_feature_name WHERE primary_display=1 and name LIKE '%"+text+"%' LIMIT 15"
     record_list=dataset.query(id_query).fetchall()
     id_list=[]
     pop_up_list=[]
     for fid in record_list:
         id_list.append(fid[0])
-    results=[]
     for r_id in id_list:
         place_info=[]
         place_info.append(r_id)
@@ -303,7 +303,7 @@ def gazetteer_search():
     
     return render_template('login.html', 
                            results_visible='none',
-                           results=id_list,
+                           results={},
                            geoResults=geoFlaskResults
                            )
 
@@ -317,7 +317,7 @@ def login():
     if request.method == 'POST':
         if request.form.get('password') == app.config['PASSWORD']:
             return redirect(url_for('index'))
-    return render_template('login.html', results_visible='none', results=[],geoResults=[])
+    return render_template('login.html', results_visible='none', results={}, geoResults=[])
 
 @app.route('/logout/', methods=['GET'])
 def logout():

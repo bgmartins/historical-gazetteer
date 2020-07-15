@@ -26,7 +26,7 @@ def export_to_whos_on_first(database, features,names):
                        "properties":{
                            "name": name,
                            "amenity": name,
-                           "popupContent": name + " (id: " + feature + ")"},
+                           "popupContent": name + " (id: " + str(feature) + ")"},
                        "geometry": { "coordinates":None,"type":None}
                        }
             

@@ -1,4 +1,5 @@
 <html>
+<!-- <body style="background-color:#e7e7e7;"> -->
 <head>
 	<link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
     <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
@@ -50,7 +51,6 @@
 <section class="top_container">
 	<div id="login_box">
 		<form action="{{ url_for('login') }}" class="form" method="post">
-				<h4> Login for full access:</h4>
 				<input id="access_box" placeholder="Enter Password" name="password" type="password" value=""/>
 				<button class="login_button" type="submit">Login</button>
 		</form>
@@ -64,31 +64,6 @@
 		</form>
 	</div>
 </section>
-
-<div id="results_section" style="display: {{results_visible}};">
-<table id="resultsTable">
-<thead>
-    <tr>
-      <th>ID</th>
-      <th>Name</th> 
-      <th>Type</th>
-      <th>Geometry</th>
-      <th>Alternative Names</th>
-      <th>Related Features</th>
-    </tr>
-</thead>
-{% for r in results %}
-<tr>
-  <td>{{ r[0] }}</td>
-  <td>{{ r[1] }}</td> 
-  <td>{{ r[2] }}</td>
-  <td>{{ r[3] }}</td>
-  <td>{{ r[4] }}</td>
-  <td>{{ r[5] }}</td>
-</tr>
-{% endfor %}
-</table>
-</div>
 
 <div id="map"><div id="crosshairs" style="background-color:#fff;"></div></div>
 
@@ -108,6 +83,77 @@
 <div id="whereami-feedback"></div>
 
 <div id="wof-log-container"><div id="wof-log"></div></div>
+
+<div id="results_section" style="display: {{results_visible}};">
+	{% if results != {} %}
+	<h2> Data available about {{results.primary_name}}</h2>
+	<div id="properties_section">
+		<h3> Properties: </h3>
+		<div id="place_props">
+			<div> 
+				<h4> Names </h4>
+				<table class="table">
+					<tr>
+						<th>Primary Name</th>
+						<td> {{results.primary_name}} </td>
+					</tr>
+					<tr>
+						<th>Alternative Names</th>
+						<td> {{results.alt_names}} </td>
+					</tr>
+				</table>
+				<h4> Classification </h4>
+				<table class="table">
+					<tr>
+						<th>Term Name</th>
+						<td> {{results.type}}</td>
+					</tr>
+				</table>
+				<h4> Geometry </h4>
+				<table class="table">
+					<tr>
+						<th>Type</th>
+						<td> {{results.geometry}}</td>
+						
+					</tr>
+					<tr>
+						<th>Coordinates</th>
+						<td> {{results.geometry}}</td>
+						
+					</tr>
+					<tr>
+						<th>Area</th>
+						<td> {{results.geometry}}</td>
+					</tr>
+				</table>
+				<h4> Sources </h4>
+				<table class="table">
+					<tr>
+						<th>Full Reference</th>
+						<td> {{results.source}}</td>
+					</tr>
+					<tr>
+						<th> Author/Mnemonic </th>
+						<td> {{results.mnemonic}}</td>
+					</tr>
+				</table>
+				<h4> Related Features </h4>
+				<table class="table">
+					<tr>
+						<th>Related Name + ID</th>
+						<td> {{results.related_features}}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	<h3> Hierarchy </h3>
+	<h3>Bounding box: </h3>
+		
+		<h4>swlat, swlon, nelat, nelon</h4>
+		<pre>{{ results['bbox'][1] }}, {{ results['bbox'][0]}}, {{ results['bbox'][3]}}, {{ results['bbox'][2]}}</pre>
+	</div>
+	{% endif %}
+</div>
 
 <script type="text/javascript">
 $(function() {

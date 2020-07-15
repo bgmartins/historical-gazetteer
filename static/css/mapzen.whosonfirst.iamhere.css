@@ -2,6 +2,15 @@ body {
      margin-top:2em;
      margin-bottom:2em;
 }
+
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+}
+
+th{
+  width: 20%;
+}
 		
 #pass_label {
 	postion:relative;
@@ -41,14 +50,16 @@ body {
 }
 #login_box {
     width: 20%;
-	height: 90%;
+	height: 70%;
 	float: left;
+	margin-left: 10%;
+	margin-top: 5px;
 }
 
 #search_box{
-	margin-left: 40%;
     width: 20%;
 	height: 90%;
+	margin-left: 70%;
 }
 
 #results_section {
@@ -149,7 +160,7 @@ text-align:center;
 #whereami-reversegeo:before {
   font-weight: 200;
   font-size: small; 
-  content: "which appears to be somewhere in ";
+  content: "containing the following features ";
 }
 
 #whereami-feedback {
