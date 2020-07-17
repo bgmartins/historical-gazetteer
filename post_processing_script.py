@@ -27,7 +27,7 @@ def get_identifier(table_name, column_name):
 
 def create_new_relation(feature_1, feature_2, relation_type):
     new_id=get_identifier("g_related_feature","related_feature_id")
-    related_name=conn.execute("SELECT name from g_feature_name where feature_id = ? limit 1", (feature_2,)).fetchone()[0]
+    related_name=conn.execute("SELECT name from g_feature_name where feature_id = ? and primary_display=1 limit 1", (feature_2,)).fetchone()[0]
     conn.execute("INSERT INTO g_related_feature (related_feature_id, feature_id,related_name ,related_feature_feature_id, time_period_id, related_type_term_id,time_period_note) VALUES(?,?,?,?,2,?,NULL)", (new_id,feature_1,related_name,feature_2,relation_type))
 
 def check_geometries_relation(feature_1, feature_2):
@@ -37,15 +37,15 @@ def check_geometries_relation(feature_1, feature_2):
     geo_2=feature_2["geometry"]
     if(geo_1.equals(geo_2) or geo_1.almost_equals(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Equal"])
-    if(geo_1.contains(geo_2)):
+    elif(geo_1.contains(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Member is"])
-    if(geo_1.within(geo_2)):
+    elif(geo_1.within(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Within"])
-    if(geo_1.overlaps(geo_2)):
+    elif(geo_1.overlaps(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Overlap"])
-    if(geo_1.touches(geo_2)):
+    elif(geo_1.touches(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Adjacent"])
-    if(geo_1.distance(geo_2)<0.1):
+    elif(geo_1.distance(geo_2)<0.1):
         create_new_relation(id_1,id_2,relation_dict["Near"])
         
         
@@ -53,10 +53,13 @@ def check_geometries_relation(feature_1, feature_2):
 def process_geometries():
     raw_geometries = conn.execute("SELECT location_id, feature_id, encoded_geometry FROM g_location_geometry Natural Join g_location").fetchall()
     geometries=[]
+    print("getting geometries...")
     for row in raw_geometries:
         if(row[2]!="None"):
             enc_geo = shapely.wkt.loads(row[2])
-            geo_obj={} #shapely.geometry.mapping(enc_geo)
+            enc_geo = enc_geo.simplify(0.2, preserve_topology=False)
+            aux=shapely.geometry.mapping(enc_geo)
+            geo_obj={}
             geo_obj["feature_id"]=row[1]
             geo_obj["geometry"]=enc_geo
             geometries.append(geo_obj)
@@ -64,9 +67,10 @@ def process_geometries():
     print(len(geometries))        
     for a, b in itertools.combinations(geometries, 2):
         if(a["feature_id"] not in progress_status):
-            print(a["feature_id"])
+            print("Inspecting feature id: " + str(a["feature_id"]))
             progress_status.append(a["feature_id"])
-        print(".")
         check_geometries_relation(a, b)
 
 process_geometries()
+
+conn.commit()

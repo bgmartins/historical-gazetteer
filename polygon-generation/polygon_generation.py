@@ -4,8 +4,12 @@ import math
 import numpy as np
 import os
 import sys
+import shutil
+from pprint import pprint
 import sqlite3
 import shapefile
+from shapely.ops import triangulate, polygonize
+
 conn = sqlite3.connect("../gazetteer.db")
 c = conn.cursor()
 raw_points=[]
@@ -19,7 +23,7 @@ for row in c.execute("SELECT west_coordinate,north_coordinate,south_coordinate,e
     raw_points.append(aux)
 
 w = shapefile.Writer('shape_tester')
-w.field('points', 'C')
+w.field('points', 'A')
 
 for point in raw_points:
     w.point(point[0], point[1])
@@ -31,16 +35,10 @@ print(len(raw_points))
 
 sf = shapefile.Reader('shape_tester.shp')
 
-#Get the points vector layer
-# pointsVector = QgsVectorLayer(sys.argv, 'points', 'ogr')
 #Add the vector layer to the map layer registry
-    
-# QgsMapLayerRegistry.instance().addMapLayer(pointsVector)
-os.system('gdal_rasterize -tr 0.001 0.001 -burn 255 shape_tester.shp ./rasterPoints.tif')
-#rasterPoints=QgsRasterLayer('./rasterPoints', 'rasterPoints')
-#QgsMapLayerRegistry.instance().addMapLayer(rasterPoints)
+os.system('gdal_rasterize -tr 0.01 0.01 -burn 255 shape_tester.shp ./rasterPoints')
 
-dataset = gdal.Open('./rasterPoints.tif')
+dataset = gdal.Open('./rasterPoints')
 numpy_array = dataset.ReadAsArray()
 width, height = numpy_array.shape
 points = []
@@ -67,6 +65,7 @@ for row in range(width):
                 index = i
         distanceGrid[row, col] = index
         
+print(distanceGrid)
 
 geotransform = dataset.GetGeoTransform()
 wkt = dataset.GetProjection()
@@ -77,29 +76,73 @@ outFileName = './rasterVoronoi.tiff'
 #call the driver for the chosen format from GDAL
 driver = gdal.GetDriverByName('GTiff')
 #Create the file with dimensions of the input raster ( rasterized points )
-output = driver.Create(outFileName, height*10, width*10, 1, gdal.GDT_Byte)
+output = driver.Create(outFileName, height, width, 1, gdal.GDT_Byte)
 #set the Raster transformation of the resulting raster
 output.SetGeoTransform(dataset.GetGeoTransform())
 #set the projection of the resulting raster
 output.SetProjection(dataset.GetProjection())
+
+# create color table
+colors = gdal.ColorTable()
+
+# set color for each value
+colors.SetColorEntry(1, (112, 153, 89))
+colors.SetColorEntry(2, (242, 238, 162))
+colors.SetColorEntry(3, (242, 206, 133))
+colors.SetColorEntry(4, (194, 140, 124))
+colors.SetColorEntry(5, (214, 193, 156))
+colors.SetColorEntry(6, (20, 113, 156))
+colors.SetColorEntry(7, (180, 13, 156))
+colors.SetColorEntry(8, (47, 70, 156))
+colors.SetColorEntry(9, (145, 123, 156))
+colors.SetColorEntry(10, (203, 178, 156))
+colors.SetColorEntry(11, (123, 10, 156))
+colors.SetColorEntry(12, (89, 35, 156))
+colors.SetColorEntry(13, (111, 93, 156))
+colors.SetColorEntry(14, (56, 83, 156))
+colors.SetColorEntry(15, (160, 150, 156))
+colors.SetColorEntry(16, (112, 153, 89))
+colors.SetColorEntry(17, (242, 238, 162))
+colors.SetColorEntry(18, (242, 206, 133))
+colors.SetColorEntry(19, (194, 140, 124))
+colors.SetColorEntry(20, (214, 193, 156))
+colors.SetColorEntry(21, (20, 113, 156))
+colors.SetColorEntry(22, (180, 13, 156))
+colors.SetColorEntry(23, (47, 70, 156))
+colors.SetColorEntry(24, (145, 123, 156))
+colors.SetColorEntry(25, (203, 178, 156))
+colors.SetColorEntry(26, (123, 10, 156))
+colors.SetColorEntry(27, (89, 35, 156))
+colors.SetColorEntry(28, (111, 93, 156))
+colors.SetColorEntry(29, (56, 83, 156))
+colors.SetColorEntry(30, (160, 150, 156))
+
+output.GetRasterBand(1).SetRasterColorTable(colors)
+output.GetRasterBand(1).SetRasterColorInterpretation(gdal.GCI_PaletteIndex)
+
 #insert data to the resulting raster in band 1 from the weighted distance grid
 output.GetRasterBand(1).WriteArray(distanceGrid)
 #setting no data value
-output.GetRasterBand(1).SetNoDataValue(-999)
-#setting extension of output raster
+# output.GetRasterBand(1).SetNoDataValue(-999)
+# #setting extension of output raster
 # top left x, w-e pixel resolution, rotation, top left y, rotation, n-s pixel resolution
-output.SetGeoTransform(geotransform)
+# output.SetGeoTransform(geotransform)
 # setting spatial reference of output raster
+
+# shutil.copy2('rasterVoronoi.tiff', 'VORONOI_IMAGE.tiff')
+
 srs = osr.SpatialReference()
 srs.ImportFromWkt(wkt)
 output.SetProjection( srs.ExportToWkt() )
 
+
 sr_proj=output.GetProjection()
+print(sr_proj)
 raster_proj = osr.SpatialReference()
 raster_proj.ImportFromWkt(sr_proj)
 band = output.GetRasterBand(1) 
 bandArray = band.ReadAsArray()
-outShapefile = "POLYGON"
+outShapefile = "VORONOI"
 driver = ogr.GetDriverByName("ESRI Shapefile")
 outDatasource = driver.CreateDataSource(outShapefile+ ".shp")
 outLayer = outDatasource.CreateLayer('polygonized', srs=raster_proj)
@@ -111,29 +154,11 @@ outDatasource.Destroy()
 sourceRaster = None
 
 
-# sf = shapefile.Reader("./POLYGON.shp")
+# sf = shapefile.Reader("./VORONOI.shp")
 # shapes=sf.shapes()
 # for shape in shapes:
-#     geo_poly = "POLYGON (("
-#     print("|||||||||||||||||||||||||||||||||||||||BBOX||||||||||||||||||||||||||||||||||||")
-#     for shape_point in shape.points:
-#         geo_poly+=str(shape_point[0]) + " " + str(shape_point[1]) + ","
-#     geo_poly = geo_poly[:-1]
-#     geo_poly+="))"
-#     print(shape.bbox)
-#     print(geo_poly)
+#     print(dir(shape.points))
+#     break
 
 
 print("DONEZO")
-
-'''
-#Call the raster output file
-rasterVoronoi = QgsRasterLayer('./rasterVoronoi.tiff', 'weighted Raster')
-#Add it to the map layer registry ( display it on the map)
-QgsMapLayerRegistry.instance().addMapLayer(rasterVoronoi)
-
-weightedVoronoiVector = QgsVectorLayer('./WeightedVoronoi.shp', 'weighted voronoi', 'ogr')
-#load the vector weighted voronoi diagram
-QgsMapLayerRegistry.instance().addMapLayer(weightedVoronoiVector)
-# #print "all cells with a weighted value"
-'''
