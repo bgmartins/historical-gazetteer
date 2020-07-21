@@ -113,17 +113,17 @@
 				<table class="table">
 					<tr>
 						<th>Type</th>
-						<td> {{results.geometry}}</td>
+						<td> {{results.geometry.type}}</td>
 						
 					</tr>
 					<tr>
 						<th>Coordinates</th>
-						<td> {{results.geometry}}</td>
+						<td> {{results.geometry.coordinates}}</td>
 						
 					</tr>
 					<tr>
 						<th>Area</th>
-						<td> {{results.geometry}}</td>
+						<td> {{results.geometry.area}}</td>
 					</tr>
 				</table>
 				<h4> Sources </h4>
@@ -139,18 +139,23 @@
 				</table>
 				<h4> Related Features </h4>
 				<table class="table">
-					<tr>
-						<th>Related Name + ID</th>
-						<td> {{results.related_features}}</td>
+					{% for related in results.related_features %}
+					<tr class='clickable-row' data-href="/place-info/?input_place={{related[1]}}" method = POST>
+						<th>Primary Name</th>
+						<td> {{related[0]}}</td>
+						<th>Related ID</th>
+						<td> {{related[1]}}</td>
+						<th> Relation Type</th>
+						<td> {{related[2]}}</td>
 					</tr>
+					{%endfor%}
 				</table>
 			</div>
 		</div>
-	<h3> Hierarchy </h3>
+	<h3> Hierarchy: </h3>
 	<h3>Bounding box: </h3>
-		
 		<h4>swlat, swlon, nelat, nelon</h4>
-		<pre>{{ results['bbox'][1] }}, {{ results['bbox'][0]}}, {{ results['bbox'][3]}}, {{ results['bbox'][2]}}</pre>
+		<pre>{{results['bbox']}}</pre>
 	</div>
 	{% endif %}
 </div>
@@ -171,6 +176,12 @@ $(function() {
     });
 });
 
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+
 let myStyle = {
 	"color": "#2424da",
 	"weight": 2,
@@ -187,11 +198,10 @@ let geojsonMarkerOptions = {
 };
 
 function map_painter(geoResults) {
-	console.log("-------------------GEORES------------------");
 	let map_obj = mapzen.whosonfirst.leaflet.tangram.map('map');
 	let jsonResults = JSON.parse(geoResults);
 	if(Array.isArray(jsonResults)){
-		mapzen.whosonfirst.iamhere.reverse_geocode("1##2##3##4##5##6##7##8");
+		mapzen.whosonfirst.iamhere.reverse_geocode("1##2##3##4##5##6##7##8##9");
 		return;
 	}
 	console.log(jsonResults.length);

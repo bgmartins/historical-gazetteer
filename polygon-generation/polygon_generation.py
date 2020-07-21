@@ -8,14 +8,15 @@ import shutil
 from pprint import pprint
 import sqlite3
 import shapefile
-from shapely.ops import triangulate, polygonize
+from shapely.ops import triangulate, polygonize, cascaded_union
+import shapely
+import shapely.wkt
 
 conn = sqlite3.connect("../gazetteer.db")
 c = conn.cursor()
 raw_points=[]
 
 for row in c.execute("SELECT west_coordinate,north_coordinate,south_coordinate,east_coordinate,feature_id from g_location where feature_id IN (SELECT DISTINCT feature_id FROM g_classification WHERE classification_term_id=1202)"):
-                     #location_id NOT IN (SELECT DISTINCT location_id FROM g_location_geometry)"):
     aux=[]
     aux.append(row[0])
     aux.append(row[1])
@@ -131,11 +132,10 @@ output.GetRasterBand(1).WriteArray(distanceGrid)
 
 # shutil.copy2('rasterVoronoi.tiff', 'VORONOI_IMAGE.tiff')
 
+#raster to shapefile
 srs = osr.SpatialReference()
 srs.ImportFromWkt(wkt)
 output.SetProjection( srs.ExportToWkt() )
-
-
 sr_proj=output.GetProjection()
 print(sr_proj)
 raster_proj = osr.SpatialReference()
@@ -148,17 +148,38 @@ outDatasource = driver.CreateDataSource(outShapefile+ ".shp")
 outLayer = outDatasource.CreateLayer('polygonized', srs=raster_proj)
 newField = ogr.FieldDefn(str(1), ogr.OFTInteger)
 outLayer.CreateField(newField)
-
 gdal.Polygonize( band, None, outLayer, -1, [], callback=None )
 outDatasource.Destroy()
 sourceRaster = None
+#shapefile into union
+sf = shapefile.Reader("./VORONOI.shp")
+shapes=sf.shapes()
 
+polygons=[]
+for shape in shapes:
+    poly = shapely.geometry.Polygon(shape.points)
+    # enc_geo = poly.simplify(0.1, preserve_topology=False)
+    polygons.append(poly)
 
-# sf = shapefile.Reader("./VORONOI.shp")
-# shapes=sf.shapes()
-# for shape in shapes:
-#     print(dir(shape.points))
-#     break
+poly_union=cascaded_union(polygons) 
+print(poly_union)
 
+driver = ogr.GetDriverByName('Esri Shapefile')
+ds = driver.CreateDataSource('final_poly.shp')
+layer = ds.CreateLayer('', None, ogr.wkbPolygon)
+# Add one attribute
+layer.CreateField(ogr.FieldDefn('id', ogr.OFTInteger))
+defn = layer.GetLayerDefn()
+## If there are multiple geometries, put the "for" loop here
+# Create a new feature (attribute and geometry)
+feat = ogr.Feature(defn)
+feat.SetField('id', 123)
+# Make a geometry, from Shapely object
+geom = ogr.CreateGeometryFromWkb(poly_union.wkb)
+feat.SetGeometry(geom)
+layer.CreateFeature(feat)
+feat = geom = None  # destroy these
+# Save and close everything
+outlayer = ds = layer = feat = geom = None
 
 print("DONEZO")

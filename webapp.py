@@ -20,6 +20,7 @@ from export_linked_places import export_gazetteer_to_linked_places
 from export_whos_on_first import export_to_whos_on_first
 from tester import printer
 from getpass import getpass
+import shapely
 
 # Py3k compat.
 if sys.version_info[0] == 3:
@@ -184,11 +185,14 @@ class SqliteDataSet(DataSet):
 
 @app.route('/linked-places/', methods=['GET', 'POST'])
 def export_linked_places():
-    flash("Please wait. The processing may take a while...")
+    flash("Please wait. The processing the data in the linked places format may take a while...")
     mimetype = 'text/javascript'
     data = export_gazetteer_to_linked_places(dataset.filename)
     filename="export_lfp.json"
-    os.remove(filename)
+    try:
+        os.remove(filename)
+    except OSError:
+        pass
     file_obj = open(filename, 'w', encoding='utf8')
     json.dump(data,file_obj)
     response_data=file_obj
@@ -251,26 +255,37 @@ def place_info():
         local_id=raw_local_id[0]
         raw_geometry = dataset.query("select encoded_geometry from g_location_geometry where location_id=?",(local_id,)).fetchone()
     if(raw_geometry!=None):
-        r_geometry=raw_geometry[0].split(" ")[0]
+        raw_geometry=raw_geometry[0]
+    P = shapely.wkt.loads(raw_geometry).simplify(0.2, preserve_topology=False)
+    MP = shapely.geometry.mapping(P)
+    area=P.area
+    MP["area"] = P.area
+    
+    name_id=dataset.query("select feature_name_id FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1",(r_id,)).fetchone()[0]
+    source_id = dataset.query("select source_reference_id from g_name_to_link_info_reference where feature_name_id=?",(name_id,)).fetchone()[0]
+    mnemonic = dataset.query("select source_mnemonic from g_source where source_reference_id=?",(source_id,)).fetchone()[0]
+    source_desc = dataset.query("select citation from l_source_reference where source_reference_id=?",(source_id,)).fetchone()[0]
     
     r_alt_names = ""
     r_related_features=[]
     for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
         r_alt_names = r_alt_names + alt[0] + ", "
-    for related in dataset.query("SELECT related_feature_feature_id, related_name from g_related_feature where feature_id = ?", (r_id,)).fetchall():
-        r_related_features.append([related[0],related[1]])
-    if(len(r_alt_names)==0):r_alt_names=None
-    if(len(r_related_features)==0):r_related_features=None   
+    for related in dataset.query("SELECT related_name, related_feature_feature_id from g_related_feature where feature_id = ?", (r_id,)).fetchall():
+        r_related_features.append([related[0],related[1],"type goes herino"])
+    if(len(r_alt_names)==0):
+        r_alt_names=None
+    if(len(r_related_features)==0):
+        r_related_features=[]   
     
     results={}
     results['primary_name']=r_name
     results['alt_names']=r_alt_names
     results['type']=r_type
-    results['geometry']=r_geometry
-    results['source']="full source"
-    results['mnemonic']="shorter one"
+    results['geometry']=MP
+    results['source']=source_desc
+    results['mnemonic']=mnemonic
     results['related_features']=r_related_features
-    results['bbox']=[1,2,3,4] 
+    results['bbox']=P.bounds
     
     geoFlaskResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
     

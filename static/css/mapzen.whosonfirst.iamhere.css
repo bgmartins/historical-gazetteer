@@ -11,6 +11,11 @@ table {
 th{
   width: 20%;
 }
+
+tr.clickable-row:hover{
+	background-color:#ea66c4;
+	cursor: pointer;
+}
 		
 #pass_label {
 	postion:relative;

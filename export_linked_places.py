@@ -9,7 +9,6 @@ base_data = {
 }
 
 def export_gazetteer_to_linked_places( database ):
-  os.remove("export_lfp_data.json") 
   data = base_data
   if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
   conn = sqlite3.connect( database )
