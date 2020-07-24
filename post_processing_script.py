@@ -45,8 +45,8 @@ def check_geometries_relation(feature_1, feature_2):
         create_new_relation(id_1,id_2,relation_dict["Overlap"])
     elif(geo_1.touches(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Adjacent"])
-    elif(geo_1.distance(geo_2)<0.1):
-        create_new_relation(id_1,id_2,relation_dict["Near"])
+    # elif(geo_1.distance(geo_2)<0.1):
+    #     create_new_relation(id_1,id_2,relation_dict["Near"])
         
         
 
@@ -57,7 +57,7 @@ def process_geometries():
     for row in raw_geometries:
         if(row[2]!="None"):
             enc_geo = shapely.wkt.loads(row[2])
-            enc_geo = enc_geo.simplify(0.2, preserve_topology=False)
+            enc_geo = enc_geo.simplify(0.1, preserve_topology=True)
             aux=shapely.geometry.mapping(enc_geo)
             geo_obj={}
             geo_obj["feature_id"]=row[1]
@@ -70,6 +70,7 @@ def process_geometries():
             print("Inspecting feature id: " + str(a["feature_id"]))
             progress_status.append(a["feature_id"])
         check_geometries_relation(a, b)
+        check_geometries_relation(b, a)
 
 process_geometries()
 

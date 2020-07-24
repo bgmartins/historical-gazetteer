@@ -11,6 +11,18 @@ import json
 import sqlite3
 import shapely.wkt
 
+relation_dict = {
+    'Depends on': 1263,
+    'Estancia': 1263,
+    'Near': 1265,
+    'Within': 1268,
+    'Member is': 1269,
+    'None': 1263,
+    'Equal': 1276,
+    'Overlap':1266,
+    'Adjacent': 1265
+    }
+
 def export_to_whos_on_first(database, features,names):
     data = {
         "type" : "FeatureCollection",
@@ -54,5 +66,20 @@ def export_to_whos_on_first(database, features,names):
         data["features"].append(feature_obj)
     return data
 
-if __name__ == '__main__':
-  export_to_whos_on_first('gazetteer.db')
+def path_to_top(base_id,conn):
+    related_list = conn.execute("select related_feature_feature_id from g_related_feature where feature_id=? and related_type_term_id=1268 order by related_feature_feature_id DESC",(base_id,)).fetchall()
+    return_list=[]
+    print(related_list)
+    for related in related_list:
+        new_list = path_to_top(related[0],conn)
+        print(new_list)
+        return_list.append(new_list)
+    if(return_list==[]):
+        return []
+    return return_list
+
+def create_hierarchy(database,base_id):
+    if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
+    conn = sqlite3.connect(database)
+    return []
+

@@ -37,7 +37,7 @@ print(len(raw_points))
 sf = shapefile.Reader('shape_tester.shp')
 
 #Add the vector layer to the map layer registry
-os.system('gdal_rasterize -tr 0.01 0.01 -burn 255 shape_tester.shp ./rasterPoints')
+os.system('gdal_rasterize -tr 0.005 0.005 -burn 255 shape_tester.shp ./rasterPoints')
 
 dataset = gdal.Open('./rasterPoints')
 numpy_array = dataset.ReadAsArray()
@@ -123,15 +123,9 @@ output.GetRasterBand(1).SetRasterColorInterpretation(gdal.GCI_PaletteIndex)
 
 #insert data to the resulting raster in band 1 from the weighted distance grid
 output.GetRasterBand(1).WriteArray(distanceGrid)
-#setting no data value
-# output.GetRasterBand(1).SetNoDataValue(-999)
-# #setting extension of output raster
-# top left x, w-e pixel resolution, rotation, top left y, rotation, n-s pixel resolution
-# output.SetGeoTransform(geotransform)
-# setting spatial reference of output raster
+output=None
 
-# shutil.copy2('rasterVoronoi.tiff', 'VORONOI_IMAGE.tiff')
-
+output = gdal.Open('rasterVoronoi.tiff')
 #raster to shapefile
 srs = osr.SpatialReference()
 srs.ImportFromWkt(wkt)
@@ -158,8 +152,8 @@ shapes=sf.shapes()
 polygons=[]
 for shape in shapes:
     poly = shapely.geometry.Polygon(shape.points)
-    # enc_geo = poly.simplify(0.1, preserve_topology=False)
-    polygons.append(poly)
+    enc_geo = poly.simplify(0.05, preserve_topology=True)
+    polygons.append(enc_geo)
 
 poly_union=cascaded_union(polygons) 
 print(poly_union)
@@ -172,14 +166,15 @@ layer.CreateField(ogr.FieldDefn('id', ogr.OFTInteger))
 defn = layer.GetLayerDefn()
 ## If there are multiple geometries, put the "for" loop here
 # Create a new feature (attribute and geometry)
-feat = ogr.Feature(defn)
-feat.SetField('id', 123)
-# Make a geometry, from Shapely object
-geom = ogr.CreateGeometryFromWkb(poly_union.wkb)
-feat.SetGeometry(geom)
-layer.CreateFeature(feat)
+for poly in polygons:
+    feat = ogr.Feature(defn)
+    feat.SetField('id', 123)
+    # Make a geometry, from Shapely object
+    geom = ogr.CreateGeometryFromWkb(poly.wkb)
+    feat.SetGeometry(geom)
+    layer.CreateFeature(feat)
 feat = geom = None  # destroy these
 # Save and close everything
-outlayer = ds = layer = feat = geom = None
+output = outlayer = ds = layer = feat = geom = None
 
 print("DONEZO")

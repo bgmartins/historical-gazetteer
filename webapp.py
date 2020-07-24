@@ -17,8 +17,7 @@ from collections import namedtuple, OrderedDict
 from functools import wraps
 from flask import jsonify
 from export_linked_places import export_gazetteer_to_linked_places
-from export_whos_on_first import export_to_whos_on_first
-from tester import printer
+from export_whos_on_first import export_to_whos_on_first, create_hierarchy
 from getpass import getpass
 import shapely
 
@@ -270,8 +269,9 @@ def place_info():
     r_related_features=[]
     for alt in dataset.query("SELECT name FROM g_feature_name WHERE feature_id= ? and primary_display=0 LIMIT 1",(r_id,)).fetchall():
         r_alt_names = r_alt_names + alt[0] + ", "
-    for related in dataset.query("SELECT related_name, related_feature_feature_id from g_related_feature where feature_id = ?", (r_id,)).fetchall():
-        r_related_features.append([related[0],related[1],"type goes herino"])
+    for related in dataset.query("SELECT related_name, related_feature_feature_id, related_type_term_id from g_related_feature where feature_id = ?", (r_id,)).fetchall():
+        related_type_term = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id=?",(related[2],)).fetchone()[0]
+        r_related_features.append([related[0],related[1],related_type_term])
     if(len(r_alt_names)==0):
         r_alt_names=None
     if(len(r_related_features)==0):
@@ -285,6 +285,7 @@ def place_info():
     results['source']=source_desc
     results['mnemonic']=mnemonic
     results['related_features']=r_related_features
+    results['hierarchy']=create_hierarchy("gazetteer.db",r_id)
     results['bbox']=P.bounds
     
     geoFlaskResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
