@@ -247,6 +247,8 @@ def place_info():
     pop_up_list.append(r_name)
     r_type = dataset.query("SELECT term FROM l_scheme_term WHERE scheme_term_id IN (SELECT classification_term_id FROM g_classification WHERE feature_id= ? LIMIT 1)", (r_id,)).fetchone()[0]
     
+    time_period_id = dataset.query("select time_period_id from g_feature where feature_id = ?", (r_id,)).fetchone()[0]
+    time_period_term = dataset.query("select time_period_name from g_time_period_to_period_name natural join l_time_period_name where time_period_id = ?", (time_period_id,)).fetchone()[0]
     raw_local_id= dataset.query("select location_id from g_location where feature_id=?", (r_id,)).fetchone()
     raw_geometry=None
     r_geometry=None
@@ -281,6 +283,8 @@ def place_info():
     results['primary_name']=r_name
     results['alt_names']=r_alt_names
     results['type']=r_type
+    results['time_period_term']=time_period_term
+    results['time_period_span']=""
     results['geometry']=MP
     results['source']=source_desc
     results['mnemonic']=mnemonic
