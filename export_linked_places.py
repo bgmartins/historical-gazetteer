@@ -8,7 +8,7 @@ base_data = {
   "features": []
 }
 
-def export_gazetteer_to_linked_places( database ):
+def export_gazetteer_to_linked_places(database,list_of_features):
   data = base_data
   if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
   conn = sqlite3.connect( database )

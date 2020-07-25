@@ -13,7 +13,7 @@ th{
 }
 
 tr.clickable-row:hover{
-	background-color:#ea66c4;
+	background-color:#eeeeee;
 	cursor: pointer;
 }
 		
@@ -31,7 +31,7 @@ tr.clickable-row:hover{
 	border:none;
 	background-color:#FFF;
 	font-size:1.4em;
-	color: #2E78A8;
+	color: #4019FF;
 	display:none;
 }
 

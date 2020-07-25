@@ -633,7 +633,7 @@ mapzen.whosonfirst.iamhere = (function(){
 					var enc_name = mapzen.whosonfirst.php.htmlspecialchars(name);
 
 					var link = '<a href="/place-info/?input_place=' + enc_id +'">';
-					link += enc_name + "(id:" + enc_id + ")";
+					link += enc_name + " (id:" + enc_id + ")";
 					link += '</a>';
 
 					where.push(link);

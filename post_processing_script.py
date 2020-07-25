@@ -45,22 +45,19 @@ def check_geometries_relation(feature_1, feature_2):
         create_new_relation(id_1,id_2,relation_dict["Overlap"])
     elif(geo_1.touches(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Adjacent"])
-    # elif(geo_1.distance(geo_2)<0.1):
-    #     create_new_relation(id_1,id_2,relation_dict["Near"])
-        
         
 
 def process_geometries():
-    raw_geometries = conn.execute("SELECT location_id, feature_id, encoded_geometry FROM g_location_geometry Natural Join g_location").fetchall()
+    raw_geometries = conn.execute("SELECT feature_id, encoded_geometry FROM g_location_geometry Natural Join g_location").fetchall()
     geometries=[]
     print("getting geometries...")
     for row in raw_geometries:
-        if(row[2]!="None"):
-            enc_geo = shapely.wkt.loads(row[2])
+        if(row[1]!="None"):
+            enc_geo = shapely.wkt.loads(row[1])
             enc_geo = enc_geo.simplify(0.1, preserve_topology=True)
             aux=shapely.geometry.mapping(enc_geo)
             geo_obj={}
-            geo_obj["feature_id"]=row[1]
+            geo_obj["feature_id"]=row[0]
             geo_obj["geometry"]=enc_geo
             geometries.append(geo_obj)
     print("checking geometry relations...")

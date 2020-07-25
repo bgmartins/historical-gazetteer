@@ -88,7 +88,6 @@
 	{% if results != {} %}
 	<h2> Data available about {{results.primary_name}}</h2>
 	<div id="properties_section">
-		<h3> Properties: </h3>
 		<h3> Primary Hierarchy: </h3>
 			<table class="table">
 				{% for related in results.hierarchy %}
@@ -100,6 +99,7 @@
 		<h3>Bounding box: </h3>
 			<h4>swlat, swlon, nelat, nelon</h4>
 			<pre>{{results['bbox']}}</pre>
+		<h3> Properties: </h3>
 		<div id="place_props">
 			<div> 
 				<h4> Names </h4>
