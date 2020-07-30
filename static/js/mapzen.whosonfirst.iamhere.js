@@ -613,7 +613,7 @@ mapzen.whosonfirst.iamhere = (function(){
 				}
 				
 				var li = document.getElementById("whereami-reversegeo");
-				li.style.cssText = "display:inline !important;";
+				li.style.cssText = "display:inline !important; color:";
 
 				if (! count_possible){
 					li.innerHTML = "a place we don't know about";

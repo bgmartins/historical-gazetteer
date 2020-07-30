@@ -53,18 +53,23 @@ tr.clickable-row:hover{
   margin: auto;
   padding: 10px;
 }
+
+#top_export_section {
+	display:inline;
+	float:left;
+	margin-left: 20%;
+	margin-bottom:5%;
+}
+
 #login_box {
-    width: 20%;
-	height: 70%;
+	margin-top:25px;
 	float: left;
-	margin-left: 10%;
-	margin-top: 5px;
 }
 
 #search_box{
-    width: 20%;
-	height: 90%;
-	margin-left: 70%;
+	margin-top:25px;
+	float:left;
+	margin-left: 20%;
 }
 
 #results_section {

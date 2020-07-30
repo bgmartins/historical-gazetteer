@@ -2,6 +2,7 @@ import sqlite3
 import os
 import shapely.wkt
 import itertools
+
 database="gazetteer.db"
 if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
 conn = sqlite3.connect( database )

@@ -55,10 +55,23 @@
 				<button class="login_button" type="submit">Login</button>
 		</form>
 	</div>
-
+	<div id = "top_export_section">
+		<form id="export_form" method="POST" action="{{ url_for('main_page_export') }}">
+			<p>Select Export Options (span and format)</p>
+				<select id="query" name="query">
+					<option value="##">All Database</option>
+				</select>
+				<select id="format" name="format">
+					<option value="lp">Linked Places</option>
+					<option value="csv">CSV</option>
+					<option value="shp">Shapefile</option>
+				</select>
+			<button>Export</button>
+		</form>
+	</div>
 	<div class="whereami-controls whereami-search" id="search_box">
 		<form action="{{ url_for('gazetteer_search') }}" class="form" method="GET" >
-		<input id="input_place" name="input_place" type="text"/>
+		<input id="input_place" name="input_place" type="text" autocomplete="off"/>
 		<button id="find" type="submit">Search</button>
 		<button id="findme" title="find my location">⌖</button>
 		</form>
@@ -175,6 +188,7 @@
 </div>
 
 <script type="text/javascript">
+
 $(function() {
     $("#input_place").autocomplete({
         source:function(request, response) {
@@ -204,22 +218,23 @@ let myStyle = {
 
 let geojsonMarkerOptions = {
     radius: 6,
-    fillColor: "#e515a9",
+    fillColor: "#e30505",
     color: "#fffff",
     weight: 1,
     opacity: 1,
     fillOpacity: 0.9
 };
 
+const deafult_string = "1##2##3##4##5##6##7##8##9";
+
 function map_painter(geoResults) {
 	let map_obj = mapzen.whosonfirst.leaflet.tangram.map('map');
 	let jsonResults = JSON.parse(geoResults);
 	if(Array.isArray(jsonResults)){
-		mapzen.whosonfirst.iamhere.reverse_geocode("1##2##3##4##5##6##7##8##9");
+		$('#query').append($("<option>", { value: deafult_string, html: "Export Map Places" }));
+		mapzen.whosonfirst.iamhere.reverse_geocode(deafult_string);
 		return;
 	}
-	console.log(jsonResults.length);
-	console.log(jsonResults);
 	let id_string="";
 	for(const feature of jsonResults["features"]){
 		if(feature["geometry"]["coordinates"]){
@@ -242,9 +257,11 @@ function map_painter(geoResults) {
 			else if(geojsonFeature["geometry"]["type"]==="Polygon" || geojsonFeature["geometry"]["type"]==="MultiPolygon"){
 				let new_layer = mapzen.whosonfirst.leaflet.draw_poly(map_obj,geojsonFeature,myStyle);
 			}
-			mapzen.whosonfirst.iamhere.reverse_geocode(id_string.substring(0, id_string.length - 2));
 		}
 	}
+	let query_string = id_string.substring(0, id_string.length - 2);
+	$('#query').append($("<option>", { value: query_string, html: "Export Map Places" }));
+	mapzen.whosonfirst.iamhere.reverse_geocode(query_string);
 }
 
 window.onload = function(e){
