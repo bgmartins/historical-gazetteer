@@ -17,6 +17,7 @@ def inspect_file(filename):
         if feature[1] in text:
             conn.execute("update g_feature set time_period_id=30 where feature_id=?",(feature[0],))
     
+#filter by source file
 inspect_file("decm-data/Corpus/1_RG_Guatemala _Acuna.txt")
 inspect_file("decm-data/Corpus/2_RG_Antequera_T1_Acuna.txt")
 inspect_file("decm-data/Corpus/3_RG_Antequera_T2_Acuna.txt")

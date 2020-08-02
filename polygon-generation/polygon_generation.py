@@ -18,9 +18,11 @@ raw_points=[]
 
 for row in c.execute("SELECT west_coordinate,north_coordinate,south_coordinate,east_coordinate,feature_id from g_location where feature_id in (13,14,15,16,17,18,19,20)"):
     aux=[]
-    aux.append(row[0])
-    aux.append(row[1])
-    aux.append(row[2])
+    lat=row[0]+row[3]/2
+    long=row[1]+row[2]/2
+    aux.append(lat)
+    aux.append(long)
+    aux.append(1)
     raw_points.append(aux)
 
 w = shapefile.Writer('shape_tester')
@@ -53,6 +55,8 @@ for row in range(width):
             points.append([row, col, numpy_array[row,col]])
 
 print("compute the weighted distance grid for each point")
+
+#ocurrencia no corpus para pesos
 
 distanceGrid = np.zeros(shape = (width, height))
 for row in range(width):

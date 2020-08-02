@@ -16,7 +16,8 @@ from math import sin, cos, acos, radians
 from collections import namedtuple, OrderedDict
 from functools import wraps
 from flask import jsonify
-from export_linked_places import export_gazetteer_to_linked_places, printer
+from flask import send_file
+from export_linked_places import export_gazetteer_to_linked_places, create_csv_sql, export_gazetteer_to_shp_file, printer
 from export_whos_on_first import export_to_whos_on_first, create_hierarchy
 from getpass import getpass
 import shapely
@@ -184,20 +185,21 @@ class SqliteDataSet(DataSet):
 
 @app.route('/main-page-export', methods=['POST'])
 def main_page_export():
-    os
     query=get_request_data().get('query')
     export_format=get_request_data().get('format')
     
-    filename="export_lpf.json"
-    data = export_gazetteer_to_linked_places(query)
-    
-    # try:
-    #     os.remove(filename)
-    # except OSError:
-    #     pass
-    # file_obj = open(filename, 'w', encoding='utf8')
-    # json.dump(data,file_obj)
-    # response_data=file_obj
+    if(export_format=="lp"):    
+        filename="export_file.json"
+        data = export_gazetteer_to_linked_places(query)
+    elif(export_format=="csv"):
+        sql = create_csv_sql(query)
+        return export("g_feature", sql, export_format)
+    elif(export_format=="shp"):
+        filename="export_file.shp"
+        data = export_gazetteer_to_shp_file(query)
+        return send_file(filename,attachment_filename=filename, as_attachment=True)
+    else:
+        return
     response = make_response(data)
     response.headers['Content-Type'] = "text/javascript"
     response.headers['Content-Disposition'] = 'attachment; filename=%s' % (filename)
@@ -707,7 +709,6 @@ def export(table, sql, export_format):
         filename = '%s-export.csv' % table
         mimetype = 'text/csv'
         
-
     dataset.freeze(query, export_format, file_obj=buf, **kwargs)
 
     response_data = buf.getvalue()
@@ -966,7 +967,7 @@ def main():
     db_file = args[0]
     app = myapp(db_file, options.read_only, password,  options.url_prefix)
     if options.browser: open_browser_tab(options.host, options.port)
-    print(app.url_map)
+    # print(app.url_map)
     app.run(host=options.host, port=options.port, debug=options.debug)
 
 if __name__ == '__main__':
