@@ -78,8 +78,3 @@ def path_to_top(base_id,conn):
         return []
     return return_list
 
-def create_hierarchy(database,base_id):
-    if not(os.path.isabs(database)): database = os.path.join(os.path.dirname(__file__),database)
-    conn = sqlite3.connect(database)
-    return []
-

@@ -18,7 +18,7 @@ from functools import wraps
 from flask import jsonify
 from flask import send_file
 from export_linked_places import export_gazetteer_to_linked_places, create_csv_sql, export_gazetteer_to_shp_file, printer
-from export_whos_on_first import export_to_whos_on_first, create_hierarchy
+from export_whos_on_first import export_to_whos_on_first
 from getpass import getpass
 import shapely
 
@@ -188,6 +188,8 @@ def main_page_export():
     query=get_request_data().get('query')
     export_format=get_request_data().get('format')
     
+    printer(query)
+    
     if(export_format=="lp"):    
         filename="export_file.json"
         data = export_gazetteer_to_linked_places(query)
@@ -315,13 +317,11 @@ def place_info():
     results['source']=source_desc
     results['mnemonic']=mnemonic
     results['related_features']=r_related_features
-    results['hierarchy']=create_hierarchy("gazetteer.db",r_id)
     results['bbox']=P.bounds
     
     geoFlaskResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
     
-    return render_template('login.html', 
-                           results_visible='visible',
+    return render_template('place_info.html', 
                            results=results,
                            geoResults=geoFlaskResults
                            )
@@ -348,8 +348,6 @@ def gazetteer_search():
     geoFlaskResults=export_to_whos_on_first('gazetteer.db',id_list,pop_up_list)
     
     return render_template('login.html', 
-                           results_visible='none',
-                           results={},
                            geoResults=geoFlaskResults
                            )
 

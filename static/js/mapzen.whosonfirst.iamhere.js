@@ -164,8 +164,6 @@ mapzen.whosonfirst.iamhere = (function(){
 
 				self.draw_crosshairs();
 				self.update_location();
-
-				//self.reverse_geocode("1##2##3##4##5##6##7##8");
 				
 			},
 			

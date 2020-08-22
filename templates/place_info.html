@@ -57,10 +57,7 @@
 	</div>
 	<div id = "top_export_section">
 		<form id="export_form" method="POST" action="{{ url_for('main_page_export') }}">
-			<p>Select Export Options (span and format)</p>
-				<select id="query" name="query">
-					<option value="##">All Database</option>
-				</select>
+			<p>Select Export Format for Individual Place</p>
 				<select id="format" name="format">
 					<option value="lp">Linked Places</option>
 					<option value="csv">CSV</option>
@@ -78,19 +75,109 @@
 	</div>
 </section>
 
-<div id="map"><div id="crosshairs" style="background-color:#fff;"></div></div>
+<div id="results_section">
+	{% if results != {} %}
+	<h2> Data available about {{results.primary_name}}</h2>
+	<div id="properties_section">
+		<h3>Bounding box: </h3>
+			<h4>swlat, swlon, nelat, nelon</h4>
+			<pre>{{results['bbox']}}</pre>
+		<h3> Properties: </h3>
+		<div id="place_props">
+			<div> 
+				<h4> Names </h4>
+				<table class="table">
+					<tr>
+						<th>Primary Name</th>
+						<td> {{results.primary_name}} </td>
+					</tr>
+					<tr>
+						<th>Alternative Names</th>
+						<td> {{results.alt_names}} </td>
+					</tr>
+				</table>
+				<h4> Classification </h4>
+				<table class="table">
+					<tr>
+						<th>Term Name</th>
+						<td> {{results.type}}</td>
+					</tr>
+				</table>
+				<h4> Temporal Availability </h4>
+				<table class="table">
+					<tr>
+						<th>Historical Time</th>
+						<td> {{results.time_period_term}}</td>
+					</tr>
+				</table>
+				<h4> Geometry </h4>
+				<table class="table">
+					<tr>
+						<th>Type</th>
+						<td> {{results.geometry.type}}</td>
+						
+					</tr>
+					<tr>
+						<th>Coordinates</th>
+						<td> {{results.geometry.coordinates}}</td>
+						
+					</tr>
+					<tr>
+						<th>Area</th>
+						<td> {{results.geometry.area}}</td>
+					</tr>
+				</table>
+				
+				<div id="map" style="width:70%; margin-left: auto; margin-right: auto; height: 200px;">
+					<div id="crosshairs" style="background-color:#fff;"></div>
+				</div>
 
-<div class="whereami-controls">
-<ul id="whereami-info">
-    <li id="whereami-latlon"></li>
-    <li id="whereami-zoom"></li>
-    <li id="whereami-reversegeo"></li>
-</ul>
+				<div class="whereami-controls"> 
+					<ul id="whereami-info"> 
+						<li id="whereami-latlon"></li> 
+						<li id="whereami-zoom"></li> 
+						<li id="whereami-reversegeo"></li> 
+					</ul> 
+				</div>
 
-<div id="ip-lookups">
-  <div id="ip-lookups-enabled">You have automatic map positioning (using IP lookups) enabled. <button class="ip-lookups-button" id="ip-lookups-off">Disable?</button></div>
-  <div id="ip-lookups-disabled">You have automatic map positioning (using IP lookups) disabled. <button class="ip-lookups-button" id="ip-lookups-on">Enable?</button></div>      
-</div>
+				<!-- <div id="ip-lookups"> -->
+					<!-- <div id="ip-lookups-enabled">You have automatic map positioning (using IP lookups) enabled. <button class="ip-lookups-button" id="ip-lookups-off">Disable?</button></div> -->
+					<!-- <div id="ip-lookups-disabled">You have automatic map positioning (using IP lookups) disabled. <button class="ip-lookups-button" id="ip-lookups-on">Enable?</button></div>     -->
+					<!-- </div>  -->
+
+				<!-- <div id="whereami-feedback"></div>  -->
+
+				<!-- <div id="wof-log-container"><div id="wof-log"></div></div> -->
+				<h4> Sources </h4>
+				<table class="table">
+					<tr>
+						<th>Full Reference</th>
+						<td> {{results.source}}</td>
+					</tr>
+					<tr>
+						<th> Author/Mnemonic </th>
+						<td> {{results.mnemonic}}</td>
+					</tr>
+				</table>
+				<h4> Related Features </h4>
+				<table class="table">
+					{% for related in results.related_features %}
+					<tr class='clickable-row' data-href="/place-info/?input_place={{related[1]}}" method = POST>
+						<th>Primary Name</th>
+						<td> {{related[0]}}</td>
+						<th>Related ID</th>
+						<td> {{related[1]}}</td>
+						<th> Relation Type</th>
+						<td> {{related[2]}}</td>
+					</tr>
+					{%endfor%}
+				</table>
+			</div>
+		</div>
+	</div>
+	{% else %}
+		<h2> No Data available on the place in question</h2>
+	{% endif %}
 </div>
 
 <div id="whereami-feedback"></div>
@@ -135,13 +222,12 @@ let geojsonMarkerOptions = {
     fillOpacity: 0.9
 };
 
-const deafult_string = "1##2##3##4##5##6##7##8##9";
+let query_string = "";
 
 function map_painter(geoResults) {
 	let map_obj = mapzen.whosonfirst.leaflet.tangram.map('map');
 	let jsonResults = JSON.parse(geoResults);
 	if(Array.isArray(jsonResults)){
-		$('#query').append($("<option>", { value: deafult_string, html: "Export Map Places" }));
 		mapzen.whosonfirst.iamhere.reverse_geocode(deafult_string);
 		return;
 	}
@@ -169,8 +255,8 @@ function map_painter(geoResults) {
 			}
 		}
 	}
-	let query_string = id_string.substring(0, id_string.length - 2);
-	$('#query').append($("<option>", { value: query_string, html: "Export Map Places" }));
+	query_string = id_string.substring(0, id_string.length - 2);
+	$('<input/>', { id: 'query', name: 'query', value: "1##2", type: 'hidden' }).appendTo('#export_form');
 	mapzen.whosonfirst.iamhere.reverse_geocode(query_string);
 }
 
