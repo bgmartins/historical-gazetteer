@@ -256,7 +256,7 @@ function map_painter(geoResults) {
 		}
 	}
 	query_string = id_string.substring(0, id_string.length - 2);
-	$('<input/>', { id: 'query', name: 'query', value: "1##2", type: 'hidden' }).appendTo('#export_form');
+	$('<input/>', { id: 'query', name: 'query', value: query_string, type: 'hidden' }).appendTo('#export_form');
 	mapzen.whosonfirst.iamhere.reverse_geocode(query_string);
 }
 

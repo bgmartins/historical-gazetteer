@@ -188,8 +188,6 @@ def main_page_export():
     query=get_request_data().get('query')
     export_format=get_request_data().get('format')
     
-    printer(query)
-    
     if(export_format=="lp"):    
         filename="export_file.json"
         data = export_gazetteer_to_linked_places(query)
