@@ -11,18 +11,32 @@ import shapefile
 from shapely.ops import triangulate, polygonize, cascaded_union
 import shapely
 import shapely.wkt
+import geopandas
 
 conn = sqlite3.connect("../gazetteer.db")
 c = conn.cursor()
 raw_points=[]
 
-for row in c.execute("SELECT west_coordinate,north_coordinate,south_coordinate,east_coordinate,feature_id from g_location where feature_id in (13,14,15,16,17,18,19,20)"):
+data = geopandas.read_file("./gpw_v4_admin_unit_center_points_population_estimates_rev11_mex.shp", encoding='utf8')
+
+for row in c.execute("SELECT west_coordinate,east_coordinate,south_coordinate,north_coordinate,feature_id from g_location where feature_id in (1,2,3,4,5,6,7,8,9)"):
     aux=[]
-    lat=row[0]+row[3]/2
-    long=row[1]+row[2]/2
-    aux.append(lat)
+    long=(row[0]+row[1])/2
+    lat=(row[2]+row[3])/2
+    weight=1
+    holder_distance=1000
+    print("getting weight...")
+    for index, row in data.iterrows():
+        # print(row["UN_2020_E"])
+        # print(row["UN_2020_DS"])
+        distance=math.sqrt((row["CENTROID_X"] - long) ** 2 + (row["CENTROID_X"] - lat) ** 2)
+        if(distance<holder_distance):
+            holder_distance=distance
+            print("closer found")
+    
     aux.append(long)
-    aux.append(1)
+    aux.append(lat)
+    aux.append(weight)
     raw_points.append(aux)
 
 w = shapefile.Writer('shape_tester')
@@ -62,9 +76,9 @@ distanceGrid = np.zeros(shape = (width, height))
 for row in range(width):
     for col in range(height):
         index = 0
-        min = math.sqrt((row - points[0][0]) ** 2 + (col - points[0][1]) ** 2)  #/ points[0][2]
+        min = math.sqrt((row - points[0][0]) ** 2 + (col - points[0][1]) ** 2)  / points[0][2]
         for i in range(1, (len(points) - 1)):
-            weightedDistance = math.sqrt((row - points[i][0]) ** 2 + (col - points[i][1]) ** 2) #/ points[i][2]
+            weightedDistance = math.sqrt((row - points[i][0]) ** 2 + (col - points[i][1]) ** 2) / points[i][2]
             if(weightedDistance < min):
                 min = weightedDistance
                 index = i
