@@ -188,7 +188,6 @@ def import_polygons_from_shapefile( collection_id, shp_path, attribute_name, sou
     for index, row in data.iterrows():
         name = ftfy.fix_text(str(row[attribute_name]).strip())
         geo = str(row["geometry"])
-        # print(geo)
         if(geo!="None"):
             bbox = row["geometry"].bounds
         else:

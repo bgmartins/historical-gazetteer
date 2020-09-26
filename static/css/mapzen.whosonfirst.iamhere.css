@@ -12,10 +12,6 @@ th{
   width: 20%;
 }
 
-h2 {
-	margin-left:0;
-}
-
 tr.clickable-row:hover{
 	background-color:#eeeeee;
 	cursor: pointer;

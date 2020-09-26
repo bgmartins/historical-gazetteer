@@ -48,6 +48,7 @@
 </head>
  
 <body>
+
 <section class="top_container">
 	<div id="login_box">
 		<form action="{{ url_for('login') }}" class="form" method="post">
@@ -75,10 +76,10 @@
 	</div>
 </section>
 
+<h2> Data available about {{results.primary_name}}</h2>
+
 <div id="results_section">
 	{% if results != {} %}
-	<h2> Data available about {{results.primary_name}}</h2>
-	<div id="properties_section">
 		<h3>Bounding box: </h3>
 			<h4>swlat, swlon, nelat, nelon</h4>
 			<pre>{{results['bbox']}}</pre>
@@ -174,7 +175,6 @@
 				</table>
 			</div>
 		</div>
-	</div>
 	{% else %}
 		<h2> No Data available on the place in question</h2>
 	{% endif %}
