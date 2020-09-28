@@ -73,16 +73,19 @@ def string_matching_near_processing():
         if(check_if_near(a,b)):
             near_pairs.append([a['feature_id'],b['feature_id']])
     for pair in near_pairs:
-        name_1 = conn.execute("select name from g_feature_name where feature_id=?",(pair[0],))
-        name_2 = conn.execute("select name from g_feature_name where feature_id=?",(pair[1],))
-        if(check_if_near(name_1,name_2)):
+        try:
+            name_1 = conn.execute("select name from g_feature_name where feature_id=? and primary_display=1",(pair[0],)).fetchone()[0]
+            name_2 = conn.execute("select name from g_feature_name where feature_id=? and primary_display=1",(pair[1],)).fetchone()[0]
+            if(jaro_winkler_duplicate_processing(name_1,name_2)):
                 new_id=get_identifier("g_related_feature","related_feature_id")
                 conn.execute("INSERT INTO g_related_feature (related_feature_id, feature_id,related_name ,related_feature_feature_id, time_period_id, related_type_term_id,time_period_note) VALUES(?,?,?,?,2,1278,NULL)", (new_id,pair[0],name_2,pair[1]))
                 conn.execute("INSERT INTO s_related_feature (related_feature_id,time_period_id,entry_source_id) VALUES(?,1,?)",(new_id,source_id))
                 new_id = get_identifier("g_related_feature","related_feature_id")
                 conn.execute("INSERT INTO g_related_feature (related_feature_id, feature_id,related_name ,related_feature_feature_id, time_period_id, related_type_term_id,time_period_note) VALUES(?,?,?,?,2,1278,NULL)", (new_id,pair[1],name_1,pair[0]))
                 conn.execute("INSERT INTO s_related_feature (related_feature_id,time_period_id,entry_source_id) VALUES(?,1,?)",(new_id,source_id))
-
+        except Exception as e: 
+            print(e)
+            continue
     
 string_matching_near_processing()
     

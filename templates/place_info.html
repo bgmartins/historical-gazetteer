@@ -76,16 +76,16 @@
 	</div>
 </section>
 
-<h2> Data available about {{results.primary_name}}</h2>
-
 <div id="results_section">
 	{% if results != {} %}
-		<h3>Bounding box: </h3>
-			<h4>swlat, swlon, nelat, nelon</h4>
-			<pre>{{results['bbox']}}</pre>
-		<h3> Properties: </h3>
-		<div id="place_props">
-			<div> 
+		
+		<div id="map" style="width: 50%; float: left; height: 300px;">
+			<div id="crosshairs" style="background-color:#fff;"></div>
+		</div>
+		<div id="header_info" style="width: 50%; padding-left:10px; padding-right:5px; float: right; height: 300px;">
+			<h3>Bounding box: </h3>
+				<h4>swlat, swlon, nelat, nelon</h4>
+				<pre>{{results['bbox']}}</pre>
 				<h4> Names </h4>
 				<table class="table">
 					<tr>
@@ -97,6 +97,18 @@
 						<td> {{results.alt_names}} </td>
 					</tr>
 				</table>
+				<div class="whereami-controls"> 
+					<ul id="whereami-info"> 
+						<li id="whereami-latlon"></li> 
+						<li id="whereami-zoom"></li> 
+						<!-- <li id="whereami-reversegeo"></li>  -->
+					</ul> 
+				</div>
+		</div>
+		
+		<div id="place_props" style="padding-top: 400px; padding-left: 5px; padding-right: 5px;">
+			<div> 
+				<h3> Properties: </h3>
 				<h4> Classification </h4>
 				<table class="table">
 					<tr>
@@ -128,27 +140,7 @@
 						<td> {{results.geometry.area}}</td>
 					</tr>
 				</table>
-				
-				<div id="map" style="width:70%; margin-left: auto; margin-right: auto; height: 200px;">
-					<div id="crosshairs" style="background-color:#fff;"></div>
-				</div>
 
-				<div class="whereami-controls"> 
-					<ul id="whereami-info"> 
-						<li id="whereami-latlon"></li> 
-						<li id="whereami-zoom"></li> 
-						<li id="whereami-reversegeo"></li> 
-					</ul> 
-				</div>
-
-				<!-- <div id="ip-lookups"> -->
-					<!-- <div id="ip-lookups-enabled">You have automatic map positioning (using IP lookups) enabled. <button class="ip-lookups-button" id="ip-lookups-off">Disable?</button></div> -->
-					<!-- <div id="ip-lookups-disabled">You have automatic map positioning (using IP lookups) disabled. <button class="ip-lookups-button" id="ip-lookups-on">Enable?</button></div>     -->
-					<!-- </div>  -->
-
-				<!-- <div id="whereami-feedback"></div>  -->
-
-				<!-- <div id="wof-log-container"><div id="wof-log"></div></div> -->
 				<h4> Sources </h4>
 				<table class="table">
 					<tr>
@@ -180,9 +172,7 @@
 	{% endif %}
 </div>
 
-<div id="whereami-feedback"></div>
-
-<div id="wof-log-container"><div id="wof-log"></div></div>
+<div id="whereami-feedback" style="display: none"></div>
 
 <script type="text/javascript">
 

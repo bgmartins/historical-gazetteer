@@ -222,6 +222,7 @@ def generate_polygons_for_points(features, term_id):
     return raw_points,'final_poly_'+ str(term_id) +'.shp'
 
 def insert_geometries_in_db(points,shpfile,entry_source_id):
+    print("inserting geometries....")
     data = geopandas.read_file(shpfile, encoding='utf8')
     for index, row in data.iterrows():
         geo_file=shapely.wkt.loads(str(row["geometry"]))
@@ -253,11 +254,12 @@ conn.execute("INSERT INTO l_source_reference ( source_reference_id, citation, re
 conn.execute("INSERT INTO g_source ( source_id, source_mnemonic, contributor_id, source_reference_id ) VALUES (?,?,2,?)", (source_id, "Gen Geos", source_reference_id) )
 conn.execute("INSERT INTO g_entry_source ( entry_source_id, source_id, entry_date ) VALUES (?,?,'now')", (entry_source_id,source_id) )
 
+print(term_dict)
 
-for term in term_dict:
-    points, shpfile = generate_polygons_for_points(term_dict[term],term)
-    insert_geometries_in_db(points,shpfile,entry_source_id)
-    
+points, shpfile = generate_polygons_for_points(term_dict[1079],1079)
+insert_geometries_in_db(points,shpfile,entry_source_id)
+points, shpfile = generate_polygons_for_points(term_dict[740],740)
+insert_geometries_in_db(points,shpfile,entry_source_id)
     
     
     
