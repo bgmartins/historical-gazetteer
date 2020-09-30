@@ -51,6 +51,8 @@ def inspect_file(filename):
         name_include_string= name_include_string[:-1] + ")"
         update_query = "update g_feature set time_period_id=30 where feature_id in " + id_include_string
         conn.execute(update_query)
+        update = "update g_classification set time_period_id=30 where feature_id in " + id_include_string
+        conn.execute(update)
         
         source_id = get_identifier("g_source","source_id")
         source_reference_id = get_identifier("l_source_reference","source_reference_id")

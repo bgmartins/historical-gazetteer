@@ -2,6 +2,7 @@ import os
 import sqlite3
 import shapely.wkt
 from osgeo import ogr
+import zipfile, shutil
 
 database="gazetteer.db"
 
@@ -54,49 +55,87 @@ def create_csv_sql(query):
         sql = "select * from g_feature natural join g_location natural join g_feature_name natural join g_classification where primary_display=1"
         return sql
     values = get_sql_values(query)
-    sql = "select feature_id, name, entry_note from g_feature natural join g_location natural join g_feature_name where feature_id in " + values + " and primary_display=1"
-    print(sql)
+    sql = "select main.feature_id, name, term ,west_coordinate,east_coordinate,south_coordinate,north_coordinate , group_concat(name) alternative_names \
+            from ((g_feature natural join g_feature_name NATURAL join g_location) as main inner join g_classification gc on main.feature_id=gc.feature_id) \
+                inner join l_scheme_term on classification_term_id = scheme_term_id " + \
+            "where main.feature_id in " + values +" group by main.feature_id"
     return sql
 
 def export_gazetteer_to_shp_file(query):
     conn = sqlite3.connect( database )
     try:
-        os.remove("export_file.shp")
-        os.remove("export_file.shx")
-        os.remove("export_file.dbf")
+        os.remove("export_file_polygons.shp")
+        os.remove("export_file_polygons.shx")
+        os.remove("export_file_polygons.dbf")
+        os.remove("export_file_points.shp")
+        os.remove("export_file_points.shx")
+        os.remove("export_file_points.dbf")
+        os.remove("export_shapefile.zip")
     except:
         pass
-    poly_objs={}
+    feature_objs={}
     if(query=="##"):
-        geo_list=conn.execute("select feature_id, encoded_geometry from g_location_geometry natural join g_location").fetchall()
+        geo_list=conn.execute("select feature_id, name, encoded_geometry from g_location_geometry natural join g_location natural join g_feature_name").fetchall()
     else:
         id_list=query.split("##")  
         include_string = "("
         for f_id in id_list:
             include_string+=f_id+","
         include_string= include_string[:-1] + ")"
-        raw_query="select feature_id, encoded_geometry from g_location_geometry natural join g_location where feature_id in " + include_string
+        raw_query="select feature_id, name, encoded_geometry from g_location_geometry natural join g_location natural join  g_feature_name where feature_id in " + include_string
         geo_list=conn.execute(raw_query).fetchall()
-    for geo_id in geo_list:
-        poly_objs[geo_id[0]]=geo_id[1]
+    for res in geo_list:
+        feature_objs[res[0]]=[res[1],res[2]]
     driver = ogr.GetDriverByName('Esri Shapefile')
-    ds = driver.CreateDataSource('export_file.shp')
-    layer = ds.CreateLayer('', None, ogr.wkbPolygon)
-    layer.CreateField(ogr.FieldDefn('id', ogr.OFTInteger))
-    defn = layer.GetLayerDefn()
-    for key_id in poly_objs.keys():
-        print(key_id)
-        poly=poly_objs[key_id]
+    ds = driver.CreateDataSource('export_file_polygons.shp')
+    polyLayer = ds.CreateLayer('', None, ogr.wkbPolygon)
+    polyLayer.CreateField(ogr.FieldDefn('id', ogr.OFTInteger))
+    polyLayer.CreateField(ogr.FieldDefn('name', ogr.OFTString))
+    polydefn = polyLayer.GetLayerDefn()
+    for key_id in feature_objs.keys():
+        obj=feature_objs[key_id]
+        poly=obj[1]
+        name=obj[0]
         enc_geo = shapely.wkt.loads(poly)
-        feat = ogr.Feature(defn)
+        feat = ogr.Feature(polydefn)
         feat.SetField('id', key_id)
+        feat.SetField('name', name)
         # Make a geometry, from Shapely object
         geom = ogr.CreateGeometryFromWkb(enc_geo.wkb)
         feat.SetGeometry(geom)
-        layer.CreateFeature(feat)
-    feat = geom = None  # destroy these
+        polyLayer.CreateFeature(feat)
+    
+    driver = ogr.GetDriverByName('Esri Shapefile')
+    ds = driver.CreateDataSource('export_file_points.shp')
+    pointLayer = ds.CreateLayer('', None, ogr.wkbPoint)
+    pointLayer.CreateField(ogr.FieldDefn('id', ogr.OFTInteger))
+    pointLayer.CreateField(ogr.FieldDefn('name', ogr.OFTString))
+    pointdefn = pointLayer.GetLayerDefn()
+    for key_id in feature_objs.keys():
+        obj=feature_objs[key_id]
+        poly=obj[1]
+        name=obj[0]
+        enc_geo = shapely.wkt.loads(poly)
+        feat = ogr.Feature(pointdefn)
+        feat.SetField('id', key_id)
+        feat.SetField('name', name)
+        # Make a geometry, from Shapely object
+        geom = ogr.CreateGeometryFromWkb(enc_geo.wkb)
+        feat.SetGeometry(geom)
+        pointLayer.CreateFeature(feat)
+    
+    
+    myzipfile = zipfile.ZipFile("export_shapefile.zip", mode='w',compression=0)
+    myzipfile.write("export_file_polygons.dbf")   
+    myzipfile.write("export_file_polygons.shx")   
+    myzipfile.write("export_file_polygons.shp")   
+    myzipfile.write("export_file_points.dbf")   
+    myzipfile.write("export_file_points.shx")   
+    myzipfile.write("export_file_points.shp")   
+    
+    myzipfile.close()
 
-    return ds
+    return "export_shapefile.zip"
 
 if __name__ == '__main__':
   export_gazetteer_to_shp_file('1##2##3##4##5##6##7##8')

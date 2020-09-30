@@ -195,8 +195,7 @@ def main_page_export():
         sql = create_csv_sql(query)
         return export("g_feature", sql, export_format)
     elif(export_format=="shp"):
-        filename="export_file.shp"
-        data = export_gazetteer_to_shp_file(query)
+        filename = export_gazetteer_to_shp_file(query)
         return send_file(filename,attachment_filename=filename, as_attachment=True)
     else:
         return
