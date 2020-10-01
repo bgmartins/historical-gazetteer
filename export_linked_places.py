@@ -43,11 +43,12 @@ def export_gazetteer_to_linked_places(query):
       for type_obj in conn.cursor().execute("SELECT classification_id, l_scheme_term.term FROM g_classification, l_scheme_term WHERE l_scheme_term.scheme_term_id=g_classification.classification_term_id AND g_classification.feature_id=" + repr(feature[0])):
           type_info = { "identifier": type_obj[0], "label": type_obj[1], "sourceLabel": type_obj[1], "when": [] }
           feature_obj["types"].append(type_info)
-      for relation in conn.cursor().execute("SELECT related_name, related_feature_feature_id, related_type_term_id where feature_id = " + + repr(feature[0])):
-          relation_type = conn.cursor("select term from l_scheme_term where scheme_term_id = ?" + + repr(relation[2]))
+      for relation in conn.cursor().execute("SELECT related_name, related_feature_feature_id, related_type_term_id from g_related_feature where feature_id = " + repr(feature[0])):
+          relation_type = conn.cursor().execute("select term from l_scheme_term where scheme_term_id = " + repr(relation[2])).fetchone()[0]
           relation_info = {"related_name": relation[0],"related_id": relation[1], "related_type":relation_type}
           feature_obj["relations"].append(relation_info)
       data_obj["features"].append(feature_obj)
+  print(data_obj)
   return data_obj
 
 def create_csv_sql(query):
