@@ -18,7 +18,7 @@ type_dict={
     'Default': 'populated places',
     'Admin Regions':'administrative divisions',
     'Estancia': 'resorts',
-     'Sujeto': 'populated places',#????????????????
+     'Sujeto': 'populated places',
      'Pueblo': 'towns',
      'Alcaldia Mayor': 'buildings',
      'Villa': 'villas',

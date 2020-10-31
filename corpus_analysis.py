@@ -53,7 +53,8 @@ def inspect_file(filename):
         conn.execute(update_query)
         update = "update g_classification set time_period_id=30 where feature_id in " + id_include_string
         conn.execute(update)
-        
+        update = "update g_location_geometry set time_period_id=30 where location_id in (select location_id from g_location where feature_id in " + id_include_string +" )"
+        conn.execute(update)
         source_id = get_identifier("g_source","source_id")
         source_reference_id = get_identifier("l_source_reference","source_reference_id")
         entry_source_id = get_identifier("g_entry_source","entry_source_id")

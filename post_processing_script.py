@@ -36,9 +36,7 @@ def check_geometries_relation(feature_1, feature_2):
     id_2=feature_2["feature_id"]
     geo_1=feature_1["geometry"]
     geo_2=feature_2["geometry"]
-    if(geo_1.equals(geo_2) or geo_1.almost_equals(geo_2)):
-        create_new_relation(id_1,id_2,relation_dict["Equal"])
-    elif(geo_1.contains(geo_2)):
+    if(geo_1.contains(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Member is"])
     elif(geo_1.within(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Within"])
@@ -46,6 +44,8 @@ def check_geometries_relation(feature_1, feature_2):
         create_new_relation(id_1,id_2,relation_dict["Overlap"])
     elif(geo_1.touches(geo_2)):
         create_new_relation(id_1,id_2,relation_dict["Adjacent"])
+    # elif((geo_1.geom_type == "MultiPolygon" or geo_1.geom_type == "Polygon") and (geo_2.geom_type == "MultiPolygon" or geo_2.geom_type == "Polygon") and geo_1.equals(geo_2)):
+    #     create_new_relation(id_1,id_2,relation_dict["Equal"])
         
 
 def process_geometries():

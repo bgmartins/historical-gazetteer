@@ -288,9 +288,14 @@ def place_info():
     MP["area"] = P.area
     
     name_id=dataset.query("select feature_name_id FROM g_feature_name WHERE feature_id= ? and primary_display=1 LIMIT 1",(r_id,)).fetchone()[0]
-    source_id = dataset.query("select source_reference_id from g_name_to_link_info_reference where feature_name_id=?",(name_id,)).fetchone()[0]
-    mnemonic = dataset.query("select source_mnemonic from g_source where source_reference_id=?",(source_id,)).fetchone()[0]
-    source_desc = dataset.query("select citation from l_source_reference where source_reference_id=?",(source_id,)).fetchone()[0]
+    
+    try:
+        source_id = dataset.query("select source_reference_id from g_name_to_link_info_reference where feature_name_id=?",(name_id,)).fetchone()[0]
+        mnemonic = dataset.query("select source_mnemonic from g_source where source_reference_id=?",(source_id,)).fetchone()[0]
+        source_desc = dataset.query("select citation from l_source_reference where source_reference_id=?",(source_id,)).fetchone()[0]
+    except:
+        mnemonic = 'not specified in database'
+        source_desc = 'not specified in database'
     
     r_alt_names = ""
     r_related_features=[]

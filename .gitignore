@@ -11,3 +11,5 @@ polygon-generation/raster*
 polygon-generation/shape_tester*
 gazetteer.db-journal
 export_lpf.json
+geonames_1.csv
+/polygon-generation/gpw*
